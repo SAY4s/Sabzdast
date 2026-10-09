@@ -199,6 +199,33 @@ main{max-width:1180px;margin:0 auto;padding:0 18px 70px;}
 .admin-toolbar h2{margin:0;font-size:20px;color:var(--leaf-dark);}
 .mini-items{font-size:12px;color:var(--muted);max-width:220px;}
 
+/* ===== بخش‌های توضیحی ===== */
+.section-title{font-size:26px;color:var(--leaf-dark);text-align:center;margin:46px 0 8px;}
+.section-sub{text-align:center;color:var(--muted);font-size:14px;margin:0 auto 26px;max-width:560px;}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.feature{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:22px 18px;text-align:center;}
+.feature .ic{width:46px;height:46px;margin:0 auto 10px;color:var(--leaf);background:var(--leaf-light);border-radius:50%;padding:10px;}
+.feature h3{font-size:18px;margin:0 0 6px;color:var(--soil);}
+.feature p{margin:0;font-size:13.5px;color:var(--muted);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;counter-reset:st;}
+.step{position:relative;background:var(--leaf-light);border-radius:10px;padding:22px 18px 18px;text-align:center;}
+.step::before{counter-increment:st;content:counter(st,persian);position:absolute;top:-14px;right:50%;transform:translateX(50%);
+  width:30px;height:30px;border-radius:50%;background:var(--wheat);color:var(--soil);font-weight:800;display:flex;align-items:center;justify-content:center;}
+.step h3{font-size:17px;margin:6px 0 4px;color:var(--leaf-dark);}
+.step p{margin:0;font-size:13px;color:#4a4231;}
+.about-hero{margin:22px 0 10px;}
+.prose{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:26px 28px;font-size:14.5px;line-height:2;color:#3d3626;}
+.prose h3{font-size:20px;color:var(--leaf-dark);margin:0 0 8px;}
+.prose p{margin:0 0 12px;}
+.faq details{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-bottom:10px;}
+.faq summary{cursor:pointer;font-weight:700;color:var(--soil);}
+.faq details p{margin:10px 0 0;font-size:13.5px;color:#4a4231;line-height:1.9;}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.contact-item{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center;font-size:14px;}
+.contact-item b{display:block;color:var(--leaf-dark);margin-bottom:4px;}
+.footer-links{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:8px;}
+.footer-links a{color:var(--leaf-dark);font-weight:600;}
+@counter-style persian{system:numeric;symbols:'۰' '۱' '۲' '۳' '۴' '۵' '۶' '۷' '۸' '۹';}
 footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);margin-top:40px;}
 
 @media (max-width:760px){
@@ -222,7 +249,8 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
       <a href="#/" data-route="home">محصولات</a>
       <a href="#/cart" data-route="cart">سبد خرید <span class="badge" id="cartBadge">0</span></a>
       <a href="#/account" data-route="account" id="accountLink">ورود / ثبت‌نام</a>
-      <a href="#/admin" data-route="admin">پنل سفارشات</a>
+      <a href="#/about" data-route="about">درباره ما</a>
+      <a href="#/admin" data-route="admin" id="adminLink" style="display:none;">پنل سفارشات</a>
     </nav>
   </div>
 </header>
@@ -237,6 +265,55 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
     </div>
     <div class="filters" id="filters"></div>
     <div class="product-grid" id="productGrid"></div>
+
+    <h2 class="section-title">چرا سبزدشت؟</h2>
+    <p class="section-sub">تأمین نهاده‌ی کشاورزی فقط خرید و فروش نیست؛ مسئولیتی است که روی برداشت شما اثر می‌گذارد.</p>
+    <div class="features">
+      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 52C12 28 28 12 54 10c0 26-16 42-40 42z"/><path d="M12 52L36 28"/></svg></div><h3>کیفیت اصل</h3><p>کالاها مستقیم از تولیدکننده و نمایندگی‌های معتبر تأمین می‌شوند.</p></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20l24-10 24 10v24L32 54 8 44z"/><path d="M8 20l24 10 24-10M32 30v24"/></svg></div><h3>ارسال سریع</h3><p>سفارش‌ها بسته‌بندی ایمن شده و به سراسر کشور ارسال می‌شوند.</p></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8l18 7v15c0 13-8 21-18 26-10-5-18-13-18-26V15z"/><path d="M24 32l6 6 11-12"/></svg></div><h3>ضمانت و پشتیبانی</h3><p>در صورت مغایرت یا مشکل در کالا، پیگیری و جایگزینی انجام می‌شود.</p></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14h44v30H28l-12 10V44h-6z"/></svg></div><h3>مشاوره‌ی رایگان</h3><p>برای انتخاب کود، بذر یا ابزار مناسب با کارشناسان ما مشورت کنید.</p></div>
+    </div>
+
+    <h2 class="section-title">خرید در چهار قدم</h2>
+    <p class="section-sub">فرایند سفارش ساده و بدون پیچیدگی است.</p>
+    <div class="steps">
+      <div class="step"><h3>انتخاب کالا</h3><p>محصول مورد نیازتان را پیدا و به سبد اضافه کنید.</p></div>
+      <div class="step"><h3>تکمیل مشخصات</h3><p>نام، موبایل و آدرس تحویل را وارد کنید.</p></div>
+      <div class="step"><h3>ثبت سفارش</h3><p>سفارش شما بلافاصله برای ما ثبت می‌شود.</p></div>
+      <div class="step"><h3>هماهنگی و تحویل</h3><p>همکاران ما برای تأیید و ارسال تماس می‌گیرند.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== درباره ما ===== -->
+  <section class="view" id="view-about">
+    <div class="hero about-hero">
+      <h1>درباره‌ی سبزدشت</h1>
+      <p>همراه کشاورز، از کاشت تا برداشت.</p>
+    </div>
+
+    <div class="prose">
+      <h3>ما که هستیم؟</h3>
+      <p>سبزدشت یک فروشگاه تخصصی نهاده و ابزار کشاورزی است. هدف ما این است که کشاورزان، باغداران و علاقه‌مندان به کشت، بتوانند بذر، کود، ابزار، تجهیزات آبیاری و ماشین‌آلات مورد نیازشان را در یک‌جا، با قیمت شفاف و کیفیت قابل اعتماد تهیه کنند.</p>
+      <h3>رویکرد ما</h3>
+      <p>هر کالایی که در فروشگاه عرضه می‌شود با دقت انتخاب شده است. توضیحات، موجودی و کد کالا برای هر محصول به‌صورت شفاف درج می‌شود تا خریدی آگاهانه داشته باشید.</p>
+    </div>
+
+    <h2 class="section-title">ارسال و تحویل</h2>
+    <div class="prose">
+      <p>پس از ثبت سفارش، همکاران ما برای تأیید نهایی و هماهنگی نحوه‌ی تحویل با شماره‌ی موبایل شما تماس می‌گیرند. سفارش‌ها پس از تأیید، بسته‌بندی و ارسال می‌شوند. هزینه و زمان ارسال بسته به مقصد و وزن کالا متفاوت است و هنگام هماهنگی اعلام می‌شود.</p>
+    </div>
+
+    <h2 class="section-title">سوالات متداول</h2>
+    <div class="faq">
+      <details><summary>چطور سفارش بدهم؟</summary><p>کالاها را به سبد خرید اضافه کنید، سپس در مرحله‌ی «ثبت سفارش» نام، موبایل و آدرس را وارد کنید. نیازی به ساخت حساب کاربری نیست، اما با ثبت‌نام اطلاعاتتان در سفارش‌های بعدی خودکار پر می‌شود.</p></details>
+      <details><summary>پرداخت چگونه انجام می‌شود؟</summary><p>پرداخت پس از هماهنگی و تأیید سفارش، با همکاران ما انجام می‌شود.</p></details>
+      <details><summary>اگر کالا موجود نبود چه می‌شود؟</summary><p>در صورت ناموجود بودن، پیش از ارسال با شما تماس گرفته و کالای جایگزین یا زمان تأمین اعلام می‌شود.</p></details>
+      <details><summary>برای انتخاب محصول مناسب راهنمایی می‌گیرم؟</summary><p>بله، هنگام تماس برای تأیید سفارش یا از طریق راه‌های ارتباطی زیر می‌توانید مشاوره بگیرید.</p></details>
+    </div>
+
+    <h2 class="section-title">تماس با ما</h2>
+    <div class="contact-grid" id="contactGrid"></div>
   </section>
 
   <!-- ===== جزئیات محصول ===== -->
@@ -349,18 +426,13 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
 
   <!-- ===== پنل سفارشات ===== -->
   <section class="view" id="view-admin">
-    <div class="admin-gate" id="adminGate">
-      <h2 style="color:var(--leaf-dark);">ورود به پنل سفارشات</h2>
-      <div class="f-field">
-        <input type="password" id="adminPass" placeholder="رمز عبور مدیریت">
-      </div>
-      <button class="btn" id="adminLoginBtn">ورود</button>
-      <div class="status" id="adminStatus"></div>
-    </div>
-    <div id="adminPanel" style="display:none;">
+    <div id="adminPanel">
       <div class="admin-toolbar">
         <h2>سفارشات ثبت‌شده</h2>
-        <button class="btn outline" id="refreshOrdersBtn">بروزرسانی</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn outline" id="refreshOrdersBtn">بروزرسانی</button>
+          <button class="btn outline" id="adminLogoutBtn">خروج از پنل</button>
+        </div>
       </div>
       <div class="orders-table-wrap" id="ordersTableWrap"></div>
     </div>
@@ -368,7 +440,10 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
 
 </main>
 
-<footer>© فروشگاه سبزدشت — ساخته‌شده برای عرضه‌ی نهاده و ابزار کشاورزی</footer>
+<footer>
+  <div class="footer-links"><a href="#/">محصولات</a><a href="#/about">درباره ما</a><a href="#/cart">سبد خرید</a><a href="#/account">ورود / ثبت‌نام</a></div>
+  © فروشگاه سبزدشت — عرضه‌ی نهاده و ابزار کشاورزی
+</footer>
 
 <script>
 /* =======================================================================
@@ -385,7 +460,9 @@ const SHEET_GID = '0';
 const CONFIG_ROW = 6; // ردیف ۶ (خونه B6)
 const CONFIG_COL = 1; // ستون B
 const CUSTOMERS_FILE = 'customers.json';
-const ADMIN_PASSCODE = 'Admin'; // رمز ورود به پنل سفارشات را اینجا عوض کن
+const ADMIN_PASSCODE = 'admin'; // رمز مدیر: در بخش ورود/ثبت‌نام وارد شود تا پنل سفارشات باز شود
+/* اطلاعات تماس فروشگاه — مقدار خالی نمایش داده نمی‌شود */
+const STORE_INFO = { phone:'', address:'', hours:'شنبه تا پنجشنبه، ۸ تا ۱۸', telegram:'' };
 
 const CATEGORY_LABELS = {
   seed:'بذر و نهال', fertilizer:'کود و اصلاح خاک', tool:'ابزار و نهاده',
@@ -558,7 +635,11 @@ function route(){
   if (parts[0] === 'checkout'){ renderCheckout(); showView('view-checkout'); return; }
   if (parts[0] === 'order-success'){ showView('view-order-success'); return; }
   if (parts[0] === 'account'){ showView('view-account'); return; }
-  if (parts[0] === 'admin'){ showView('view-admin'); return; }
+  if (parts[0] === 'about'){ renderContact(); showView('view-about'); return; }
+  if (parts[0] === 'admin'){
+    if (!isAdmin()){ location.hash = '#/account'; return; }
+    showView('view-admin'); loadOrders(); return;
+  }
   renderHome(); showView('view-home');
 }
 window.addEventListener('hashchange', route);
@@ -764,6 +845,7 @@ loginForm.addEventListener('submit', async (e)=>{
   const pass = document.getElementById('liPass');
   const statusBox = document.getElementById('loginStatus');
   statusBox.className='status'; statusBox.textContent='';
+  if (pass.value === ADMIN_PASSCODE){ setAdmin(true); pass.value=''; location.hash = '#/admin'; return; }
   let ok = true;
   if (!mobileRe.test(mobile.value.trim())){ setFErr(mobile,'شماره موبایل معتبر نیست'); ok=false; } else setFErr(mobile,'');
   if (!pass.value){ setFErr(pass,'رمز عبور را وارد کنید'); ok=false; } else setFErr(pass,'');
@@ -797,6 +879,7 @@ signupForm.addEventListener('submit', async (e)=>{
   const pass = document.getElementById('suPass');
   const statusBox = document.getElementById('signupStatus');
   statusBox.className='status'; statusBox.textContent='';
+  if (pass.value === ADMIN_PASSCODE){ setAdmin(true); pass.value=''; location.hash = '#/admin'; return; }
   let ok = true;
   if (!name.value.trim()){ setFErr(name,'نام را وارد کنید'); ok=false; } else setFErr(name,'');
   if (!mobileRe.test(mobile.value.trim())){ setFErr(mobile,'شماره موبایل معتبر نیست'); ok=false; } else setFErr(mobile,'');
@@ -826,21 +909,24 @@ signupForm.addEventListener('submit', async (e)=>{
 });
 
 /* ---------- پنل سفارشات (ادمین) ---------- */
-let ordersCache = []; let ordersSha = null; let adminUnlocked = false;
+let ordersCache = []; let ordersSha = null;
+function isAdmin(){ return sessionStorage.getItem('fs_admin') === '1'; }
+function setAdmin(on){
+  if (on) sessionStorage.setItem('fs_admin','1'); else sessionStorage.removeItem('fs_admin');
+  document.getElementById('adminLink').style.display = on ? '' : 'none';
+}
+document.getElementById('adminLogoutBtn').addEventListener('click', ()=>{ setAdmin(false); location.hash = '#/'; });
 
-document.getElementById('adminLoginBtn').addEventListener('click', async ()=>{
-  const passInput = document.getElementById('adminPass');
-  const statusBox = document.getElementById('adminStatus');
-  statusBox.className='status'; statusBox.textContent='';
-  if (passInput.value !== ADMIN_PASSCODE){
-    statusBox.className='status bad'; statusBox.textContent='رمز عبور اشتباه است';
-    return;
-  }
-  adminUnlocked = true;
-  document.getElementById('adminGate').style.display = 'none';
-  document.getElementById('adminPanel').style.display = 'block';
-  await loadOrders();
-});
+function renderContact(){
+  const items = [];
+  if (STORE_INFO.phone) items.push(['تلفن', STORE_INFO.phone]);
+  if (STORE_INFO.telegram) items.push(['تلگرام', STORE_INFO.telegram]);
+  if (STORE_INFO.address) items.push(['آدرس', STORE_INFO.address]);
+  if (STORE_INFO.hours) items.push(['ساعت پاسخ‌گویی', STORE_INFO.hours]);
+  items.push(['سفارش آنلاین', 'همین فروشگاه، شبانه‌روز']);
+  document.getElementById('contactGrid').innerHTML = items.map(([k,v])=>`<div class="contact-item"><b>${k}</b>${v}</div>`).join('');
+}
+
 document.getElementById('refreshOrdersBtn').addEventListener('click', loadOrders);
 
 async function loadOrders(){
@@ -898,6 +984,7 @@ function renderOrdersTable(){
 
 /* ---------- راه‌اندازی ---------- */
 async function init(){
+  setAdmin(isAdmin());
   updateAccountLink();
   updateCartBadge();
   try{
