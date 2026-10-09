@@ -199,6 +199,55 @@ main{max-width:1180px;margin:0 auto;padding:0 18px 70px;}
 .admin-toolbar h2{margin:0;font-size:20px;color:var(--leaf-dark);}
 .mini-items{font-size:12px;color:var(--muted);max-width:220px;}
 
+/* ===== روش ارسال (checkout) ===== */
+.ship-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.ship-opt{position:relative;cursor:pointer;}
+.ship-opt input{position:absolute;opacity:0;inset:0;cursor:pointer;}
+.ship-body{display:block;border:1.5px solid var(--line);border-radius:9px;padding:12px;background:#fffef9;text-align:center;transition:all .15s;}
+.ship-body b{display:block;font-size:14.5px;color:var(--soil);}
+.ship-body small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.6;}
+.ship-opt input:checked + .ship-body{border-color:var(--leaf);background:var(--leaf-light);box-shadow:0 0 0 2px rgba(63,107,53,.18);}
+.ship-note{font-size:12.5px;color:var(--wheat-dark);background:#fbf2dc;border-radius:7px;padding:9px 12px;margin:10px 0 0;}
+.f-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.f-field select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:7px;background:#fffef9;font-size:14.5px;}
+.f-field input[readonly]{background:#f1ecdc;color:var(--muted);}
+.account-box{text-align:center;}
+.account-box h2{margin-bottom:6px;}
+.account-box p{color:var(--muted);margin:0 0 18px;font-size:14px;}
+
+/* ===== پنل مدیریت سفارشات ===== */
+.stat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.stat-chip{border:1.5px solid var(--line);background:var(--sheet);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;color:var(--soil);}
+.stat-chip.active{background:var(--soil);border-color:var(--soil);color:#fdf8ea;}
+.stat-chip span{margin-inline-start:6px;opacity:.75;}
+.admin-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.admin-filters select,.admin-filters input{padding:9px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);font-size:13.5px;font-family:inherit;}
+.admin-filters input{flex:1 1 240px;}
+.o-card{background:var(--sheet);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+.o-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 16px;background:var(--leaf-light);border-bottom:1px solid var(--line);}
+.o-head .o-id{font-weight:800;color:var(--leaf-dark);}
+.o-head .o-date{font-size:12.5px;color:var(--muted);}
+.o-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.pill.preparing{background:#dfe9f7;color:#244a7c;}
+.pill.shipped{background:#e3dcf5;color:#4a3a85;}
+.pill.canceled{background:#f5dcd8;color:var(--err);}
+.pill.ship{background:#f3ead0;color:#7a5a12;}
+.o-body{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;padding:16px;}
+.o-sec h4{margin:0 0 5px;font-size:12px;color:var(--wheat-dark);font-weight:800;}
+.o-sec p{margin:0;font-size:14px;line-height:1.9;word-break:break-word;}
+.o-sec.full{grid-column:1/-1;}
+.o-items{width:100%;border-collapse:collapse;font-size:13px;}
+.o-items th{text-align:right;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line);}
+.o-items td{padding:5px 6px;border-bottom:1px dashed var(--line);}
+.o-total{display:flex;justify-content:space-between;font-weight:800;color:var(--leaf-dark);padding:8px 6px 0;font-size:15px;}
+.o-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);background:#fbf8ef;}
+.o-foot select,.o-foot input{padding:8px 10px;border:1.5px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;background:#fff;}
+.o-foot input{flex:1 1 180px;}
+.o-foot .pill-btn{padding:8px 14px;font-size:13px;}
+.o-foot .save{background:var(--leaf);color:#fff;border-color:var(--leaf);}
+.o-hist{font-size:11.5px;color:var(--muted);}
+@media (max-width:700px){.o-body{grid-template-columns:1fr;}.f-row2{grid-template-columns:1fr;}}
+
 /* ===== بخش‌های توضیحی ===== */
 .section-title{font-size:26px;color:var(--leaf-dark);text-align:center;margin:46px 0 8px;}
 .section-sub{text-align:center;color:var(--muted);font-size:14px;margin:0 auto 26px;max-width:560px;}
@@ -330,25 +379,56 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
 
   <!-- ===== ثبت سفارش ===== -->
   <section class="view" id="view-checkout">
-    <div class="form-card">
+    <div class="form-card" style="max-width:640px;">
       <h2>تکمیل سفارش</h2>
       <div class="order-summary-mini" id="checkoutSummary"></div>
       <form id="checkoutForm" novalidate>
+
         <div class="f-field">
-          <label>نام و نام خانوادگی<span class="req">*</span></label>
-          <input type="text" id="coName" required>
-          <div class="f-err"></div>
+          <label>روش دریافت سفارش<span class="req">*</span></label>
+          <div class="ship-options" id="shipOptions"></div>
+          <div class="ship-note" id="shipNote" style="display:none;"></div>
+          <div class="f-err" id="shipErr"></div>
         </div>
-        <div class="f-field">
-          <label>شماره موبایل<span class="req">*</span></label>
-          <input type="tel" id="coMobile" inputmode="numeric" placeholder="09xxxxxxxxx" required>
-          <div class="f-err"></div>
+
+        <div class="f-row2">
+          <div class="f-field">
+            <label>نام تحویل‌گیرنده<span class="req">*</span></label>
+            <input type="text" id="coName" required>
+            <div class="f-err"></div>
+          </div>
+          <div class="f-field">
+            <label>موبایل تحویل‌گیرنده<span class="req">*</span></label>
+            <input type="tel" id="coMobile" inputmode="numeric" placeholder="09xxxxxxxxx" required>
+            <div class="f-err"></div>
+          </div>
         </div>
-        <div class="f-field">
-          <label>آدرس تحویل<span class="req">*</span></label>
-          <textarea id="coAddress" required></textarea>
-          <div class="f-err"></div>
+
+        <div id="addrGroup" style="display:none;">
+          <div class="f-row2">
+            <div class="f-field">
+              <label>استان<span class="req">*</span></label>
+              <input type="text" id="coProvince">
+              <div class="f-err"></div>
+            </div>
+            <div class="f-field">
+              <label>شهر<span class="req">*</span></label>
+              <input type="text" id="coCity">
+              <div class="f-err"></div>
+            </div>
+          </div>
+          <div class="f-field">
+            <label>کد پستی (۱۰ رقم)<span class="req">*</span></label>
+            <input type="text" id="coPostal" inputmode="numeric" maxlength="10">
+            <div class="f-err"></div>
+          </div>
+          <div class="f-field">
+            <label>آدرس کامل<span class="req">*</span></label>
+            <textarea id="coAddress"></textarea>
+            <div class="f-err"></div>
+          </div>
         </div>
+
         <div class="f-field">
           <label>توضیحات سفارش</label>
           <textarea id="coNotes"></textarea>
@@ -374,6 +454,9 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
   <!-- ===== ورود / ثبت‌نام ===== -->
   <section class="view" id="view-account">
     <div class="form-card">
+      <div class="status" id="accountNotice" style="margin:0 0 16px;"></div>
+      <div id="accountInfo" class="account-box" style="display:none;"></div>
+      <div id="authBox">
       <div class="tabs">
         <button type="button" id="tabLogin" class="active">ورود</button>
         <button type="button" id="tabSignup">ثبت‌نام</button>
@@ -421,6 +504,7 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
         </div>
         <div class="status" id="signupStatus"></div>
       </form>
+      </div>
     </div>
   </section>
 
@@ -434,7 +518,17 @@ footer{text-align:center;padding:26px 14px;color:var(--muted);font-size:12.5px;b
           <button class="btn outline" id="adminLogoutBtn">خروج از پنل</button>
         </div>
       </div>
-      <div class="orders-table-wrap" id="ordersTableWrap"></div>
+      <div class="stat-chips" id="ordersStats"></div>
+      <div class="admin-filters">
+        <select id="fShip">
+          <option value="all">همه روش‌های ارسال</option>
+          <option value="post-express">پست اکسپرس</option>
+          <option value="tipax">تیپاکس</option>
+          <option value="pickup">حضوری</option>
+        </select>
+        <input type="text" id="fSearch" placeholder="جستجو: نام، موبایل، شماره سفارش، کد رهگیری">
+      </div>
+      <div id="ordersTableWrap"></div>
     </div>
   </section>
 
@@ -463,6 +557,19 @@ const CUSTOMERS_FILE = 'customers.json';
 const ADMIN_PASSCODE = 'admin'; // رمز مدیر: در بخش ورود/ثبت‌نام وارد شود تا پنل سفارشات باز شود
 /* اطلاعات تماس فروشگاه — مقدار خالی نمایش داده نمی‌شود */
 const STORE_INFO = { phone:'', address:'', hours:'شنبه تا پنجشنبه، ۸ تا ۱۸', telegram:'' };
+
+const SHIP_METHODS = {
+  'post-express': { label:'پست اکسپرس', desc:'ارسال از طریق شرکت پست', needsAddress:true },
+  'tipax':        { label:'تیپاکس',      desc:'ارسال از طریق تیپاکس',   needsAddress:true },
+  'pickup':       { label:'حضوری',       desc:'تحویل در محل فروشگاه',   needsAddress:false }
+};
+const STATUS_LIST = ['pending','preparing','shipped','done','canceled'];
+function statusLabel(st, method){
+  const m = { pending:'در انتظار تأیید', preparing:'در حال آماده‌سازی', shipped: method==='pickup' ? 'آماده‌ی تحویل' : 'ارسال شد', done:'تحویل‌شده', canceled:'لغو شده' };
+  return m[st] || st;
+}
+function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function nowTime(){ return new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}); }
 
 const CATEGORY_LABELS = {
   seed:'بذر و نهال', fertilizer:'کود و اصلاح خاک', tool:'ابزار و نهاده',
@@ -632,9 +739,12 @@ function route(){
     renderProductDetail(parts[1]); showView('view-product'); return;
   }
   if (parts[0] === 'cart'){ renderCart(); showView('view-cart'); return; }
-  if (parts[0] === 'checkout'){ renderCheckout(); showView('view-checkout'); return; }
+  if (parts[0] === 'checkout'){
+    if (!CUSTOMER){ sessionStorage.setItem('fs_after_login', '#/checkout'); location.hash = '#/account'; return; }
+    renderCheckout(); showView('view-checkout'); return;
+  }
   if (parts[0] === 'order-success'){ showView('view-order-success'); return; }
-  if (parts[0] === 'account'){ showView('view-account'); return; }
+  if (parts[0] === 'account'){ renderAccount(); showView('view-account'); return; }
   if (parts[0] === 'about'){ renderContact(); showView('view-about'); return; }
   if (parts[0] === 'admin'){
     if (!isAdmin()){ location.hash = '#/account'; return; }
@@ -750,7 +860,7 @@ function renderCart(){
       </div>
     </div>
     <div class="cart-actions">
-      <a href="#/checkout" class="btn gold">ادامه و ثبت سفارش</a>
+      <a href="#/checkout" class="btn gold">${CUSTOMER ? 'ادامه و ثبت سفارش' : 'ورود به حساب و ادامه ثبت سفارش'}</a>
     </div>`;
 
   body.querySelectorAll('tr[data-id]').forEach(row=>{
@@ -771,30 +881,62 @@ function setFErr(input, msg){
 const mobileRe = /^09\d{9}$/;
 
 /* ---------- تسویه حساب / ثبت سفارش ---------- */
+function selectedShip(){ const r = document.querySelector('input[name="shipMethod"]:checked'); return r ? r.value : null; }
+function applyShipUI(){
+  const m = selectedShip();
+  const needs = m ? SHIP_METHODS[m].needsAddress : false;
+  document.getElementById('addrGroup').style.display = needs ? 'block' : 'none';
+  const note = document.getElementById('shipNote');
+  if (!m){ note.style.display='none'; return; }
+  note.style.display = 'block';
+  note.textContent = needs
+    ? 'هزینه و زمان ارسال جداگانه محاسبه و هنگام هماهنگی توسط همکاران ما اعلام می‌شود.'
+    : ('سفارش شما در فروشگاه آماده می‌شود و پس از هماهنگی تلفنی تحویل می‌گیرید.' + (STORE_INFO.address ? ' آدرس: ' + STORE_INFO.address : ''));
+}
 function renderCheckout(){
   if (!cartLines().length){ location.hash = '#/cart'; return; }
   const sum = document.getElementById('checkoutSummary');
-  sum.innerHTML = cartLines().map(l=>`<div class="row"><span>${l.product.name} × ${l.qty}</span><span>${fmtPrice(l.lineTotal)} تومان</span></div>`).join('')
-    + `<div class="row total"><span>جمع کل</span><span>${fmtPrice(cartTotal())} تومان</span></div>`;
+  sum.innerHTML = cartLines().map(l=>`<div class="row"><span>${esc(l.product.name)} × ${l.qty}</span><span>${fmtPrice(l.lineTotal)} تومان</span></div>`).join('')
+    + `<div class="row total"><span>جمع کل کالاها</span><span>${fmtPrice(cartTotal())} تومان</span></div>`;
+  const prev = selectedShip();
+  document.getElementById('shipOptions').innerHTML = Object.entries(SHIP_METHODS).map(([k,v])=>`
+    <label class="ship-opt"><input type="radio" name="shipMethod" value="${k}" ${prev===k?'checked':''}>
+      <span class="ship-body"><b>${v.label}</b><small>${v.desc}</small></span></label>`).join('');
+  document.querySelectorAll('input[name="shipMethod"]').forEach(r=>r.addEventListener('change', ()=>{ document.getElementById('shipErr').textContent=''; applyShipUI(); }));
   if (CUSTOMER){
-    document.getElementById('coName').value = CUSTOMER.name || '';
-    document.getElementById('coMobile').value = CUSTOMER.mobile || '';
-    document.getElementById('coAddress').value = CUSTOMER.address || '';
+    const n = document.getElementById('coName'), m = document.getElementById('coMobile'), a = document.getElementById('coAddress');
+    if (!n.value) n.value = CUSTOMER.name || '';
+    if (!m.value) m.value = CUSTOMER.mobile || '';
+    if (!a.value) a.value = CUSTOMER.address || '';
   }
+  applyShipUI();
 }
 document.getElementById('checkoutForm').addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const name = document.getElementById('coName');
-  const mobile = document.getElementById('coMobile');
-  const address = document.getElementById('coAddress');
-  const notes = document.getElementById('coNotes');
   const statusBox = document.getElementById('checkoutStatus');
   statusBox.className = 'status'; statusBox.textContent = '';
+  if (!CUSTOMER){ sessionStorage.setItem('fs_after_login','#/checkout'); location.hash = '#/account'; return; }
+
+  const name = document.getElementById('coName');
+  const mobile = document.getElementById('coMobile');
+  const province = document.getElementById('coProvince');
+  const city = document.getElementById('coCity');
+  const postal = document.getElementById('coPostal');
+  const address = document.getElementById('coAddress');
+  const notes = document.getElementById('coNotes');
+  const method = selectedShip();
 
   let ok = true;
+  if (!method){ document.getElementById('shipErr').textContent = 'روش دریافت سفارش را انتخاب کنید'; ok=false; } else document.getElementById('shipErr').textContent = '';
   if (!name.value.trim()){ setFErr(name,'نام را وارد کنید'); ok=false; } else setFErr(name,'');
   if (!mobileRe.test(mobile.value.trim())){ setFErr(mobile,'شماره موبایل معتبر نیست'); ok=false; } else setFErr(mobile,'');
-  if (!address.value.trim()){ setFErr(address,'آدرس را وارد کنید'); ok=false; } else setFErr(address,'');
+  const needs = method && SHIP_METHODS[method].needsAddress;
+  if (needs){
+    if (!province.value.trim()){ setFErr(province,'استان را وارد کنید'); ok=false; } else setFErr(province,'');
+    if (!city.value.trim()){ setFErr(city,'شهر را وارد کنید'); ok=false; } else setFErr(city,'');
+    if (!/^\d{10}$/.test(postal.value.trim())){ setFErr(postal,'کد پستی ۱۰ رقمی معتبر نیست'); ok=false; } else setFErr(postal,'');
+    if (!address.value.trim()){ setFErr(address,'آدرس را وارد کنید'); ok=false; } else setFErr(address,'');
+  }
   if (!ok){
     statusBox.className = 'status bad';
     statusBox.textContent = 'فرم ناقص یا نادرست است — موارد قرمزرنگ را اصلاح کنید.';
@@ -808,14 +950,22 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e)=>{
     const order = {
       id: Date.now(),
       date: nowJalali(),
-      customer: { name: name.value.trim(), mobile: mobile.value.trim(), address: address.value.trim(), notes: notes.value.trim() },
+      time: nowTime(),
+      account: { name: CUSTOMER.name, mobile: CUSTOMER.mobile },
+      receiver: { name: name.value.trim(), mobile: mobile.value.trim() },
+      shipping: { method, label: SHIP_METHODS[method].label },
+      address: needs ? { province: province.value.trim(), city: city.value.trim(), postalCode: postal.value.trim(), full: address.value.trim() } : null,
+      notes: notes.value.trim(),
       items: cartLines().map(l=>({ id:l.product.id, name:l.product.name, price:l.product.price, qty:l.qty, lineTotal:l.lineTotal })),
       total: cartTotal(),
-      status: 'pending'
+      status: 'pending',
+      trackingCode: '',
+      history: [{ status:'pending', date: nowJalali(), time: nowTime() }]
     };
-    await ghAppend(CONFIG.fileName, order, `سفارش جدید: ${order.customer.name}`);
+    await ghAppend(CONFIG.fileName, order, `سفارش جدید: ${order.receiver.name}`);
     document.getElementById('orderSuccessText').textContent =
-      `سفارش شما به مبلغ ${fmtPrice(order.total)} تومان ثبت شد. همکاران ما برای هماهنگی تحویل با شما تماس می‌گیرند.`;
+      `سفارش شما به مبلغ ${fmtPrice(order.total)} تومان ثبت شد. ` +
+      (needs ? 'همکاران ما برای تأیید و هماهنگی هزینه و زمان ارسال با شما تماس می‌گیرند.' : 'پس از آماده شدن سفارش، برای تحویل حضوری با شما تماس می‌گیریم.');
     CART = []; saveCart();
     e.target.reset();
     location.hash = '#/order-success';
@@ -834,6 +984,31 @@ const signupForm = document.getElementById('signupForm');
 tabLogin.onclick = ()=>{ tabLogin.classList.add('active'); tabSignup.classList.remove('active'); loginForm.style.display='block'; signupForm.style.display='none'; };
 tabSignup.onclick = ()=>{ tabSignup.classList.add('active'); tabLogin.classList.remove('active'); signupForm.style.display='block'; loginForm.style.display='none'; };
 
+function goAfterLogin(){
+  const t = sessionStorage.getItem('fs_after_login');
+  sessionStorage.removeItem('fs_after_login');
+  location.hash = t || '#/';
+}
+function renderAccount(){
+  const info = document.getElementById('accountInfo');
+  const box = document.getElementById('authBox');
+  const notice = document.getElementById('accountNotice');
+  if (CUSTOMER){
+    box.style.display = 'none'; notice.className = 'status'; notice.textContent = '';
+    info.style.display = 'block';
+    info.innerHTML = `<h2>${esc(CUSTOMER.name)}</h2><p>موبایل: ${esc(CUSTOMER.mobile)}</p>
+      <a href="#/cart" class="btn" style="display:inline-block;margin-inline-end:8px;">سبد خرید</a>
+      <button type="button" class="btn outline" id="logoutBtn">خروج از حساب</button>`;
+    document.getElementById('logoutBtn').onclick = ()=>{
+      CUSTOMER = null; localStorage.removeItem('fs_customer'); updateAccountLink(); renderAccount();
+    };
+  } else {
+    info.style.display = 'none'; box.style.display = 'block';
+    if (sessionStorage.getItem('fs_after_login')){
+      notice.className = 'status bad'; notice.textContent = 'برای ثبت سفارش ابتدا وارد حساب خود شوید یا ثبت‌نام کنید.';
+    } else { notice.className = 'status'; notice.textContent = ''; }
+  }
+}
 function updateAccountLink(){
   const link = document.getElementById('accountLink');
   link.textContent = CUSTOMER ? `حساب: ${CUSTOMER.name}` : 'ورود / ثبت‌نام';
@@ -863,7 +1038,7 @@ loginForm.addEventListener('submit', async (e)=>{
     localStorage.setItem('fs_customer', JSON.stringify(CUSTOMER));
     updateAccountLink();
     statusBox.className='status ok'; statusBox.textContent = 'ورود موفق بود.';
-    setTimeout(()=>{ location.hash = '#/'; }, 500);
+    setTimeout(goAfterLogin, 500);
   } catch(err){
     statusBox.className='status bad'; statusBox.textContent = err.message;
   } finally {
@@ -900,7 +1075,7 @@ signupForm.addEventListener('submit', async (e)=>{
     localStorage.setItem('fs_customer', JSON.stringify(CUSTOMER));
     updateAccountLink();
     statusBox.className='status ok'; statusBox.textContent = 'ثبت‌نام با موفقیت انجام شد.';
-    setTimeout(()=>{ location.hash = '#/'; }, 600);
+    setTimeout(goAfterLogin, 600);
   } catch(err){
     statusBox.className='status bad'; statusBox.textContent = err.message;
   } finally {
@@ -938,48 +1113,131 @@ async function loadOrders(){
     ordersCache = data; ordersSha = sha;
     renderOrdersTable();
   } catch(err){
-    wrap.innerHTML = `<div class="status bad" style="display:block;">${err.message}</div>`;
+    wrap.innerHTML = `<div class="status bad" style="display:block;">${esc(err.message)}</div>`;
   }
 }
+
+let adminFilter = { status:'all', ship:'all', q:'' };
+document.getElementById('fShip').addEventListener('change', e=>{ adminFilter.ship = e.target.value; renderOrdersTable(); });
+document.getElementById('fSearch').addEventListener('input', e=>{ adminFilter.q = e.target.value.trim(); renderOrdersTable(); });
+
+function normOrder(o){
+  const receiver = o.receiver || o.customer || {};
+  const account = o.account || o.customer || {};
+  const shipping = o.shipping || { method:null, label:'ثبت‌نشده' };
+  const addr = (o.address && typeof o.address === 'object') ? o.address : (o.customer && o.customer.address ? { full:o.customer.address } : null);
+  const notes = (o.notes !== undefined) ? o.notes : (o.customer ? o.customer.notes : '');
+  return { raw:o, id:o.id, date:o.date, time:o.time, receiver, account, shipping, addr, notes, items:o.items||[], total:o.total, status:o.status||'pending', trackingCode:o.trackingCode||'', history:o.history||[] };
+}
+function shippingText(o){
+  const lines = [`گیرنده: ${o.receiver.name||'—'} — ${o.receiver.mobile||'—'}`, `روش ارسال: ${o.shipping.label}`];
+  if (o.addr){
+    const loc = [o.addr.province, o.addr.city].filter(Boolean).join('، ');
+    if (loc) lines.push(`استان/شهر: ${loc}`);
+    if (o.addr.full) lines.push(`آدرس: ${o.addr.full}`);
+    if (o.addr.postalCode) lines.push(`کد پستی: ${o.addr.postalCode}`);
+  } else if (o.shipping.method === 'pickup') lines.push('تحویل حضوری از فروشگاه');
+  return lines.join('\n');
+}
 function renderOrdersTable(){
-  const wrap = document.getElementById('ordersTableWrap');
-  if (!ordersCache.length){ wrap.innerHTML = '<div class="empty-state">هنوز سفارشی ثبت نشده.</div>'; return; }
-  const rows = [...ordersCache].reverse();
-  wrap.innerHTML = `
-    <table class="orders-table">
-      <thead><tr><th>تاریخ</th><th>مشتری</th><th>موبایل</th><th>اقلام</th><th>مبلغ</th><th>وضعیت</th><th></th></tr></thead>
-      <tbody>
-        ${rows.map(o=>`
-          <tr data-oid="${o.id}">
-            <td>${o.date||'—'}</td>
-            <td>${o.customer?.name||'—'}</td>
-            <td>${o.customer?.mobile||'—'}</td>
-            <td class="mini-items">${(o.items||[]).map(it=>`${it.name}×${it.qty}`).join('، ')}</td>
-            <td>${fmtPrice(o.total)} تومان</td>
-            <td><span class="pill ${o.status==='done'?'done':'pending'}">${o.status==='done'?'تحویل‌شده':'در انتظار'}</span></td>
-            <td><button type="button" class="pill-btn toggle-status">${o.status==='done'?'بازگردانی':'تحویل شد'}</button></td>
-          </tr>`).join('')}
-      </tbody>
-    </table>`;
-  wrap.querySelectorAll('.toggle-status').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-      const tr = btn.closest('tr');
-      const oid = tr.dataset.oid;
-      const order = ordersCache.find(o=>String(o.id)===String(oid));
-      if (!order) return;
-      btn.disabled = true; btn.textContent = '...';
-      try{
-        order.status = order.status === 'done' ? 'pending' : 'done';
-        await ghPutFile(CONFIG.fileName, ordersCache, ordersSha, `بروزرسانی وضعیت سفارش ${oid}`);
-        const fresh = await ghGetFile(CONFIG.fileName);
-        ordersCache = fresh.data; ordersSha = fresh.sha;
-        renderOrdersTable();
-      } catch(err){
-        alert(err.message);
-        btn.disabled = false;
-      }
-    });
+  const all = ordersCache.map(normOrder).reverse();
+  // شمارنده‌ها
+  const counts = { all: all.length };
+  STATUS_LIST.forEach(s=>counts[s]=0);
+  all.forEach(o=>{ if (counts[o.status]!==undefined) counts[o.status]++; });
+  const chips = [['all','همه'], ...STATUS_LIST.map(s=>[s, statusLabel(s)])];
+  const statsBox = document.getElementById('ordersStats');
+  statsBox.innerHTML = chips.map(([k,l])=>`<button type="button" class="stat-chip ${adminFilter.status===k?'active':''}" data-st="${k}">${l}<span>${fmtPrice(counts[k]||0)}</span></button>`).join('');
+  statsBox.querySelectorAll('.stat-chip').forEach(b=>b.onclick = ()=>{ adminFilter.status = b.dataset.st; renderOrdersTable(); });
+
+  // فیلتر
+  const q = adminFilter.q;
+  const list = all.filter(o=>{
+    if (adminFilter.status !== 'all' && o.status !== adminFilter.status) return false;
+    if (adminFilter.ship !== 'all' && o.shipping.method !== adminFilter.ship) return false;
+    if (q){
+      const hay = [o.id, o.receiver.name, o.receiver.mobile, o.account.name, o.account.mobile, o.trackingCode, o.addr && o.addr.full].join(' ');
+      if (!hay.includes(q)) return false;
+    }
+    return true;
   });
+
+  const wrap = document.getElementById('ordersTableWrap');
+  if (!all.length){ wrap.innerHTML = '<div class="empty-state">هنوز سفارشی ثبت نشده.</div>'; return; }
+  if (!list.length){ wrap.innerHTML = '<div class="empty-state">سفارشی با این فیلتر پیدا نشد.</div>'; return; }
+
+  wrap.innerHTML = list.map(o=>{
+    const isPickup = o.shipping.method === 'pickup';
+    const addrHtml = o.addr
+      ? `${o.addr.province||o.addr.city ? `<b>${esc([o.addr.province,o.addr.city].filter(Boolean).join('، '))}</b><br>` : ''}${esc(o.addr.full||'')}${o.addr.postalCode ? `<br>کد پستی: ${esc(o.addr.postalCode)}` : ''}`
+      : (isPickup ? 'تحویل حضوری از فروشگاه' : '—');
+    const hist = o.history.length ? o.history.map(h=>`${esc(statusLabel(h.status, o.shipping.method))} (${esc(h.date||'')} ${esc(h.time||'')})`).join(' ← ') : '';
+    return `
+    <div class="o-card" data-oid="${esc(o.id)}">
+      <div class="o-head">
+        <div><span class="o-id">سفارش ${esc(String(o.id).slice(-6))}</span> <span class="o-date">${esc(o.date||'')} ${esc(o.time||'')}</span></div>
+        <div class="o-pills">
+          <span class="pill ship">${esc(o.shipping.label)}</span>
+          <span class="pill ${o.status==='pending'?'pending':o.status}">${statusLabel(o.status, o.shipping.method)}</span>
+        </div>
+      </div>
+      <div class="o-body">
+        <div class="o-sec"><h4>صاحب حساب</h4><p>${esc(o.account.name||'—')}<br>${esc(o.account.mobile||'—')}</p></div>
+        <div class="o-sec"><h4>تحویل‌گیرنده</h4><p>${esc(o.receiver.name||'—')}<br>${esc(o.receiver.mobile||'—')}</p></div>
+        <div class="o-sec"><h4>${isPickup?'نحوه‌ی دریافت':'آدرس ارسال'}</h4><p>${addrHtml}</p></div>
+        <div class="o-sec"><h4>توضیحات مشتری</h4><p>${o.notes ? esc(o.notes) : '—'}</p></div>
+        <div class="o-sec full"><h4>اقلام سفارش</h4>
+          <table class="o-items"><thead><tr><th>کالا</th><th>تعداد</th><th>قیمت واحد</th><th>جمع</th></tr></thead><tbody>
+            ${o.items.map(it=>`<tr><td>${esc(it.name)}</td><td>${fmtPrice(it.qty)}</td><td>${fmtPrice(it.price)}</td><td>${fmtPrice(it.lineTotal ?? (it.price*it.qty))}</td></tr>`).join('')}
+          </tbody></table>
+          <div class="o-total"><span>جمع کل کالاها</span><span>${fmtPrice(o.total)} تومان</span></div>
+        </div>
+        ${hist ? `<div class="o-sec full o-hist">سابقه: ${hist}</div>` : ''}
+      </div>
+      <div class="o-foot">
+        <select class="os-status">${STATUS_LIST.map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${statusLabel(s, o.shipping.method)}</option>`).join('')}</select>
+        ${isPickup ? '' : `<input type="text" class="os-track" placeholder="کد رهگیری (در صورت ارسال)" value="${esc(o.trackingCode)}">`}
+        <button type="button" class="pill-btn save os-save">ذخیره تغییرات</button>
+        <button type="button" class="pill-btn os-copy">کپی اطلاعات ارسال</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.o-card').forEach(card=>{
+    const oid = card.dataset.oid;
+    const o = all.find(x=>String(x.id)===String(oid));
+    card.querySelector('.os-copy').onclick = async (ev)=>{
+      const b = ev.target; const txt = shippingText(o);
+      try{ await navigator.clipboard.writeText(txt); b.textContent = 'کپی شد ✓'; }
+      catch(e){ window.prompt('این متن را کپی کنید:', txt); }
+      setTimeout(()=>{ b.textContent = 'کپی اطلاعات ارسال'; }, 1500);
+    };
+    card.querySelector('.os-save').onclick = async (ev)=>{
+      const b = ev.target;
+      const st = card.querySelector('.os-status').value;
+      const trackEl = card.querySelector('.os-track');
+      b.disabled = true; b.textContent = 'در حال ذخیره...';
+      try{
+        await updateOrder(oid, { status: st, trackingCode: trackEl ? trackEl.value.trim() : '' });
+        b.textContent = 'ذخیره شد ✓';
+        setTimeout(renderOrdersTable, 700);
+      } catch(err){
+        alert(err.message); b.disabled = false; b.textContent = 'ذخیره تغییرات';
+      }
+    };
+  });
+}
+async function updateOrder(oid, patch){
+  if (!CONFIG) CONFIG = await loadConfig();
+  const { data, sha } = await ghGetFile(CONFIG.fileName);
+  const o = data.find(x=>String(x.id)===String(oid));
+  if (!o) throw new Error('سفارش پیدا نشد');
+  const changed = (o.status || 'pending') !== patch.status;
+  o.status = patch.status;
+  o.trackingCode = patch.trackingCode;
+  if (changed){ o.history = o.history || []; o.history.push({ status: patch.status, date: nowJalali(), time: nowTime() }); }
+  await ghPutFile(CONFIG.fileName, data, sha, `بروزرسانی سفارش ${oid}`);
+  ordersCache = data; ordersSha = null;
 }
 
 /* ---------- راه‌اندازی ---------- */
