@@ -136,7 +136,7 @@
       }
     ],
     "total": 8425000,
-    "status": "shipped",
+    "status": "pending",
     "trackingCode": "16321632",
     "history": [
       {
@@ -153,6 +153,11 @@
         "status": "shipped",
         "date": "17 مهر 1405",
         "time": "۲۳:۳۸"
+      },
+      {
+        "status": "pending",
+        "date": "17 مهر 1405",
+        "time": "۲۳:۳۹"
       }
     ]
   }
