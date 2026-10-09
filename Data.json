@@ -199,7 +199,7 @@
       }
     ],
     "total": 925000,
-    "status": "preparing",
+    "status": "shipped",
     "trackingCode": "",
     "history": [
       {
@@ -211,6 +211,11 @@
         "status": "preparing",
         "date": "17 مهر 1405",
         "time": "۲۳:۴۶"
+      },
+      {
+        "status": "shipped",
+        "date": "17 مهر 1405",
+        "time": "۲۳:۴۷"
       }
     ]
   }
