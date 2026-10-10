@@ -247,13 +247,18 @@
       }
     ],
     "total": 185000,
-    "status": "pending",
+    "status": "done",
     "trackingCode": "",
     "history": [
       {
         "status": "pending",
         "date": "18 مهر 1405",
         "time": "۱۰:۴۰"
+      },
+      {
+        "status": "done",
+        "date": "18 مهر 1405",
+        "time": "۱۰:۴۲"
       }
     ]
   }
