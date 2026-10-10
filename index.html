@@ -349,6 +349,55 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 .track .tk.on::before{background:var(--leaf);}
 .cancel-banner{background:#f5dcd8;color:var(--err);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;}
 
+
+/* ===== پروفایل (سایدبار راست در کادر) ===== */
+.profile-layout{display:grid;grid-template-columns:272px 1fr;gap:22px;align-items:start;margin-top:22px;}
+.profile-side{position:sticky;top:86px;padding:22px 14px 14px;border-radius:16px;
+  background:var(--glass);-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+  border:1.5px solid var(--glass-border);box-shadow:var(--glass-shadow);}
+.avatar{width:74px;height:74px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--leaf),var(--leaf-dark));color:#fff;font-family:'Lalezar','Vazirmatn',sans-serif;font-size:32px;
+  box-shadow:0 6px 18px rgba(43,74,36,.35);border:3px solid rgba(255,255,255,.7);}
+.side-name{text-align:center;font-weight:800;font-size:16px;color:var(--ink);}
+.side-mobile{text-align:center;font-size:12.5px;color:var(--muted);margin:2px 0 14px;}
+.side-menu{display:flex;flex-direction:column;gap:4px;border-top:1px solid rgba(0,0,0,.09);padding-top:12px;}
+.side-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;font-weight:600;font-size:14px;color:var(--soil);
+  background:transparent;border:none;width:100%;text-align:right;font-family:inherit;cursor:pointer;transition:background .15s;}
+.side-item svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.side-item:hover{background:rgba(255,255,255,.6);}
+.side-item.active{background:var(--leaf);color:#fff;box-shadow:0 4px 12px rgba(63,107,53,.35);}
+.side-item.logout{color:var(--err);margin-top:6px;border-top:1px solid rgba(0,0,0,.09);border-radius:0 0 10px 10px;padding-top:14px;}
+.side-item.logout:hover{background:rgba(164,52,42,.08);}
+.profile-main{min-width:0;}
+.profile-pane{display:none;}
+.profile-pane.active{display:block;animation:fadeIn .25s ease;}
+.pane-title{font-size:24px;color:var(--leaf-dark);margin:0 0 16px;}
+.pane-card{background:var(--glass);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
+  border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);border-radius:14px;padding:22px 24px;margin-bottom:16px;}
+.pane-card h3{font-size:19px;color:var(--leaf-dark);margin:0 0 10px;}
+.pane-card p{margin:0 0 8px;font-size:14px;color:#4a4231;line-height:1.9;}
+.welcome{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  background:linear-gradient(135deg,rgba(63,107,53,.88),rgba(43,74,36,.9));color:#fdfaf0;border:none;}
+.welcome h3{color:#fff;font-size:24px;margin:0;}
+.welcome p{color:#dce9d4;margin:2px 0 0;}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+.stat-card{background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);border-radius:12px;padding:16px 10px;text-align:center;}
+.stat-card .n{font-family:'Lalezar','Vazirmatn',sans-serif;font-size:28px;color:var(--leaf-dark);line-height:1.3;}
+.stat-card .n.sm{font-size:19px;padding-top:6px;}
+.stat-card .l{font-size:12.5px;color:var(--muted);}
+.quick{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+.info-note{font-size:12.5px;color:var(--muted);margin:-6px 0 14px;}
+.tip-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+@media (max-width:820px){
+  .profile-layout{grid-template-columns:minmax(0,1fr);}
+  .profile-side{position:static;min-width:0;}
+  .side-menu{min-width:0;}
+  .side-menu::-webkit-scrollbar{display:none;}
+  .side-menu{flex-direction:row;overflow-x:auto;gap:6px;}
+  .side-item{white-space:nowrap;width:auto;}
+  .side-item.logout{border-top:none;margin-top:0;border-radius:10px;padding-top:11px;}
+}
+
 /* ===== فاکتور چاپی ===== */
 #invoicePrint{display:none;}
 #invoicePrint{direction:rtl;font-family:'Vazirmatn','Tahoma',sans-serif;color:#111;background:#fff;}
@@ -392,7 +441,7 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
     <nav class="main-nav" id="mainNav">
       <a href="#/" data-route="home">محصولات</a>
       <a href="#/cart" data-route="cart">سبد خرید <span class="badge" id="cartBadge">0</span></a>
-      <a href="#/my-orders" data-route="my-orders" id="myOrdersLink" style="display:none;">سفارشات من</a>
+      <a href="#/account/orders" data-route="my-orders" id="myOrdersLink" style="display:none;">سفارشات من</a>
       <a href="#/account" data-route="account" id="accountLink">ورود / ثبت‌نام</a>
       <a href="#/about" data-route="about">درباره ما</a>
       <a href="#/admin" data-route="admin" id="adminLink" style="display:none;">پنل سفارشات</a>
@@ -544,16 +593,27 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
       <h2>سفارش شما ثبت شد</h2>
       <p id="orderSuccessText"></p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;">
-        <a href="#/my-orders" class="btn">پیگیری سفارش</a>
+        <a href="#/account/orders" class="btn">پیگیری سفارش</a>
         <a href="#/" class="btn outline">بازگشت به فروشگاه</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== سفارشات من ===== -->
-  <section class="view" id="view-my-orders">
-    <h2 style="color:var(--leaf-dark);margin:20px 0;">سفارشات من</h2>
-    <div id="myOrdersBody"></div>
+  <!-- ===== پروفایل ===== -->
+  <section class="view" id="view-profile">
+    <div class="profile-layout">
+      <aside class="profile-side" id="profileSide"></aside>
+      <div class="profile-main">
+        <div class="profile-pane" id="pane-overview"></div>
+        <div class="profile-pane" id="pane-info"></div>
+        <div class="profile-pane" id="pane-orders">
+          <h2 class="pane-title">سفارشات من</h2>
+          <div id="myOrdersBody"></div>
+        </div>
+        <div class="profile-pane" id="pane-password"></div>
+        <div class="profile-pane" id="pane-support"></div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== ورود / ثبت‌نام ===== -->
@@ -661,7 +721,7 @@ const SHEET_GID = '0';
 const CONFIG_ROW = 6; // ردیف ۶ (خونه B6)
 const CONFIG_COL = 1; // ستون B
 const CUSTOMERS_FILE = 'customers.json';
-const ADMIN_PASSCODE = 'admin'; // رمز مدیر: در بخش ورود/ثبت‌نام وارد شود تا پنل سفارشات باز شود
+const ADMIN_PASSCODE = 'kharazmi1403'; // رمز مدیر: در بخش ورود/ثبت‌نام وارد شود تا پنل سفارشات باز شود
 /* اطلاعات تماس فروشگاه — مقدار خالی نمایش داده نمی‌شود */
 const STORE_INFO = { phone:'', address:'', hours:'شنبه تا پنجشنبه، ۸ تا ۱۸', telegram:'' };
 
@@ -851,11 +911,12 @@ function route(){
     renderCheckout(); showView('view-checkout'); return;
   }
   if (parts[0] === 'order-success'){ showView('view-order-success'); return; }
-  if (parts[0] === 'account'){ renderAccount(); showView('view-account'); return; }
-  if (parts[0] === 'my-orders'){
-    if (!CUSTOMER){ sessionStorage.setItem('fs_after_login', '#/my-orders'); location.hash = '#/account'; return; }
-    showView('view-my-orders'); loadMyOrders(); return;
+  if (parts[0] === 'account'){
+    if (CUSTOMER){ renderProfile(parts[1]); showView('view-profile'); return; }
+    if (parts[1]) sessionStorage.setItem('fs_after_login', '#/account/' + parts[1]);
+    renderAccount(); showView('view-account'); return;
   }
+  if (parts[0] === 'my-orders'){ location.hash = '#/account/orders'; return; }
   if (parts[0] === 'about'){ renderContact(); showView('view-about'); return; }
   if (parts[0] === 'admin'){
     if (!isAdmin()){ location.hash = '#/account'; return; }
@@ -1019,6 +1080,10 @@ function renderCheckout(){
     if (!n.value) n.value = CUSTOMER.name || '';
     if (!m.value) m.value = CUSTOMER.mobile || '';
     if (!a.value) a.value = CUSTOMER.address || '';
+    const pv = document.getElementById('coProvince'), ct = document.getElementById('coCity'), pc = document.getElementById('coPostal');
+    if (!pv.value) pv.value = CUSTOMER.province || '';
+    if (!ct.value) ct.value = CUSTOMER.city || '';
+    if (!pc.value) pc.value = CUSTOMER.postal || '';
   }
   applyShipUI();
 }
@@ -1098,7 +1163,8 @@ tabSignup.onclick = ()=>{ tabSignup.classList.add('active'); tabLogin.classList.
 function goAfterLogin(){
   const t = sessionStorage.getItem('fs_after_login');
   sessionStorage.removeItem('fs_after_login');
-  location.hash = t || '#/';
+  const target = t || (location.hash.startsWith('#/account') ? '#/account/overview' : '#/');
+  if (location.hash === target) route(); else location.hash = target;
 }
 function renderAccount(){
   const info = document.getElementById('accountInfo');
@@ -1117,7 +1183,7 @@ function renderAccount(){
   } else {
     info.style.display = 'none'; box.style.display = 'block';
     if (sessionStorage.getItem('fs_after_login')){
-      notice.className = 'status bad'; notice.textContent = 'برای ثبت سفارش ابتدا وارد حساب خود شوید یا ثبت‌نام کنید.';
+      notice.className = 'status bad'; notice.textContent = 'برای ادامه ابتدا وارد حساب خود شوید یا ثبت‌نام کنید.';
     } else { notice.className = 'status'; notice.textContent = ''; }
   }
 }
@@ -1147,7 +1213,7 @@ loginForm.addEventListener('submit', async (e)=>{
     const hash = await hashPassword(pass.value);
     const user = data.find(u=>u.mobile === mobile.value.trim() && u.passHash === hash);
     if (!user) throw new Error('شماره موبایل یا رمز عبور اشتباه است');
-    CUSTOMER = { name:user.name, mobile:user.mobile, address:user.address||'' };
+    CUSTOMER = { name:user.name, mobile:user.mobile, address:user.address||'', province:user.province||'', city:user.city||'', postal:user.postal||'', since:user.date||'' };
     localStorage.setItem('fs_customer', JSON.stringify(CUSTOMER));
     updateAccountLink();
     statusBox.className='status ok'; statusBox.textContent = 'ورود موفق بود.';
@@ -1184,7 +1250,7 @@ signupForm.addEventListener('submit', async (e)=>{
     const record = { name:name.value.trim(), mobile:mobile.value.trim(), address:address.value.trim(), passHash, date: nowJalali() };
     data.push(record);
     await ghPutFile(CUSTOMERS_FILE, data, sha, `ثبت‌نام مشتری جدید: ${record.name}`);
-    CUSTOMER = { name:record.name, mobile:record.mobile, address:record.address };
+    CUSTOMER = { name:record.name, mobile:record.mobile, address:record.address, province:'', city:'', postal:'', since:record.date||'' };
     localStorage.setItem('fs_customer', JSON.stringify(CUSTOMER));
     updateAccountLink();
     statusBox.className='status ok'; statusBox.textContent = 'ثبت‌نام با موفقیت انجام شد.';
@@ -1415,13 +1481,17 @@ function printInvoice(o){
 
 /* ---------- سفارشات من (مشتری) ---------- */
 let myOrders = [];
+async function fetchMyOrders(){
+  if (!CONFIG) CONFIG = await loadConfig();
+  const { data } = await ghGetFile(CONFIG.fileName);
+  myOrders = data.map(normOrder).filter(o=>o.account.mobile === CUSTOMER.mobile).reverse();
+  return myOrders;
+}
 async function loadMyOrders(){
   const body = document.getElementById('myOrdersBody');
   body.innerHTML = '<div class="empty-state">در حال بارگذاری...</div>';
   try{
-    if (!CONFIG) CONFIG = await loadConfig();
-    const { data } = await ghGetFile(CONFIG.fileName);
-    myOrders = data.map(normOrder).filter(o=>o.account.mobile === CUSTOMER.mobile).reverse();
+    await fetchMyOrders();
     renderMyOrders();
   } catch(err){
     body.innerHTML = `<div class="status bad" style="display:block;">${esc(err.message)}</div>`;
@@ -1620,6 +1690,202 @@ function openEditModal(oid){
       btn.disabled = false; btn.textContent = 'ذخیره تغییرات';
     }
   });
+}
+
+
+/* ---------- پروفایل مشتری ---------- */
+const PROFILE_SECTIONS = [
+  { id:'overview', label:'نمای کلی',        icon:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>' },
+  { id:'info',     label:'اطلاعات حساب',    icon:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>' },
+  { id:'orders',   label:'سفارشات من',      icon:'<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>' },
+  { id:'password', label:'تغییر رمز عبور',  icon:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>' },
+  { id:'support',  label:'پشتیبانی و راهنما', icon:'<path d="M4 5h16v11H9l-5 4V5z"/>' }
+];
+let profileSection = 'overview';
+
+function renderProfile(section){
+  if (!PROFILE_SECTIONS.some(x=>x.id===section)) section = 'overview';
+  profileSection = section;
+  const initial = (CUSTOMER.name || '؟').trim().charAt(0);
+  document.getElementById('profileSide').innerHTML = `
+    <div class="avatar">${esc(initial)}</div>
+    <div class="side-name">${esc(CUSTOMER.name)}</div>
+    <div class="side-mobile">${esc(CUSTOMER.mobile)}</div>
+    <nav class="side-menu">
+      ${PROFILE_SECTIONS.map(x=>`<a href="#/account/${x.id}" class="side-item ${x.id===section?'active':''}"><svg viewBox="0 0 24 24">${x.icon}</svg>${x.label}</a>`).join('')}
+      <button type="button" class="side-item logout" id="sideLogout"><svg viewBox="0 0 24 24"><path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>خروج از حساب</button>
+    </nav>`;
+  document.getElementById('sideLogout').onclick = ()=>{
+    CUSTOMER = null; localStorage.removeItem('fs_customer'); updateAccountLink(); location.hash = '#/';
+  };
+  PROFILE_SECTIONS.forEach(x=>document.getElementById('pane-'+x.id).classList.toggle('active', x.id===section));
+  if (section === 'overview') renderOverview();
+  if (section === 'info') renderInfoPane();
+  if (section === 'orders') loadMyOrders();
+  if (section === 'password') renderPasswordPane();
+  if (section === 'support') renderSupportPane();
+}
+
+async function renderOverview(){
+  const pane = document.getElementById('pane-overview');
+  const head = `
+    <div class="pane-card welcome">
+      <div><h3>سلام، ${esc(CUSTOMER.name)} 👋</h3><p>${CUSTOMER.since ? 'عضو فروشگاه از ' + esc(CUSTOMER.since) : 'به حساب کاربری خود خوش آمدید'}</p></div>
+      <div class="quick"><a href="#/" class="btn gold">ادامه خرید</a><a href="#/cart" class="btn outline" style="color:#fff;border-color:#fff;">سبد خرید (${fmtPrice(cartCount())})</a></div>
+    </div>`;
+  pane.innerHTML = head + '<div class="empty-state">در حال بارگذاری آمار...</div>';
+  let list;
+  try{ list = await fetchMyOrders(); }
+  catch(err){ pane.innerHTML = head + `<div class="status bad" style="display:block;">${esc(err.message)}</div>`; return; }
+  if (profileSection !== 'overview') return;
+  const active = list.filter(o=>o.status !== 'canceled');
+  const cnt = st => list.filter(o=>st.includes(o.status)).length;
+  const spend = active.reduce((t,o)=>t + (o.total||0), 0);
+  const last = list[0];
+  pane.innerHTML = head + `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="n">${fmtPrice(list.length)}</div><div class="l">کل سفارش‌ها</div></div>
+      <div class="stat-card"><div class="n">${fmtPrice(cnt(['pending']))}</div><div class="l">در انتظار تأیید</div></div>
+      <div class="stat-card"><div class="n">${fmtPrice(cnt(['preparing','shipped']))}</div><div class="l">در جریان</div></div>
+      <div class="stat-card"><div class="n">${fmtPrice(cnt(['done']))}</div><div class="l">تحویل‌شده</div></div>
+      <div class="stat-card"><div class="n sm">${fmtPrice(spend)}</div><div class="l">جمع خرید (تومان)</div></div>
+    </div>
+    <div class="pane-card">
+      <h3>آخرین سفارش</h3>
+      ${last ? `
+        <p><b>سفارش ${esc(String(last.id).slice(-6))}</b> — ${esc(last.date||'')} ${esc(last.time||'')}</p>
+        <p>${last.items.map(it=>esc(it.name)+' ×'+fmtPrice(it.qty)).join('، ')}</p>
+        <p>روش دریافت: ${esc(last.shipping.label)} &nbsp;|&nbsp; مبلغ: <b>${fmtPrice(last.total)} تومان</b></p>
+        <p><span class="pill ${last.status==='pending'?'pending':last.status}">${statusLabel(last.status, last.shipping.method)}</span></p>
+        <a href="#/account/orders" class="btn" style="display:inline-block;margin-top:6px;">مشاهده جزئیات و مدیریت سفارش</a>`
+      : `<p>هنوز سفارشی ثبت نکرده‌اید.</p><a href="#/" class="btn" style="display:inline-block;">مشاهده محصولات</a>`}
+    </div>
+    <div class="pane-card">
+      <h3>میان‌بُرها</h3>
+      <div class="quick">
+        <a href="#/account/info" class="btn outline">ویرایش اطلاعات و آدرس پیش‌فرض</a>
+        <a href="#/account/password" class="btn outline">تغییر رمز عبور</a>
+        <a href="#/account/support" class="btn outline">پشتیبانی</a>
+      </div>
+    </div>`;
+}
+
+async function mutateCustomer(mutate){
+  if (!CONFIG) CONFIG = await loadConfig();
+  const { data, sha } = await ghGetFile(CUSTOMERS_FILE);
+  const rec = data.find(u=>u.mobile === CUSTOMER.mobile);
+  if (!rec) throw new Error('حساب شما در سیستم پیدا نشد');
+  await mutate(rec);
+  await ghPutFile(CUSTOMERS_FILE, data, sha, `بروزرسانی حساب ${rec.mobile}`);
+  return rec;
+}
+
+function renderInfoPane(){
+  const pane = document.getElementById('pane-info');
+  pane.innerHTML = `
+    <h2 class="pane-title">اطلاعات حساب</h2>
+    <div class="pane-card">
+      <form id="infoForm" novalidate>
+        <h3>مشخصات</h3>
+        <div class="f-row2">
+          <div class="f-field"><label>نام و نام خانوادگی<span class="req">*</span></label><input type="text" id="pfName" value="${esc(CUSTOMER.name)}"><div class="f-err"></div></div>
+          <div class="f-field"><label>شماره موبایل (نام کاربری)</label><input type="text" id="pfMobile" value="${esc(CUSTOMER.mobile)}" readonly></div>
+        </div>
+        <h3 style="margin-top:8px;">اطلاعات تحویل پیش‌فرض</h3>
+        <p class="info-note">این اطلاعات هنگام ثبت سفارش به‌صورت خودکار پر می‌شود و همیشه قابل تغییر است.</p>
+        <div class="f-row2">
+          <div class="f-field"><label>استان</label><input type="text" id="pfProvince" value="${esc(CUSTOMER.province||'')}"></div>
+          <div class="f-field"><label>شهر</label><input type="text" id="pfCity" value="${esc(CUSTOMER.city||'')}"></div>
+        </div>
+        <div class="f-field"><label>کد پستی</label><input type="text" id="pfPostal" inputmode="numeric" maxlength="10" value="${esc(CUSTOMER.postal||'')}"><div class="f-err"></div></div>
+        <div class="f-field"><label>آدرس کامل</label><textarea id="pfAddress">${esc(CUSTOMER.address||'')}</textarea></div>
+        <button type="submit" class="btn" id="infoBtn">ذخیره تغییرات</button>
+        <div class="status" id="infoStatus"></div>
+      </form>
+    </div>`;
+  document.getElementById('infoForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const st = document.getElementById('infoStatus'); st.className = 'status'; st.textContent = '';
+    const name = document.getElementById('pfName'), postal = document.getElementById('pfPostal');
+    let ok = true;
+    if (!name.value.trim()){ setFErr(name,'نام را وارد کنید'); ok = false; } else setFErr(name,'');
+    if (postal.value.trim() && !/^\d{10}$/.test(postal.value.trim())){ setFErr(postal,'کد پستی باید ۱۰ رقم باشد'); ok = false; } else setFErr(postal,'');
+    if (!ok) return;
+    const btn = document.getElementById('infoBtn'); btn.disabled = true; btn.textContent = 'در حال ذخیره...';
+    try{
+      const rec = await mutateCustomer(r=>{
+        r.name = name.value.trim();
+        r.province = document.getElementById('pfProvince').value.trim();
+        r.city = document.getElementById('pfCity').value.trim();
+        r.postal = postal.value.trim();
+        r.address = document.getElementById('pfAddress').value.trim();
+      });
+      CUSTOMER = { ...CUSTOMER, name:rec.name, province:rec.province, city:rec.city, postal:rec.postal, address:rec.address };
+      localStorage.setItem('fs_customer', JSON.stringify(CUSTOMER));
+      updateAccountLink();
+      st.className = 'status ok'; st.textContent = 'اطلاعات با موفقیت ذخیره شد.';
+      renderProfile('info');
+      const st2 = document.getElementById('infoStatus'); st2.className = 'status ok'; st2.textContent = 'اطلاعات با موفقیت ذخیره شد.';
+    } catch(err){
+      st.className = 'status bad'; st.textContent = err.message;
+      btn.disabled = false; btn.textContent = 'ذخیره تغییرات';
+    }
+  });
+}
+
+function renderPasswordPane(){
+  const pane = document.getElementById('pane-password');
+  pane.innerHTML = `
+    <h2 class="pane-title">تغییر رمز عبور</h2>
+    <div class="pane-card" style="max-width:520px;">
+      <form id="pwForm" novalidate>
+        <div class="f-field"><label>رمز عبور فعلی<span class="req">*</span></label><input type="password" id="pwCur"><div class="f-err"></div></div>
+        <div class="f-field"><label>رمز عبور جدید<span class="req">*</span></label><input type="password" id="pwNew"><div class="f-err"></div></div>
+        <div class="f-field"><label>تکرار رمز جدید<span class="req">*</span></label><input type="password" id="pwNew2"><div class="f-err"></div></div>
+        <button type="submit" class="btn" id="pwBtn">تغییر رمز</button>
+        <div class="status" id="pwStatus"></div>
+      </form>
+    </div>`;
+  document.getElementById('pwForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const st = document.getElementById('pwStatus'); st.className = 'status'; st.textContent = '';
+    const cur = document.getElementById('pwCur'), nw = document.getElementById('pwNew'), nw2 = document.getElementById('pwNew2');
+    let ok = true;
+    if (!cur.value){ setFErr(cur,'رمز فعلی را وارد کنید'); ok = false; } else setFErr(cur,'');
+    if (nw.value.length < 4){ setFErr(nw,'رمز جدید حداقل ۴ کاراکتر'); ok = false; } else setFErr(nw,'');
+    if (nw2.value !== nw.value){ setFErr(nw2,'تکرار رمز با رمز جدید یکسان نیست'); ok = false; } else setFErr(nw2,'');
+    if (!ok) return;
+    const btn = document.getElementById('pwBtn'); btn.disabled = true; btn.textContent = 'در حال ذخیره...';
+    try{
+      await mutateCustomer(async r=>{
+        if (r.passHash !== await hashPassword(cur.value)) throw new Error('رمز عبور فعلی اشتباه است');
+        r.passHash = await hashPassword(nw.value);
+      });
+      cur.value = nw.value = nw2.value = '';
+      st.className = 'status ok'; st.textContent = 'رمز عبور با موفقیت تغییر کرد.';
+    } catch(err){
+      st.className = 'status bad'; st.textContent = err.message;
+    } finally { btn.disabled = false; btn.textContent = 'تغییر رمز'; }
+  });
+}
+
+function renderSupportPane(){
+  const rows = [];
+  if (STORE_INFO.phone) rows.push(['تلفن', STORE_INFO.phone]);
+  if (STORE_INFO.telegram) rows.push(['تلگرام', STORE_INFO.telegram]);
+  if (STORE_INFO.address) rows.push(['آدرس', STORE_INFO.address]);
+  if (STORE_INFO.hours) rows.push(['ساعت پاسخ‌گویی', STORE_INFO.hours]);
+  document.getElementById('pane-support').innerHTML = `
+    <h2 class="pane-title">پشتیبانی و راهنما</h2>
+    <div class="tip-list">
+      <div class="pane-card"><h3>ویرایش یا لغو سفارش</h3><p>تا وقتی سفارش در وضعیت «در انتظار تأیید» باشد، از بخش «سفارشات من» می‌توانید آن را ویرایش یا لغو کنید. بعد از تأیید، برای تغییر با فروشگاه تماس بگیرید.</p><a href="#/account/orders" class="btn outline">رفتن به سفارشات من</a></div>
+      <div class="pane-card"><h3>ارسال و تحویل</h3><p>روش‌های دریافت: پست اکسپرس، تیپاکس و تحویل حضوری. هزینه‌ی ارسال هنگام هماهنگی اعلام می‌شود و کد رهگیری پس از ارسال در سفارش شما نمایش داده می‌شود.</p></div>
+      <div class="pane-card"><h3>فاکتور</h3><p>برای هر سفارش دکمه‌ی «چاپ فاکتور» وجود دارد؛ می‌توانید فاکتور را چاپ یا به‌صورت PDF ذخیره کنید.</p></div>
+      <div class="pane-card"><h3>سوالات متداول</h3><p>پاسخ پرسش‌های رایج در صفحه‌ی «درباره ما» آمده است.</p><a href="#/about" class="btn outline">مشاهده</a></div>
+    </div>
+    <div class="pane-card"><h3>راه‌های ارتباطی</h3>
+      ${rows.length ? rows.map(([k,v])=>`<p><b>${k}:</b> ${esc(v)}</p>`).join('') : '<p>اطلاعات تماس به‌زودی در این بخش قرار می‌گیرد.</p>'}
+    </div>`;
 }
 
 /* ---------- راه‌اندازی ---------- */
