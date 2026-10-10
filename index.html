@@ -473,6 +473,19 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
   body.has-invoice > *:not(#invoicePrint){display:none !important;}
   body.has-invoice #invoicePrint{display:block !important;}
 }
+
+/* ===== تصاویر وکتور محصولات ===== */
+.fs-art{display:block;}
+.p-thumb:has(.fs-art){padding:8px;}
+.p-thumb .fs-art{width:100%;height:100%;max-height:100%;}
+.pd-image:has(.fs-art){padding:16px;}
+.pd-image .fs-art{width:100%;height:auto;max-width:380px;max-height:380px;}
+.cart-item-name .mini-thumb:has(.fs-art){padding:2px;}
+.mini-thumb .fs-art{width:100%;height:100%;}
+.mini-img:has(.fs-art){padding:2px;}
+.mini-img .fs-art{width:100%;height:100%;}
+.img-prev:has(.fs-art){padding:3px;}
+.img-prev .fs-art{width:100%;height:100%;}
 </style>
 </head>
 <body>
@@ -999,10 +1012,276 @@ function iconSvg(key){
 window.fsIcon = function(catId){ const d = document.createElement('div'); d.innerHTML = categoryIconSvg(catId); return d.firstChild; };
 function productThumb(p){
   if (p.image){
-    return `<img src="${esc(p.image)}" alt="${esc(p.name)}" data-cat="${esc(p.category)}" onerror="this.replaceWith(fsIcon(this.dataset.cat))">`;
+    return `<img src="${esc(p.image)}" alt="${esc(p.name)}" data-name="${esc(p.name)}" data-cat="${esc(p.category)}" onerror="this.replaceWith(fsProductArt(this))">`;
   }
-  return categoryIconSvg(p.category);
+  return productArt(p);
 }
+
+/* ---------- تصاویر وکتور محصولات (SVG با کد) ---------- */
+const FS_ART = (function(){
+  const G = '#3f6b35', GL = '#8fbf6e', GD = '#2b4a24', W = '#d9a441', WD = '#a97b1f',
+        SOIL = '#6b4a2b', SOILD = '#4a321c', CREAM = '#fdf8ea', RED = '#c8553d', REDD = '#9c3b28',
+        STEEL = '#aeb8bf', STEELD = '#7d8991', INK = '#2a2318', BLUE = '#3b82a8', BLUEL = '#bfe0ee';
+  const shadow = (cx, cy, rx) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="7" fill="${INK}" opacity=".13"/>`;
+  const wheatEar = (x, y, s, rot) => {
+    let g = `<g transform="translate(${x} ${y}) rotate(${rot||0}) scale(${s||1})">`;
+    g += `<path d="M0 0V46" stroke="${WD}" stroke-width="2.4" stroke-linecap="round"/>`;
+    for (let i = 0; i < 5; i++){
+      const yy = 2 + i*8;
+      g += `<ellipse cx="-5.5" cy="${yy+3}" rx="3.4" ry="6.2" transform="rotate(-28 -5.5 ${yy+3})" fill="${W}"/>`;
+      g += `<ellipse cx="5.5" cy="${yy+3}" rx="3.4" ry="6.2" transform="rotate(28 5.5 ${yy+3})" fill="${W}"/>`;
+    }
+    g += `<ellipse cx="0" cy="-5" rx="3.2" ry="7" fill="${W}"/></g>`;
+    return g;
+  };
+  const sackBase = (body, shade, fold) => `
+    <path d="M52 62c0-8 6-12 14-12h68c8 0 14 4 14 12l4 100c0 9-6 14-14 14H62c-8 0-14-5-14-14z" fill="${body}"/>
+    <path d="M52 62c0-8 6-12 14-12h68c8 0 14 4 14 12l.6 14H51.4z" fill="${fold}"/>
+    <path d="M60 78h80" stroke="${shade}" stroke-width="2" stroke-dasharray="4 4" opacity=".55"/>
+    <path d="M148 80l4 82c0 9-6 14-14 14h10c8 0 14-5 14-14l-4-100z" fill="${shade}" opacity=".25"/>`;
+
+  const art = {};
+
+  /* بذر گندم */
+  art.wheat = () => `${shadow(100,184,58)}
+    ${sackBase('#e6cf9b', '#a98d4f', '#cdb176')}
+    <rect x="68" y="92" width="64" height="62" rx="8" fill="${CREAM}"/>
+    ${wheatEar(100, 100, .95)}
+    <rect x="76" y="146" width="48" height="5" rx="2.5" fill="${G}" opacity=".85"/>
+    ${wheatEar(34, 128, .55, -18)}${wheatEar(168, 130, .5, 16)}
+    <g fill="${W}"><ellipse cx="148" cy="182" rx="3.2" ry="5" transform="rotate(60 148 182)"/><ellipse cx="158" cy="186" rx="3.2" ry="5" transform="rotate(-20 158 186)"/><ellipse cx="46" cy="184" rx="3.2" ry="5" transform="rotate(30 46 184)"/></g>`;
+
+  /* نهال سیب */
+  art.sapling = () => `${shadow(100,184,50)}
+    <path d="M62 150c0-22 17-34 38-34s38 12 38 34c0 20-17 32-38 32s-38-12-38-32z" fill="${SOIL}"/>
+    <path d="M62 150c2-6 6-11 12-15" stroke="${SOILD}" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+    <path d="M70 152c10 6 50 6 60 0" stroke="#c9a56a" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M98 118c-1-24-2-40-6-58M102 118c0-18 3-34 9-50" stroke="${SOILD}" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M97 92c-12-4-22-14-26-24M103 80c10-2 18-10 22-18" stroke="${SOILD}" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <g fill="${G}"><circle cx="72" cy="58" r="22"/><circle cx="106" cy="40" r="25"/><circle cx="132" cy="62" r="21"/><circle cx="96" cy="70" r="20"/></g>
+    <g fill="${GL}" opacity=".7"><circle cx="64" cy="52" r="10"/><circle cx="100" cy="30" r="11"/><circle cx="126" cy="54" r="9"/></g>
+    <g fill="${RED}"><circle cx="84" cy="74" r="7.5"/><circle cx="118" cy="48" r="7.5"/><circle cx="138" cy="72" r="7"/></g>
+    <g fill="#fff" opacity=".55"><circle cx="81.5" cy="71.5" r="2"/><circle cx="115.5" cy="45.5" r="2"/><circle cx="135.5" cy="69.5" r="2"/></g>`;
+
+  /* کود اوره */
+  art.urea = () => `${shadow(100,184,58)}
+    ${sackBase('#f4f6f7', '#9aa7ad', '#dfe5e8')}
+    <rect x="49" y="104" width="102" height="26" fill="${BLUE}"/>
+    <rect x="49" y="130" width="102" height="5" fill="#2c6585"/>
+    <text x="100" y="124" text-anchor="middle" font-family="Vazirmatn,sans-serif" font-weight="800" font-size="19" fill="#fff">UREA</text>
+    <rect x="76" y="140" width="48" height="22" rx="5" fill="#fff" stroke="${BLUE}" stroke-width="2"/>
+    <text x="100" y="156" text-anchor="middle" font-family="Vazirmatn,sans-serif" font-weight="800" font-size="13" fill="${BLUE}">N 46%</text>
+    <g fill="#f2ead8" stroke="#cdbf9b" stroke-width="1.2"><circle cx="152" cy="176" r="4.2"/><circle cx="162" cy="181" r="4.2"/><circle cx="144" cy="182" r="4.2"/><circle cx="156" cy="187" r="4.2"/><circle cx="168" cy="188" r="4.2"/><circle cx="46" cy="184" r="4.2"/><circle cx="36" cy="188" r="4.2"/></g>`;
+
+  /* کود مرغی کمپوست‌شده */
+  art.compost = () => `${shadow(100,184,58)}
+    ${sackBase('#a9794a', '#6b4a2b', '#8c6238')}
+    <rect x="66" y="92" width="68" height="62" rx="9" fill="${CREAM}"/>
+    <g transform="translate(100 124)">
+      <ellipse cx="0" cy="6" rx="21" ry="15" fill="#fff" stroke="${SOIL}" stroke-width="2"/>
+      <path d="M-20 4c-8-8-8-16-2-20 2 8 8 12 14 14z" fill="#f1e4cf" stroke="${SOIL}" stroke-width="2"/>
+      <circle cx="14" cy="-10" r="9" fill="#fff" stroke="${SOIL}" stroke-width="2"/>
+      <path d="M10-19c1-6 5-8 7-5 2-3 6-1 5 5z" fill="${RED}"/>
+      <path d="M22-10l8 3-8 3z" fill="${W}"/>
+      <circle cx="16" cy="-11" r="1.8" fill="${INK}"/>
+      <path d="M-4 20v9M6 20v9" stroke="${W}" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <path d="M90 150c4-8 12-8 16 0" stroke="${G}" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M148 168c8-10 18-8 24-18-12-2-24 6-24 18z" fill="${G}"/>
+    <path d="M148 168c5-7 10-10 16-13" stroke="${GL}" stroke-width="2" fill="none"/>`;
+
+  /* بیل باغبانی */
+  art.shovel = () => `${shadow(104,186,52)}
+    <g transform="rotate(32 100 100)">
+      <rect x="95" y="20" width="10" height="104" rx="5" fill="#c99a62"/>
+      <path d="M96 30v90" stroke="#a97b3f" stroke-width="2" opacity=".6"/>
+      <path d="M78 22c0-10 6-14 14-14h16c8 0 14 4 14 14v4c0 4-3 7-7 7H85c-4 0-7-3-7-7z" fill="${SOIL}"/>
+      <rect x="86" y="14" width="28" height="9" rx="4.5" fill="${SOILD}" opacity=".5"/>
+      <path d="M86 118h28v10c0 4-2 6-5 6H91c-3 0-5-2-5-6z" fill="${STEELD}"/>
+      <path d="M72 132c0-6 6-10 14-10h28c8 0 14 4 14 10 0 24-12 52-28 58-16-6-28-34-28-58z" fill="${STEEL}"/>
+      <path d="M100 126v58" stroke="${STEELD}" stroke-width="2.4" opacity=".6"/>
+      <path d="M78 136c2 14 8 30 16 42" stroke="#fff" stroke-width="3" opacity=".5" fill="none" stroke-linecap="round"/>
+    </g>
+    <path d="M30 184h28M150 184h20" stroke="${SOIL}" stroke-width="4" stroke-linecap="round" opacity=".35"/>`;
+
+  /* قیچی باغبانی */
+  art.shears = () => `${shadow(100,184,56)}
+    <g transform="rotate(16 100 100)">
+      <path d="M103 106C113 128 125 156 133 179C135 187 127 191 121 187C110 167 98 140 94 112Z" fill="${GD}"/>
+      <path d="M122 150l8 24" stroke="#fff" stroke-width="3" opacity=".3" stroke-linecap="round"/>
+      <path d="M97 106C87 128 75 156 67 179C65 187 73 191 79 187C90 167 102 140 106 112Z" fill="${RED}"/>
+      <path d="M78 150l-8 24" stroke="#fff" stroke-width="3" opacity=".4" stroke-linecap="round"/>
+      <path d="M100 100c10-20 20-38 34-50 6-4 11 1 6 7-10 10-18 24-24 44z" fill="${STEELD}"/>
+      <path d="M96 106c-8-28-10-58-4-86 11 22 18 52 16 84z" fill="${STEEL}"/>
+      <path d="M96 24c-2 22-2 46 2 70" stroke="#fff" stroke-width="2.4" opacity=".65" fill="none" stroke-linecap="round"/>
+      <circle cx="100" cy="106" r="8.5" fill="${INK}"/><circle cx="100" cy="106" r="3.8" fill="${STEEL}"/>
+    </g>
+    <g fill="${GL}" opacity=".9"><path d="M164 168c6-10 14-12 22-12-2 10-10 16-22 12z"/><path d="M164 168c-10-2-16-8-16-16 10 0 16 6 16 16z"/></g>`;
+
+  /* لوله آبیاری قطره‌ای */
+  art.drip = () => `${shadow(100,184,62)}
+    <ellipse cx="86" cy="104" rx="62" ry="62" fill="#1f2a2e"/>
+    <circle cx="86" cy="104" r="52" fill="none" stroke="#33454b" stroke-width="7"/>
+    <circle cx="86" cy="104" r="40" fill="none" stroke="#2c3d43" stroke-width="7"/>
+    <circle cx="86" cy="104" r="28" fill="none" stroke="#33454b" stroke-width="6"/>
+    <circle cx="86" cy="104" r="17" fill="${CREAM}"/>
+    <circle cx="86" cy="104" r="10" fill="#e0d7bd"/>
+    <path d="M52 66c6-8 14-14 24-18" stroke="#fff" stroke-width="3" opacity=".25" fill="none" stroke-linecap="round"/>
+    <path d="M110 150c30 8 50 12 70 6" stroke="#1f2a2e" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M112 146c28 8 48 12 66 6" stroke="#3a4f56" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+    <rect x="150" y="150" width="14" height="10" rx="3" fill="${GD}"/>
+    <path d="M157 160v8" stroke="${GD}" stroke-width="3"/>
+    <path d="M157 172c-5 6-6 10-3 13 3 3 8 2 8-4 0-3-2-6-5-9z" fill="${BLUE}"/>
+    <path d="M176 164c-3 4-3 7-1 9 2 2 6 1 6-3 0-2-2-4-5-6z" fill="${BLUE}" opacity=".8"/>`;
+
+  /* پمپ آب کشاورزی */
+  art.pump = () => `${shadow(100,186,66)}
+    <rect x="28" y="162" width="148" height="9" rx="4.5" fill="${INK}" opacity=".78"/>
+    <rect x="36" y="120" width="8" height="44" fill="${INK}" opacity=".7"/><rect x="156" y="120" width="8" height="44" fill="${INK}" opacity=".7"/>
+    <rect x="34" y="92" width="94" height="68" rx="12" fill="${RED}"/>
+    <rect x="34" y="92" width="94" height="22" rx="10" fill="${REDD}" opacity=".55"/>
+    <rect x="46" y="62" width="50" height="34" rx="9" fill="${GD}"/>
+    <rect x="52" y="54" width="18" height="12" rx="3" fill="${INK}"/>
+    <rect x="46" y="62" width="50" height="9" rx="4" fill="#fff" opacity=".15"/>
+    <circle cx="112" cy="112" r="14" fill="${INK}"/><circle cx="112" cy="112" r="9" fill="#d9dee1"/><path d="M112 103v18M103 112h18" stroke="${STEELD}" stroke-width="2.6"/>
+    <path d="M50 134h60" stroke="#fff" stroke-width="3" stroke-dasharray="8 6" opacity=".35" stroke-linecap="round"/>
+    <circle cx="150" cy="130" r="30" fill="${STEEL}"/>
+    <circle cx="150" cy="130" r="22" fill="#c9d2d7"/>
+    <circle cx="150" cy="130" r="9" fill="${STEELD}"/>
+    <g fill="${STEELD}"><circle cx="150" cy="104" r="3"/><circle cx="150" cy="156" r="3"/><circle cx="124" cy="130" r="3"/><circle cx="176" cy="130" r="3"/></g>
+    <rect x="148" y="72" width="22" height="30" rx="4" fill="${BLUE}"/>
+    <rect x="144" y="66" width="30" height="10" rx="4" fill="#2c6585"/>
+    <path d="M170 82h14c6 0 8 3 8 8" stroke="${BLUE}" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M186 98c-3 5-3 8-1 10 3 2 7 0 7-4 0-3-3-5-6-6z" fill="${BLUEL}"/>`;
+
+  /* تیلر دوچرخ */
+  art.tiller = () => `${shadow(100,186,70)}
+    <g>
+      <circle cx="46" cy="148" r="30" fill="${STEELD}"/>
+      <g stroke="${STEEL}" stroke-width="5" stroke-linecap="round">
+        <path d="M46 148L46 120M46 148L72 160M46 148L26 170M46 148L22 134M46 148L70 134"/>
+      </g>
+      <circle cx="46" cy="148" r="9" fill="${INK}"/>
+      <g fill="${STEEL}"><path d="M28 134l-16-6 6 14z"/><path d="M62 170l8 16-14-6z"/><path d="M20 160l-14 8 16 4z"/><path d="M64 126l14-10-4 16z"/></g>
+    </g>
+    <rect x="68" y="92" width="66" height="50" rx="12" fill="${RED}"/>
+    <rect x="68" y="92" width="66" height="16" rx="8" fill="${REDD}" opacity=".5"/>
+    <rect x="76" y="68" width="40" height="28" rx="8" fill="${GD}"/>
+    <rect x="82" y="60" width="14" height="10" rx="3" fill="${INK}"/>
+    <circle cx="124" cy="116" r="10" fill="${INK}"/><circle cx="124" cy="116" r="5" fill="#d9dee1"/>
+    <rect x="94" y="140" width="34" height="14" rx="4" fill="${INK}" opacity=".85"/>
+    <circle cx="150" cy="158" r="24" fill="${INK}"/><circle cx="150" cy="158" r="14" fill="#6b7780"/><circle cx="150" cy="158" r="5" fill="#d9dee1"/>
+    <path d="M132 112l30-38" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M132 124l36-22" stroke="${INK}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M160 76l12-15" stroke="${RED}" stroke-width="10" stroke-linecap="round"/>
+    <path d="M166 104l14-9" stroke="${RED}" stroke-width="10" stroke-linecap="round"/>`;
+
+  /* سم حشره‌کش ارگانیک */
+  art.sprayer = () => `${shadow(100,184,44)}
+    <rect x="58" y="86" width="72" height="92" rx="16" fill="#e6f1e1"/>
+    <rect x="58" y="86" width="72" height="92" rx="16" fill="none" stroke="${G}" stroke-width="3"/>
+    <rect x="58" y="150" width="72" height="28" rx="14" fill="${GL}" opacity=".45"/>
+    <rect x="72" y="70" width="44" height="22" rx="6" fill="${GD}"/>
+    <rect x="76" y="62" width="36" height="12" rx="4" fill="${G}"/>
+    <path d="M108 54h28c6 0 10 4 10 10v6c0 3-2 5-5 5h-14" fill="${G}" stroke="${GD}" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M118 66l-4 22c-.5 3 1 5 4 5h8" stroke="${GD}" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <rect x="146" y="58" width="12" height="10" rx="3" fill="${GD}"/>
+    <g stroke="${BLUE}" stroke-width="3" stroke-linecap="round" opacity=".75"><path d="M166 58l14-4M168 64l16 0M166 70l14 4"/></g>
+    <rect x="66" y="102" width="56" height="44" rx="8" fill="${CREAM}"/>
+    <path d="M94 112c-12 4-18 14-16 26 12 0 22-8 22-20z" fill="${G}"/>
+    <path d="M94 114c-6 6-9 12-10 20" stroke="${CREAM}" stroke-width="2" fill="none"/>
+    <g transform="translate(106 124)">
+      <ellipse cx="0" cy="2" rx="9" ry="8" fill="${RED}"/>
+      <path d="M0-6v16" stroke="${INK}" stroke-width="1.6"/>
+      <circle cx="-3.5" cy="0" r="1.6" fill="${INK}"/><circle cx="3.5" cy="4" r="1.6" fill="${INK}"/>
+      <circle cx="0" cy="-8" r="4" fill="${INK}"/>
+    </g>
+    <rect x="72" y="136" width="44" height="3" rx="1.5" fill="${G}" opacity=".5"/>`;
+
+  /* ---- پیش‌فرض‌های دسته‌بندی ---- */
+  art.packet = () => `${shadow(100,184,50)}
+    <path d="M56 40h88l-6 12H62z" fill="${WD}"/>
+    <path d="M62 52h76l8 124c0 5-4 8-8 8H62c-4 0-8-3-8-8z" fill="${W}"/>
+    <rect x="70" y="72" width="60" height="74" rx="9" fill="${CREAM}"/>
+    <path d="M100 138v-34" stroke="${G}" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M100 118c-14 0-22-8-22-20 14 0 22 8 22 20z" fill="${GL}"/>
+    <path d="M100 108c12 0 20-8 20-18-12 0-20 8-20 18z" fill="${G}"/>
+    <ellipse cx="78" cy="164" rx="5" ry="7" fill="${SOIL}" transform="rotate(20 78 164)"/><ellipse cx="96" cy="166" rx="5" ry="7" fill="${SOIL}"/><ellipse cx="114" cy="164" rx="5" ry="7" fill="${SOIL}" transform="rotate(-20 114 164)"/>`;
+
+  art.trowel = () => `${shadow(100,186,52)}
+    <g transform="rotate(35 100 100)">
+      <rect x="92" y="20" width="16" height="64" rx="8" fill="${RED}"/>
+      <rect x="95" y="28" width="4" height="48" rx="2" fill="#fff" opacity=".35"/>
+      <rect x="94" y="82" width="12" height="14" fill="${STEELD}"/>
+      <path d="M100 94c-18 6-26 22-26 42 0 20 12 40 26 50 14-10 26-30 26-50 0-20-8-36-26-42z" fill="${STEEL}"/>
+      <path d="M100 98v84" stroke="${STEELD}" stroke-width="2.4" opacity=".6"/>
+      <path d="M86 118c-2 14 0 30 8 46" stroke="#fff" stroke-width="3" opacity=".5" fill="none" stroke-linecap="round"/>
+    </g>`;
+
+  art.can = () => `${shadow(100,184,56)}
+    <path d="M60 80h70l-6 86c0 6-5 10-10 10H76c-5 0-10-4-10-10z" fill="${BLUE}"/>
+    <path d="M66 80h58l-1 12H65z" fill="#2c6585"/>
+    <path d="M130 100c24 2 38 14 46 36" stroke="${BLUE}" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M168 128l14-14 8 12-12 14z" fill="#2c6585"/>
+    <path d="M60 94c-14 0-20 10-20 24s8 24 20 24" stroke="${BLUE}" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M72 100c0-26 14-40 34-40" stroke="${BLUE}" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <rect x="72" y="110" width="12" height="46" rx="6" fill="#fff" opacity=".28"/>
+    <g fill="${BLUEL}"><path d="M186 142c-3 5-3 8-1 10 3 2 7 0 7-4 0-3-3-5-6-6z"/><path d="M174 156c-3 5-3 8-1 10 3 2 7 0 7-4 0-3-3-5-6-6z"/></g>`;
+
+  art.tractor = () => `${shadow(100,186,70)}
+    <rect x="96" y="56" width="52" height="44" rx="6" fill="${GD}"/>
+    <rect x="102" y="62" width="40" height="30" rx="4" fill="${BLUEL}"/>
+    <rect x="92" y="50" width="60" height="9" rx="4" fill="${INK}"/>
+    <path d="M30 98h66v22h22v-24h40c6 0 10 4 10 10v22H30z" fill="${RED}"/>
+    <rect x="30" y="98" width="66" height="10" rx="5" fill="${REDD}" opacity=".6"/>
+    <rect x="22" y="88" width="14" height="30" rx="4" fill="${INK}"/>
+    <g stroke="${INK}" stroke-width="3"><path d="M44 106h42M44 114h42"/></g>
+    <circle cx="52" cy="150" r="22" fill="${INK}"/><circle cx="52" cy="150" r="12" fill="${W}"/><circle cx="52" cy="150" r="4" fill="${INK}"/>
+    <circle cx="140" cy="140" r="34" fill="${INK}"/><circle cx="140" cy="140" r="20" fill="${W}"/><circle cx="140" cy="140" r="7" fill="${INK}"/>`;
+
+  art.crate = () => `${shadow(100,184,56)}
+    <path d="M40 78l60-24 60 24v72l-60 28-60-28z" fill="#c9a56a"/>
+    <path d="M40 78l60 28 60-28" fill="none" stroke="${SOIL}" stroke-width="3"/>
+    <path d="M100 106v72" stroke="${SOIL}" stroke-width="3"/>
+    <path d="M100 106l60-28v72l-60 28z" fill="${SOIL}" opacity=".25"/>
+    <path d="M100 98c-16 0-28-10-30-26 16 0 30 8 30 26z" fill="${G}"/>
+    <path d="M100 92c14-2 22-10 24-22-14 0-22 8-24 22z" fill="${GL}"/>`;
+
+  return art;
+})();
+
+const FS_ART_RULES = [
+  [/گندم|(^|\s)جو(\s|$)|برنج|شلتوک/, 'wheat'],
+  [/نهال|درخت|پیوند|قلمه/, 'sapling'],
+  [/اوره|نیترات|فسفات|پتاس|(^|\s)npk/i, 'urea'],
+  [/مرغی|کمپوست|کود\s*(آلی|حیوانی|دامی)|ورمی/, 'compost'],
+  [/(^|\s)بیل|کلنگ|بیلچه/, 'shovel'],
+  [/قیچی|هرس|اره\s*باغبانی/, 'shears'],
+  [/قطره|لوله|شلنگ|آبپاش|نواری/, 'drip'],
+  [/پمپ|موتور\s*پمپ|الکتروپمپ/, 'pump'],
+  [/تیلر|کولتیواتور|تراکتور|دروگر|کمباین/, 'tiller'],
+  [/(^|\s)سم(\s|$)|حشره|آفت|قارچ|علف‌?کش|سمپاش/, 'sprayer']
+];
+const FS_ART_CAT = { seed:'packet', fertilizer:'urea', tool:'trowel', irrigation:'can', machinery:'tractor', protection:'sprayer', leaf:'crate', box:'crate' };
+
+function productArtKey(p){
+  const name = String((p && p.name) || '');
+  for (const [re, key] of FS_ART_RULES){ if (re.test(name)) return key; }
+  const cat = CATEGORIES.find(c=>c.id === (p && p.category));
+  return FS_ART_CAT[(cat && cat.icon) || (p && p.category)] || 'crate';
+}
+function productArt(p){
+  const key = productArtKey(p);
+  const body = (FS_ART[key] || FS_ART.crate)();
+  const title = esc((p && p.name) || '');
+  return `<svg class="fs-art" viewBox="0 0 200 200" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+}
+window.fsProductArt = function(el){
+  const d = document.createElement('div');
+  d.innerHTML = productArt({ name: el.dataset.name || '', category: el.dataset.cat || '' });
+  return d.firstChild;
+};
+
 
 /* ---------- سبد خرید ---------- */
 function saveCart(){ localStorage.setItem('fs_cart', JSON.stringify(CART)); updateCartBadge(); }
@@ -2185,7 +2464,7 @@ function openProductModal(id){
           <div class="img-ctrl">
             <input type="file" id="apfFile" accept="image/*">
             <input type="text" id="apfImgUrl" placeholder="یا آدرس تصویر (URL)" value="${(p.image && !p.image.startsWith('data:')) ? esc(p.image) : ''}">
-            <button type="button" class="pill-btn" id="apfImgClear">حذف تصویر (نمایش آیکون دسته)</button>
+            <button type="button" class="pill-btn" id="apfImgClear">حذف تصویر (نمایش تصویر وکتور پیش‌فرض)</button>
           </div>
         </div>
         <div class="o-hist" id="apfImgInfo">تصویر آپلودشده خودکار کوچک و فشرده می‌شود.</div>
@@ -2201,10 +2480,11 @@ function openProductModal(id){
   const drawPrev = ()=>{
     const pv = document.getElementById('apfPrev');
     if (curImage){ pv.className = 'img-prev has-img'; pv.innerHTML = `<img src="${esc(curImage)}" alt="">`; }
-    else { pv.className = 'img-prev'; pv.innerHTML = categoryIconSvg(document.getElementById('apfCat').value); }
+    else { pv.className = 'img-prev'; pv.innerHTML = productArt({ name: document.getElementById('apfName').value, category: document.getElementById('apfCat').value }); }
   };
   drawPrev();
   document.getElementById('apfCat').onchange = drawPrev;
+  document.getElementById('apfName').addEventListener('input', ()=>{ if (!curImage) drawPrev(); });
   document.getElementById('apfCancel').onclick = closeEditModal;
   document.getElementById('apfImgClear').onclick = ()=>{ curImage = ''; document.getElementById('apfImgUrl').value = ''; document.getElementById('apfFile').value = ''; drawPrev(); };
   document.getElementById('apfImgUrl').oninput = e=>{ curImage = e.target.value.trim(); drawPrev(); };
