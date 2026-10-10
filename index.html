@@ -398,6 +398,51 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
   .side-item.logout{border-top:none;margin-top:0;border-radius:10px;padding-top:11px;}
 }
 
+
+/* ===== مدیریت محصولات / دسته‌ها / محتوا ===== */
+.p-thumb{position:relative;}
+.out-badge{position:absolute;top:10px;right:10px;background:var(--err);color:#fff;font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;}
+.p-card.out .p-thumb svg,.p-card.out .p-thumb img{opacity:.45;}
+.ptable{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;overflow:hidden;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:var(--glass-shadow);}
+.ptable th{background:var(--soil);color:#fdf8ea;padding:10px;text-align:right;white-space:nowrap;font-weight:600;}
+.ptable td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:middle;}
+.mini-img{width:46px;height:46px;border-radius:9px;background:var(--glass-tint);color:var(--leaf);padding:9px;overflow:hidden;display:block;}
+.mini-img.has-img{padding:0;}
+.mini-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.p-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.pill-btn.danger{color:var(--err);border-color:var(--err);}
+.pill.hiddenp{background:#e7e2d3;color:#6b634d;}
+.pill.outp{background:#f5dcd8;color:var(--err);}
+.pill.okp{background:#dcefd6;color:var(--leaf-dark);}
+.f-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.img-box{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.img-prev{width:92px;height:92px;border-radius:12px;background:var(--glass-tint);color:var(--leaf);padding:18px;overflow:hidden;flex:none;}
+.img-prev.has-img{padding:0;}
+.img-prev img{width:100%;height:100%;object-fit:cover;display:block;}
+.img-ctrl{flex:1 1 220px;display:flex;flex-direction:column;gap:8px;}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;margin:6px 0 10px;}
+.chk input{width:18px;height:18px;}
+.cat-row{display:grid;grid-template-columns:44px 1fr 150px auto auto;gap:10px;align-items:center;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
+.cat-row .cat-ic{width:40px;height:40px;color:var(--leaf);background:var(--glass-tint);border-radius:9px;padding:8px;}
+.cat-row input,.cat-row select{padding:8px 10px;border:1.5px solid var(--line);border-radius:7px;font-family:inherit;font-size:14px;background:rgba(255,255,255,.7);width:100%;}
+.cat-row .cat-count{font-size:12px;color:var(--muted);white-space:nowrap;}
+.cat-row .cat-btns{display:flex;gap:5px;}
+.ct-group{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;margin-bottom:12px;box-shadow:var(--glass-shadow);}
+.ct-group > summary{cursor:pointer;padding:14px 18px;font-weight:800;color:var(--leaf-dark);font-size:16px;}
+.ct-body{padding:2px 18px 16px;}
+.ct-body .f-field textarea{min-height:64px;}
+.ct-list-title{font-weight:700;font-size:13.5px;margin:10px 0 6px;color:var(--soil);}
+.ct-item{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:rgba(255,255,255,.35);}
+.ct-item .f-field{margin-bottom:8px;}
+.ct-bar{position:sticky;bottom:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;padding:12px;border-radius:12px;
+  background:rgba(255,253,248,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);}
+@media (max-width:760px){
+  .f-grid3{grid-template-columns:1fr;}
+  .cat-row{grid-template-columns:40px 1fr;}
+  .cat-row select,.cat-row .cat-count,.cat-row .cat-btns{grid-column:1/-1;}
+}
+
 /* ===== فاکتور چاپی ===== */
 #invoicePrint{display:none;}
 #invoicePrint{direction:rtl;font-family:'Vazirmatn','Tahoma',sans-serif;color:#111;background:#fff;}
@@ -435,8 +480,8 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 <header class="site-header">
   <div class="header-inner">
     <a href="#/" class="brand">
-      <span style="font-size:24px;">🌾</span>
-      <div><span class="brand-mark">سبزدشت</span><small>ابزار و نهاده‌های کشاورزی</small></div>
+      <span style="font-size:24px;" id="brandLogo">🌾</span>
+      <div><span class="brand-mark" id="brandName">سبزدشت</span><small id="brandTag">ابزار و نهاده‌های کشاورزی</small></div>
     </a>
     <nav class="main-nav" id="mainNav">
       <a href="#/" data-route="home">محصولات</a>
@@ -444,7 +489,7 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
       <a href="#/account/orders" data-route="my-orders" id="myOrdersLink" style="display:none;">سفارشات من</a>
       <a href="#/account" data-route="account" id="accountLink">ورود / ثبت‌نام</a>
       <a href="#/about" data-route="about">درباره ما</a>
-      <a href="#/admin" data-route="admin" id="adminLink" style="display:none;">پنل سفارشات</a>
+      <a href="#/admin" data-route="admin" id="adminLink" style="display:none;">پنل مدیریت</a>
     </nav>
   </div>
 </header>
@@ -454,59 +499,36 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
   <!-- ===== خانه / محصولات ===== -->
   <section class="view" id="view-home">
     <div class="hero">
-      <h1>نهاده و ابزار کشاورزی، مستقیم از تأمین‌کننده</h1>
-      <p>بذر، کود، ابزار باغبانی، سیستم آبیاری و ماشین‌آلات — همه در یک‌جا، با کیفیت تضمینی.</p>
+      <h1 id="heroTitle"></h1>
+      <p id="heroText"></p>
     </div>
     <div class="filters" id="filters"></div>
     <div class="product-grid" id="productGrid"></div>
 
-    <h2 class="section-title">چرا سبزدشت؟</h2>
-    <p class="section-sub">تأمین نهاده‌ی کشاورزی فقط خرید و فروش نیست؛ مسئولیتی است که روی برداشت شما اثر می‌گذارد.</p>
-    <div class="features">
-      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 52C12 28 28 12 54 10c0 26-16 42-40 42z"/><path d="M12 52L36 28"/></svg></div><h3>کیفیت اصل</h3><p>کالاها مستقیم از تولیدکننده و نمایندگی‌های معتبر تأمین می‌شوند.</p></div>
-      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20l24-10 24 10v24L32 54 8 44z"/><path d="M8 20l24 10 24-10M32 30v24"/></svg></div><h3>ارسال سریع</h3><p>سفارش‌ها بسته‌بندی ایمن شده و به سراسر کشور ارسال می‌شوند.</p></div>
-      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8l18 7v15c0 13-8 21-18 26-10-5-18-13-18-26V15z"/><path d="M24 32l6 6 11-12"/></svg></div><h3>ضمانت و پشتیبانی</h3><p>در صورت مغایرت یا مشکل در کالا، پیگیری و جایگزینی انجام می‌شود.</p></div>
-      <div class="feature"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14h44v30H28l-12 10V44h-6z"/></svg></div><h3>مشاوره‌ی رایگان</h3><p>برای انتخاب کود، بذر یا ابزار مناسب با کارشناسان ما مشورت کنید.</p></div>
-    </div>
+    <h2 class="section-title" id="whyTitle"></h2>
+    <p class="section-sub" id="whySub"></p>
+    <div class="features" id="featuresGrid"></div>
 
-    <h2 class="section-title">خرید در چهار قدم</h2>
-    <p class="section-sub">فرایند سفارش ساده و بدون پیچیدگی است.</p>
-    <div class="steps">
-      <div class="step"><h3>انتخاب کالا</h3><p>محصول مورد نیازتان را پیدا و به سبد اضافه کنید.</p></div>
-      <div class="step"><h3>تکمیل مشخصات</h3><p>نام، موبایل و آدرس تحویل را وارد کنید.</p></div>
-      <div class="step"><h3>ثبت سفارش</h3><p>سفارش شما بلافاصله برای ما ثبت می‌شود.</p></div>
-      <div class="step"><h3>هماهنگی و تحویل</h3><p>همکاران ما برای تأیید و ارسال تماس می‌گیرند.</p></div>
-    </div>
+    <h2 class="section-title" id="stepsTitle"></h2>
+    <p class="section-sub" id="stepsSub"></p>
+    <div class="steps" id="stepsGrid"></div>
   </section>
 
   <!-- ===== درباره ما ===== -->
   <section class="view" id="view-about">
     <div class="hero about-hero">
-      <h1>درباره‌ی سبزدشت</h1>
-      <p>همراه کشاورز، از کاشت تا برداشت.</p>
+      <h1 id="aboutHeroTitle"></h1>
+      <p id="aboutHeroText"></p>
     </div>
+    <div class="prose" id="aboutBody"></div>
 
-    <div class="prose">
-      <h3>ما که هستیم؟</h3>
-      <p>سبزدشت یک فروشگاه تخصصی نهاده و ابزار کشاورزی است. هدف ما این است که کشاورزان، باغداران و علاقه‌مندان به کشت، بتوانند بذر، کود، ابزار، تجهیزات آبیاری و ماشین‌آلات مورد نیازشان را در یک‌جا، با قیمت شفاف و کیفیت قابل اعتماد تهیه کنند.</p>
-      <h3>رویکرد ما</h3>
-      <p>هر کالایی که در فروشگاه عرضه می‌شود با دقت انتخاب شده است. توضیحات، موجودی و کد کالا برای هر محصول به‌صورت شفاف درج می‌شود تا خریدی آگاهانه داشته باشید.</p>
-    </div>
+    <h2 class="section-title" id="shipTitle"></h2>
+    <div class="prose" id="shipBody"></div>
 
-    <h2 class="section-title">ارسال و تحویل</h2>
-    <div class="prose">
-      <p>پس از ثبت سفارش، همکاران ما برای تأیید نهایی و هماهنگی نحوه‌ی تحویل با شماره‌ی موبایل شما تماس می‌گیرند. سفارش‌ها پس از تأیید، بسته‌بندی و ارسال می‌شوند. هزینه و زمان ارسال بسته به مقصد و وزن کالا متفاوت است و هنگام هماهنگی اعلام می‌شود.</p>
-    </div>
+    <h2 class="section-title" id="faqTitle"></h2>
+    <div class="faq" id="faqList"></div>
 
-    <h2 class="section-title">سوالات متداول</h2>
-    <div class="faq">
-      <details><summary>چطور سفارش بدهم؟</summary><p>کالاها را به سبد خرید اضافه کنید، سپس در مرحله‌ی «ثبت سفارش» نام، موبایل و آدرس را وارد کنید. نیازی به ساخت حساب کاربری نیست، اما با ثبت‌نام اطلاعاتتان در سفارش‌های بعدی خودکار پر می‌شود.</p></details>
-      <details><summary>پرداخت چگونه انجام می‌شود؟</summary><p>پرداخت پس از هماهنگی و تأیید سفارش، با همکاران ما انجام می‌شود.</p></details>
-      <details><summary>اگر کالا موجود نبود چه می‌شود؟</summary><p>در صورت ناموجود بودن، پیش از ارسال با شما تماس گرفته و کالای جایگزین یا زمان تأمین اعلام می‌شود.</p></details>
-      <details><summary>برای انتخاب محصول مناسب راهنمایی می‌گیرم؟</summary><p>بله، هنگام تماس برای تأیید سفارش یا از طریق راه‌های ارتباطی زیر می‌توانید مشاوره بگیرید.</p></details>
-    </div>
-
-    <h2 class="section-title">تماس با ما</h2>
+    <h2 class="section-title" id="contactTitle"></h2>
     <div class="contact-grid" id="contactGrid"></div>
   </section>
 
@@ -675,25 +697,30 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 
   <!-- ===== پنل سفارشات ===== -->
   <section class="view" id="view-admin">
-    <div id="adminPanel">
-      <div class="admin-toolbar">
-        <h2>سفارشات ثبت‌شده</h2>
-        <div style="display:flex;gap:8px;">
-          <button class="btn outline" id="refreshOrdersBtn">بروزرسانی</button>
-          <button class="btn outline" id="adminLogoutBtn">خروج از پنل</button>
+    <div class="profile-layout">
+      <aside class="profile-side" id="adminSide"></aside>
+      <div class="profile-main">
+        <div class="profile-pane" id="apane-orders">
+          <div class="admin-toolbar">
+            <h2>سفارشات ثبت‌شده</h2>
+            <button class="btn outline" id="refreshOrdersBtn">بروزرسانی</button>
+          </div>
+          <div class="stat-chips" id="ordersStats"></div>
+          <div class="admin-filters">
+            <select id="fShip">
+              <option value="all">همه روش‌های ارسال</option>
+              <option value="post-express">پست اکسپرس</option>
+              <option value="tipax">تیپاکس</option>
+              <option value="pickup">حضوری</option>
+            </select>
+            <input type="text" id="fSearch" placeholder="جستجو: نام، موبایل، شماره سفارش، کد رهگیری">
+          </div>
+          <div id="ordersTableWrap"></div>
         </div>
+        <div class="profile-pane" id="apane-products"></div>
+        <div class="profile-pane" id="apane-categories"></div>
+        <div class="profile-pane" id="apane-content"></div>
       </div>
-      <div class="stat-chips" id="ordersStats"></div>
-      <div class="admin-filters">
-        <select id="fShip">
-          <option value="all">همه روش‌های ارسال</option>
-          <option value="post-express">پست اکسپرس</option>
-          <option value="tipax">تیپاکس</option>
-          <option value="pickup">حضوری</option>
-        </select>
-        <input type="text" id="fSearch" placeholder="جستجو: نام، موبایل، شماره سفارش، کد رهگیری">
-      </div>
-      <div id="ordersTableWrap"></div>
     </div>
   </section>
 
@@ -703,7 +730,7 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 
 <footer>
   <div class="footer-links"><a href="#/">محصولات</a><a href="#/about">درباره ما</a><a href="#/cart">سبد خرید</a><a href="#/account">ورود / ثبت‌نام</a></div>
-  © فروشگاه سبزدشت — عرضه‌ی نهاده و ابزار کشاورزی
+  <span id="footerText"></span>
 </footer>
 
 <script>
@@ -738,10 +765,107 @@ function statusLabel(st, method){
 function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function nowTime(){ return new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}); }
 
-const CATEGORY_LABELS = {
-  seed:'بذر و نهال', fertilizer:'کود و اصلاح خاک', tool:'ابزار و نهاده',
-  irrigation:'آبیاری', machinery:'ماشین‌آلات', protection:'سم و حفاظت گیاهی'
+const PRODUCTS_FILE = 'products.json', CATEGORIES_FILE = 'categories.json', CONTENT_FILE = 'content.json';
+const DEFAULT_CATEGORIES = [
+  { id:'seed', label:'بذر و نهال', icon:'seed' },
+  { id:'fertilizer', label:'کود و اصلاح خاک', icon:'fertilizer' },
+  { id:'tool', label:'ابزار و نهاده', icon:'tool' },
+  { id:'irrigation', label:'آبیاری', icon:'irrigation' },
+  { id:'machinery', label:'ماشین‌آلات', icon:'machinery' },
+  { id:'protection', label:'سم و حفاظت گیاهی', icon:'protection' }
+];
+let CATEGORIES = DEFAULT_CATEGORIES.map(c=>({...c}));
+const ICON_LABELS = { seed:'بذر', fertilizer:'کود', tool:'ابزار', irrigation:'آبیاری', machinery:'ماشین‌آلات', protection:'سم / حفاظت', leaf:'برگ', box:'بسته' };
+function categoryLabel(id){ const c = CATEGORIES.find(x=>x.id===id); return c ? c.label : ''; }
+
+const DEFAULT_CONTENT = {
+  logo:'🌾', storeName:'سبزدشت', tagline:'ابزار و نهاده‌های کشاورزی',
+  footerText:'© فروشگاه سبزدشت — عرضه‌ی نهاده و ابزار کشاورزی',
+  heroTitle:'نهاده و ابزار کشاورزی، مستقیم از تأمین‌کننده',
+  heroText:'بذر، کود، ابزار باغبانی، سیستم آبیاری و ماشین‌آلات — همه در یک‌جا، با کیفیت تضمینی.',
+  whyTitle:'چرا سبزدشت؟',
+  whySub:'تأمین نهاده‌ی کشاورزی فقط خرید و فروش نیست؛ مسئولیتی است که روی برداشت شما اثر می‌گذارد.',
+  features:[
+    { title:'کیفیت اصل', text:'کالاها مستقیم از تولیدکننده و نمایندگی‌های معتبر تأمین می‌شوند.' },
+    { title:'ارسال سریع', text:'سفارش‌ها بسته‌بندی ایمن شده و به سراسر کشور ارسال می‌شوند.' },
+    { title:'ضمانت و پشتیبانی', text:'در صورت مغایرت یا مشکل در کالا، پیگیری و جایگزینی انجام می‌شود.' },
+    { title:'مشاوره‌ی رایگان', text:'برای انتخاب کود، بذر یا ابزار مناسب با کارشناسان ما مشورت کنید.' }
+  ],
+  stepsTitle:'خرید در چهار قدم', stepsSub:'فرایند سفارش ساده و بدون پیچیدگی است.',
+  steps:[
+    { title:'انتخاب کالا', text:'محصول مورد نیازتان را پیدا و به سبد اضافه کنید.' },
+    { title:'تکمیل مشخصات', text:'نام، موبایل و آدرس تحویل را وارد کنید.' },
+    { title:'ثبت سفارش', text:'سفارش شما بلافاصله برای ما ثبت می‌شود.' },
+    { title:'هماهنگی و تحویل', text:'همکاران ما برای تأیید و ارسال تماس می‌گیرند.' }
+  ],
+  aboutHeroTitle:'درباره‌ی سبزدشت', aboutHeroText:'همراه کشاورز، از کاشت تا برداشت.',
+  aboutWhoTitle:'ما که هستیم؟',
+  aboutWhoText:'سبزدشت یک فروشگاه تخصصی نهاده و ابزار کشاورزی است. هدف ما این است که کشاورزان، باغداران و علاقه‌مندان به کشت، بتوانند بذر، کود، ابزار، تجهیزات آبیاری و ماشین‌آلات مورد نیازشان را در یک‌جا، با قیمت شفاف و کیفیت قابل اعتماد تهیه کنند.',
+  aboutApproachTitle:'رویکرد ما',
+  aboutApproachText:'هر کالایی که در فروشگاه عرضه می‌شود با دقت انتخاب شده است. توضیحات، موجودی و کد کالا برای هر محصول به‌صورت شفاف درج می‌شود تا خریدی آگاهانه داشته باشید.',
+  shippingTitle:'ارسال و تحویل',
+  shippingText:'پس از ثبت سفارش، همکاران ما برای تأیید نهایی و هماهنگی نحوه‌ی تحویل با شماره‌ی موبایل شما تماس می‌گیرند. سفارش‌ها پس از تأیید، بسته‌بندی و ارسال می‌شوند. هزینه و زمان ارسال بسته به مقصد و وزن کالا متفاوت است و هنگام هماهنگی اعلام می‌شود.',
+  faqTitle:'سوالات متداول',
+  faq:[
+    { q:'چطور سفارش بدهم؟', a:'کالاها را به سبد خرید اضافه کنید، سپس در مرحله‌ی «ثبت سفارش» روش دریافت و مشخصات تحویل را وارد کنید. برای ثبت سفارش باید وارد حساب کاربری خود شده باشید.' },
+    { q:'پرداخت چگونه انجام می‌شود؟', a:'پرداخت پس از هماهنگی و تأیید سفارش، با همکاران ما انجام می‌شود.' },
+    { q:'اگر کالا موجود نبود چه می‌شود؟', a:'در صورت ناموجود بودن، پیش از ارسال با شما تماس گرفته و کالای جایگزین یا زمان تأمین اعلام می‌شود.' },
+    { q:'برای انتخاب محصول مناسب راهنمایی می‌گیرم؟', a:'بله، هنگام تماس برای تأیید سفارش یا از طریق راه‌های ارتباطی زیر می‌توانید مشاوره بگیرید.' }
+  ],
+  contactTitle:'تماس با ما',
+  contact:{ phone:'', telegram:'', address:'', hours:'شنبه تا پنجشنبه، ۸ تا ۱۸' },
+  shipNoteShip:'هزینه و زمان ارسال جداگانه محاسبه و هنگام هماهنگی توسط همکاران ما اعلام می‌شود.',
+  shipNotePickup:'سفارش شما در فروشگاه آماده می‌شود و پس از هماهنگی تلفنی تحویل می‌گیرید.',
+  successShip:'همکاران ما برای تأیید و هماهنگی هزینه و زمان ارسال با شما تماس می‌گیرند.',
+  successPickup:'پس از آماده شدن سفارش، برای تحویل حضوری با شما تماس می‌گیریم.',
+  invoiceNote:'هزینه‌ی ارسال (در صورت ارسال) جداگانه محاسبه و هنگام هماهنگی اعلام می‌شود. این فاکتور نشان‌دهنده‌ی سفارش ثبت‌شده در فروشگاه است.',
+  supportCards:[
+    { title:'ویرایش یا لغو سفارش', text:'تا وقتی سفارش در وضعیت «در انتظار تأیید» باشد، از بخش «سفارشات من» می‌توانید آن را ویرایش یا لغو کنید. بعد از تأیید، برای تغییر با فروشگاه تماس بگیرید.' },
+    { title:'ارسال و تحویل', text:'روش‌های دریافت: پست اکسپرس، تیپاکس و تحویل حضوری. هزینه‌ی ارسال هنگام هماهنگی اعلام می‌شود و کد رهگیری پس از ارسال در سفارش شما نمایش داده می‌شود.' },
+    { title:'فاکتور', text:'برای هر سفارش دکمه‌ی «چاپ فاکتور» وجود دارد؛ می‌توانید فاکتور را چاپ یا به‌صورت PDF ذخیره کنید.' },
+    { title:'سوالات متداول', text:'پاسخ پرسش‌های رایج در صفحه‌ی «درباره ما» آمده است.' }
+  ]
 };
+const clone = o => JSON.parse(JSON.stringify(o));
+let CONTENT = clone(DEFAULT_CONTENT);
+function mergeContent(saved){
+  const out = clone(DEFAULT_CONTENT);
+  for (const k in (saved || {})){
+    if (k === 'contact') out.contact = { ...out.contact, ...saved.contact };
+    else if (saved[k] !== undefined && saved[k] !== null) out[k] = saved[k];
+  }
+  return out;
+}
+function para(t){ return esc(t).replace(/\n/g, '<br>'); }
+function inStock(p){ return p.stock === null || p.stock === undefined || p.stock === '' || Number(p.stock) > 0; }
+function maxQty(p){ return (p.stock === null || p.stock === undefined || p.stock === '') ? Infinity : Number(p.stock); }
+const FEATURE_ICONS = [
+  '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 52C12 28 28 12 54 10c0 26-16 42-40 42z"/><path d="M12 52L36 28"/></svg>',
+  '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20l24-10 24 10v24L32 54 8 44z"/><path d="M8 20l24 10 24-10M32 30v24"/></svg>',
+  '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8l18 7v15c0 13-8 21-18 26-10-5-18-13-18-26V15z"/><path d="M24 32l6 6 11-12"/></svg>',
+  '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14h44v30H28l-12 10V44h-6z"/></svg>'
+];
+function applyContent(){
+  const C = CONTENT;
+  Object.assign(STORE_INFO, C.contact || {});
+  const set = (id,t)=>{ const e = document.getElementById(id); if (e) e.textContent = t; };
+  const html = (id,h)=>{ const e = document.getElementById(id); if (e) e.innerHTML = h; };
+  set('brandLogo', C.logo); set('brandName', C.storeName); set('brandTag', C.tagline);
+  document.title = C.storeName + ' | ' + C.tagline;
+  set('heroTitle', C.heroTitle); set('heroText', C.heroText);
+  set('whyTitle', C.whyTitle); set('whySub', C.whySub);
+  html('featuresGrid', (C.features||[]).map((f,i)=>`<div class="feature"><div class="ic">${FEATURE_ICONS[i%FEATURE_ICONS.length]}</div><h3>${esc(f.title)}</h3><p>${para(f.text)}</p></div>`).join(''));
+  set('stepsTitle', C.stepsTitle); set('stepsSub', C.stepsSub);
+  html('stepsGrid', (C.steps||[]).map(f=>`<div class="step"><h3>${esc(f.title)}</h3><p>${para(f.text)}</p></div>`).join(''));
+  set('aboutHeroTitle', C.aboutHeroTitle); set('aboutHeroText', C.aboutHeroText);
+  html('aboutBody', `<h3>${esc(C.aboutWhoTitle)}</h3><p>${para(C.aboutWhoText)}</p><h3>${esc(C.aboutApproachTitle)}</h3><p>${para(C.aboutApproachText)}</p>`);
+  set('shipTitle', C.shippingTitle); html('shipBody', `<p>${para(C.shippingText)}</p>`);
+  set('faqTitle', C.faqTitle);
+  html('faqList', (C.faq||[]).map(f=>`<details><summary>${esc(f.q)}</summary><p>${para(f.a)}</p></details>`).join(''));
+  set('contactTitle', C.contactTitle);
+  set('footerText', C.footerText);
+  renderContact();
+}
 
 let CONFIG = null;
 let PRODUCTS = [];
@@ -787,17 +911,25 @@ async function loadConfig(){
 function b64EncodeUtf8(str){ return btoa(unescape(encodeURIComponent(str))); }
 function b64DecodeUtf8(str){ return decodeURIComponent(escape(atob(str))); }
 
-async function ghGetFile(path){
+async function ghGetFile(path, asObject){
+  const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}?ref=${CONFIG.branch}`;
   const headers = { 'Authorization': `token ${CONFIG.token}` };
+  const empty = asObject ? {} : [];
   let res;
-  try{ res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}?ref=${CONFIG.branch}`, { headers }); }
+  try{ res = await fetch(url, { headers }); }
   catch(e){ throw new Error('اتصال به GitHub برقرار نشد'); }
-  if (res.status === 404) return { data: [], sha: null };
+  if (res.status === 404) return { data: empty, sha: null };
   if (!res.ok) throw new Error('خطا در خواندن از گیت‌هاب: ' + res.status);
   const file = await res.json();
-  let data = [];
-  try{ data = JSON.parse(b64DecodeUtf8(file.content.replace(/\n/g,''))); } catch(e){ data = []; }
-  if (!Array.isArray(data)) data = [];
+  let text = '';
+  if (file.content){ try{ text = b64DecodeUtf8(file.content.replace(/\n/g,'')); } catch(e){ text = ''; } }
+  else if (file.sha){
+    try{ const r2 = await fetch(url, { headers: { ...headers, 'Accept': 'application/vnd.github.raw+json' } }); if (r2.ok) text = await r2.text(); } catch(e){}
+  }
+  let data = empty;
+  try{ data = JSON.parse(text); } catch(e){ data = empty; }
+  const okType = asObject ? (data && typeof data === 'object' && !Array.isArray(data)) : Array.isArray(data);
+  if (!okType) data = empty;
   return { data, sha: file.sha };
 }
 async function ghPutFile(path, data, sha, message){
@@ -845,7 +977,12 @@ function nowJalali(){ const d=new Date(); return gregorianToJalali(d.getFullYear
 function fmtPrice(n){ return Number(n||0).toLocaleString('fa-IR'); }
 
 /* ---------- آیکون دسته‌بندی (SVG خطی) ---------- */
-function categoryIconSvg(cat){
+function categoryIconSvg(catId){
+  const cat = CATEGORIES.find(c=>c.id===catId);
+  const key = cat ? cat.icon : catId;
+  return iconSvg(key);
+}
+function iconSvg(key){
   const common = 'viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
   const icons = {
     seed: `<svg ${common}><ellipse cx="32" cy="36" rx="15" ry="19"/><path d="M32 17c6 4 9 10 9 19"/><path d="M23 21c4 6 4 13 2 21"/></svg>`,
@@ -853,13 +990,16 @@ function categoryIconSvg(cat){
     tool: `<svg ${common}><path d="M20 44l14-14"/><circle cx="40" cy="20" r="8"/><path d="M34 26l-4 4"/></svg>`,
     irrigation: `<svg ${common}><path d="M32 12c8 10 14 18 14 26a14 14 0 0 1-28 0c0-8 6-16 14-26z"/></svg>`,
     machinery: `<svg ${common}><circle cx="20" cy="46" r="8"/><circle cx="46" cy="46" r="5"/><path d="M20 46h-6V30h18l10 10h4"/><path d="M28 30V20h8"/></svg>`,
-    protection: `<svg ${common}><path d="M32 10l16 6v14c0 12-7 20-16 24-9-4-16-12-16-24V16z"/></svg>`
+    protection: `<svg ${common}><path d="M32 10l16 6v14c0 12-7 20-16 24-9-4-16-12-16-24V16z"/></svg>`,
+    leaf: `<svg ${common}><path d="M12 52C12 28 28 12 54 10c0 26-16 42-40 42z"/><path d="M12 52L36 28"/></svg>`,
+    box: `<svg ${common}><path d="M10 22l22-10 22 10v22L32 54 10 44z"/><path d="M10 22l22 10 22-10M32 32v22"/></svg>`
   };
-  return icons[cat] || icons.tool;
+  return icons[key] || icons.tool;
 }
-function productThumb(p, sizeClass){
+window.fsIcon = function(catId){ const d = document.createElement('div'); d.innerHTML = categoryIconSvg(catId); return d.firstChild; };
+function productThumb(p){
   if (p.image){
-    return `<img src="${p.image}" alt="${p.name}" onerror="this.outerHTML=${JSON.stringify(categoryIconSvg(p.category))}">`;
+    return `<img src="${esc(p.image)}" alt="${esc(p.name)}" data-cat="${esc(p.category)}" onerror="this.replaceWith(fsIcon(this.dataset.cat))">`;
   }
   return categoryIconSvg(p.category);
 }
@@ -882,7 +1022,7 @@ function setCartQty(id, qty){
 function removeFromCart(id){ CART = CART.filter(c=>c.id!==id); saveCart(); }
 function cartLines(){
   return CART.map(c=>{
-    const p = PRODUCTS.find(p=>p.id===c.id);
+    const p = PRODUCTS.find(p=>p.id===c.id && !p.hidden);
     if (!p) return null;
     return { product:p, qty:c.qty, lineTotal: p.price * c.qty };
   }).filter(Boolean);
@@ -920,7 +1060,7 @@ function route(){
   if (parts[0] === 'about'){ renderContact(); showView('view-about'); return; }
   if (parts[0] === 'admin'){
     if (!isAdmin()){ location.hash = '#/account'; return; }
-    showView('view-admin'); loadOrders(); return;
+    renderAdmin(parts[1]); showView('view-admin'); return;
   }
   renderHome(); showView('view-home');
 }
@@ -929,11 +1069,14 @@ window.addEventListener('hashchange', route);
 /* ---------- خانه / کاتالوگ ---------- */
 let activeCategory = 'all';
 let searchTerm = '';
+function visibleProducts(){ return PRODUCTS.filter(p=>!p.hidden); }
 function renderFilters(){
-  const cats = ['all', ...new Set(PRODUCTS.map(p=>p.category))];
+  const used = new Set(visibleProducts().map(p=>p.category));
+  const cats = CATEGORIES.filter(c=>used.has(c.id));
+  if (activeCategory !== 'all' && !cats.some(c=>c.id===activeCategory)) activeCategory = 'all';
   const box = document.getElementById('filters');
-  box.innerHTML = cats.map(c=>`<button type="button" class="cat-btn ${c===activeCategory?'active':''}" data-cat="${c}">${c==='all'?'همه محصولات':(CATEGORY_LABELS[c]||c)}</button>`).join('')
-    + `<div class="search-box"><input type="text" id="searchInput" placeholder="جستجوی محصول..." value="${searchTerm}"></div>`;
+  box.innerHTML = [{id:'all',label:'همه محصولات'}, ...cats].map(c=>`<button type="button" class="cat-btn ${c.id===activeCategory?'active':''}" data-cat="${esc(c.id)}">${esc(c.label)}</button>`).join('')
+    + `<div class="search-box"><input type="text" id="searchInput" placeholder="جستجوی محصول..." value="${esc(searchTerm)}"></div>`;
   box.querySelectorAll('.cat-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{ activeCategory = btn.dataset.cat; renderHome(); });
   });
@@ -942,18 +1085,19 @@ function renderFilters(){
   });
 }
 function renderProductGrid(){
-  let list = PRODUCTS;
+  let list = visibleProducts();
+  const grid = document.getElementById('productGrid');
+  if (!list.length){ grid.innerHTML = `<div class="empty-state">هنوز محصولی در فروشگاه ثبت نشده است.</div>`; return; }
   if (activeCategory !== 'all') list = list.filter(p=>p.category===activeCategory);
   if (searchTerm.trim()) list = list.filter(p=>p.name.includes(searchTerm.trim()));
-  const grid = document.getElementById('productGrid');
   if (!list.length){ grid.innerHTML = `<div class="empty-state">محصولی یافت نشد.</div>`; return; }
   grid.innerHTML = list.map(p=>`
-    <a href="#/product/${p.id}" class="p-card">
-      <div class="p-thumb">${productThumb(p)}</div>
+    <a href="#/product/${esc(p.id)}" class="p-card ${inStock(p)?'':'out'}">
+      <div class="p-thumb">${productThumb(p)}${inStock(p)?'':'<span class="out-badge">ناموجود</span>'}</div>
       <div class="p-body">
-        <div class="p-cat">${CATEGORY_LABELS[p.category]||''}</div>
-        <div class="p-name">${p.name}</div>
-        <div class="p-price">${fmtPrice(p.price)} تومان <span class="p-unit">/ ${p.unit||''}</span></div>
+        <div class="p-cat">${esc(categoryLabel(p.category))}</div>
+        <div class="p-name">${esc(p.name)}</div>
+        <div class="p-price">${fmtPrice(p.price)} تومان <span class="p-unit">/ ${esc(p.unit||'')}</span></div>
       </div>
     </a>`).join('');
 }
@@ -961,28 +1105,30 @@ function renderHome(){ renderFilters(); renderProductGrid(); }
 
 /* ---------- جزئیات محصول ---------- */
 function renderProductDetail(id){
-  const p = PRODUCTS.find(p=>p.id===id);
+  const p = PRODUCTS.find(p=>p.id===id && !p.hidden);
   const body = document.getElementById('productDetailBody');
   if (!p){ body.innerHTML = `<div class="empty-state">محصول پیدا نشد.</div>`; return; }
+  const ok = inStock(p);
+  const stockTxt = !ok ? 'ناموجود' : (maxQty(p) === Infinity ? 'موجود' : `${fmtPrice(p.stock)} ${p.unit?('('+esc(p.unit)+')'):''}`);
   body.innerHTML = `
     <div class="product-detail">
       <div class="pd-image">${productThumb(p)}</div>
       <div class="pd-info">
-        <div class="pd-cat">${CATEGORY_LABELS[p.category]||''}</div>
-        <h2 class="pd-name">${p.name}</h2>
-        <div class="pd-price">${fmtPrice(p.price)} تومان <span class="p-unit">/ ${p.unit||''}</span></div>
+        <div class="pd-cat">${esc(categoryLabel(p.category))}</div>
+        <h2 class="pd-name">${esc(p.name)}</h2>
+        <div class="pd-price">${fmtPrice(p.price)} تومان <span class="p-unit">/ ${esc(p.unit||'')}</span></div>
         <div class="pd-meta">
-          <span>کد کالا: ${p.sku||'—'}</span>
-          <span>موجودی: ${p.stock ?? '—'} ${p.unit?('('+p.unit+')'):''}</span>
+          <span>کد کالا: ${esc(p.sku||'—')}</span>
+          <span>موجودی: ${stockTxt}</span>
         </div>
-        <p class="pd-desc">${p.description||''}</p>
+        <p class="pd-desc">${para(p.description||'')}</p>
         <div class="qty-row">
           <div class="stepper">
             <button type="button" id="pdMinus">−</button>
             <input type="text" id="pdQty" value="1" inputmode="numeric">
             <button type="button" id="pdPlus">+</button>
           </div>
-          <button class="btn" id="pdAddBtn">افزودن به سبد خرید</button>
+          <button class="btn" id="pdAddBtn" ${ok?'':'disabled'}>${ok?'افزودن به سبد خرید':'ناموجود'}</button>
         </div>
         <div class="status" id="pdStatus"></div>
       </div>
@@ -991,8 +1137,12 @@ function renderProductDetail(id){
   document.getElementById('pdMinus').onclick = ()=>{ qtyEl.value = Math.max(1, (parseInt(qtyEl.value)||1)-1); };
   document.getElementById('pdPlus').onclick = ()=>{ qtyEl.value = (parseInt(qtyEl.value)||1)+1; };
   document.getElementById('pdAddBtn').onclick = ()=>{
-    addToCart(p.id, parseInt(qtyEl.value)||1);
     const st = document.getElementById('pdStatus');
+    const want = parseInt(qtyEl.value)||1;
+    if (cartQty(p.id) + want > maxQty(p)){
+      st.className = 'status bad'; st.textContent = `حداکثر موجودی این کالا ${fmtPrice(maxQty(p))} عدد است (در سبد شما ${fmtPrice(cartQty(p.id))} عدد).`; return;
+    }
+    addToCart(p.id, want);
     st.className = 'status ok'; st.textContent = 'به سبد خرید اضافه شد.';
   };
 }
@@ -1011,7 +1161,7 @@ function renderCart(){
       <tbody>
         ${lines.map(l=>`
           <tr data-id="${l.product.id}">
-            <td><div class="cart-item-name"><div class="mini-thumb">${productThumb(l.product)}</div>${l.product.name}</div></td>
+            <td><div class="cart-item-name"><div class="mini-thumb">${productThumb(l.product)}</div>${esc(l.product.name)}</div></td>
             <td>${fmtPrice(l.product.price)} تومان</td>
             <td>
               <div class="stepper" style="display:inline-flex;">
@@ -1038,7 +1188,7 @@ function renderCart(){
   body.querySelectorAll('tr[data-id]').forEach(row=>{
     const id = row.dataset.id;
     row.querySelector('.ct-minus').onclick = ()=>{ setCartQty(id, cartQty(id)-1); renderCart(); };
-    row.querySelector('.ct-plus').onclick = ()=>{ setCartQty(id, cartQty(id)+1); renderCart(); };
+    row.querySelector('.ct-plus').onclick = ()=>{ const pr = PRODUCTS.find(x=>x.id===id); if (pr && cartQty(id)+1 > maxQty(pr)) return; setCartQty(id, cartQty(id)+1); renderCart(); };
     row.querySelector('.ct-qty').onchange = (e)=>{ setCartQty(id, parseInt(e.target.value)||0); renderCart(); };
     row.querySelector('.cart-remove').onclick = ()=>{ removeFromCart(id); renderCart(); };
   });
@@ -1062,8 +1212,8 @@ function applyShipUI(){
   if (!m){ note.style.display='none'; return; }
   note.style.display = 'block';
   note.textContent = needs
-    ? 'هزینه و زمان ارسال جداگانه محاسبه و هنگام هماهنگی توسط همکاران ما اعلام می‌شود.'
-    : ('سفارش شما در فروشگاه آماده می‌شود و پس از هماهنگی تلفنی تحویل می‌گیرید.' + (STORE_INFO.address ? ' آدرس: ' + STORE_INFO.address : ''));
+    ? CONTENT.shipNoteShip
+    : (CONTENT.shipNotePickup + (STORE_INFO.address ? ' آدرس: ' + STORE_INFO.address : ''));
 }
 function renderCheckout(){
   if (!cartLines().length){ location.hash = '#/cart'; return; }
@@ -1141,7 +1291,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e)=>{
     await ghAppend(CONFIG.fileName, order, `سفارش جدید: ${order.receiver.name}`);
     document.getElementById('orderSuccessText').textContent =
       `سفارش شما به مبلغ ${fmtPrice(order.total)} تومان ثبت شد. ` +
-      (needs ? 'همکاران ما برای تأیید و هماهنگی هزینه و زمان ارسال با شما تماس می‌گیرند.' : 'پس از آماده شدن سفارش، برای تحویل حضوری با شما تماس می‌گیریم.');
+      (needs ? CONTENT.successShip : CONTENT.successPickup);
     CART = []; saveCart();
     e.target.reset();
     location.hash = '#/order-success';
@@ -1269,7 +1419,6 @@ function setAdmin(on){
   if (on) sessionStorage.setItem('fs_admin','1'); else sessionStorage.removeItem('fs_admin');
   document.getElementById('adminLink').style.display = on ? '' : 'none';
 }
-document.getElementById('adminLogoutBtn').addEventListener('click', ()=>{ setAdmin(false); location.hash = '#/'; });
 
 function renderContact(){
   const items = [];
@@ -1448,7 +1597,7 @@ function invoiceHtml(o){
   <div class="inv-frame"><div class="inv-inner">
     ${o.status==='canceled' ? '<div class="inv-stamp">لغو شده</div>' : ''}
     <div class="inv-top">
-      <div class="inv-brand">🌾 سبزدشت<small>ابزار و نهاده‌های کشاورزی</small>${seller ? `<small>${seller}</small>` : ''}</div>
+      <div class="inv-brand">${esc(CONTENT.logo)} ${esc(CONTENT.storeName)}<small>${esc(CONTENT.tagline)}</small>${seller ? `<small>${seller}</small>` : ''}</div>
       <div class="inv-meta">شماره فاکتور: <b>${esc(String(o.id).slice(-6))}</b><br>تاریخ: ${esc(o.date||'')} ${esc(o.time||'')}<br>وضعیت: ${esc(statusLabel(o.status, o.shipping.method))}</div>
     </div>
     <div class="inv-title">فاکتور فروش</div>
@@ -1464,7 +1613,7 @@ function invoiceHtml(o){
       <tbody>${rows}</tbody>
     </table>
     <div class="inv-sum"><span>جمع کل کالاها</span><span>${fmtPrice(total)} تومان</span></div>
-    <div class="inv-note">${isPickup ? '' : 'هزینه‌ی ارسال جداگانه محاسبه و هنگام هماهنگی اعلام می‌شود. '}این فاکتور نشان‌دهنده‌ی سفارش ثبت‌شده در فروشگاه است.</div>
+    <div class="inv-note">${para(CONTENT.invoiceNote)}</div>
     <div class="inv-sign"><div>مهر و امضای فروشنده</div><div>امضای خریدار / تحویل‌گیرنده</div></div>
   </div></div>`;
 }
@@ -1878,14 +2027,391 @@ function renderSupportPane(){
   document.getElementById('pane-support').innerHTML = `
     <h2 class="pane-title">پشتیبانی و راهنما</h2>
     <div class="tip-list">
-      <div class="pane-card"><h3>ویرایش یا لغو سفارش</h3><p>تا وقتی سفارش در وضعیت «در انتظار تأیید» باشد، از بخش «سفارشات من» می‌توانید آن را ویرایش یا لغو کنید. بعد از تأیید، برای تغییر با فروشگاه تماس بگیرید.</p><a href="#/account/orders" class="btn outline">رفتن به سفارشات من</a></div>
-      <div class="pane-card"><h3>ارسال و تحویل</h3><p>روش‌های دریافت: پست اکسپرس، تیپاکس و تحویل حضوری. هزینه‌ی ارسال هنگام هماهنگی اعلام می‌شود و کد رهگیری پس از ارسال در سفارش شما نمایش داده می‌شود.</p></div>
-      <div class="pane-card"><h3>فاکتور</h3><p>برای هر سفارش دکمه‌ی «چاپ فاکتور» وجود دارد؛ می‌توانید فاکتور را چاپ یا به‌صورت PDF ذخیره کنید.</p></div>
-      <div class="pane-card"><h3>سوالات متداول</h3><p>پاسخ پرسش‌های رایج در صفحه‌ی «درباره ما» آمده است.</p><a href="#/about" class="btn outline">مشاهده</a></div>
+      ${(CONTENT.supportCards||[]).map(c=>`<div class="pane-card"><h3>${esc(c.title)}</h3><p>${para(c.text)}</p></div>`).join('')}
     </div>
     <div class="pane-card"><h3>راه‌های ارتباطی</h3>
       ${rows.length ? rows.map(([k,v])=>`<p><b>${k}:</b> ${esc(v)}</p>`).join('') : '<p>اطلاعات تماس به‌زودی در این بخش قرار می‌گیرد.</p>'}
+      <div class="quick"><a href="#/account/orders" class="btn outline">سفارشات من</a><a href="#/about" class="btn outline">درباره ما و سوالات متداول</a></div>
     </div>`;
+}
+
+
+/* ---------- ساختار پنل مدیریت ---------- */
+function setPaneStatus(id, ok, msg){ const e = document.getElementById(id); if (!e) return; e.className = 'status ' + (ok ? 'ok' : 'bad'); e.textContent = msg; }
+const ADMIN_SECTIONS = [
+  { id:'orders',     label:'سفارشات',          icon:'<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>' },
+  { id:'products',   label:'محصولات',          icon:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>' },
+  { id:'categories', label:'دسته‌بندی‌ها',      icon:'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><path d="M17 13v8M13 17h8"/>' },
+  { id:'content',    label:'متن‌ها و محتوا',    icon:'<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>' }
+];
+let adminSection = 'orders';
+function renderAdmin(section){
+  if (!ADMIN_SECTIONS.some(x=>x.id===section)) section = 'orders';
+  adminSection = section;
+  document.getElementById('adminSide').innerHTML = `
+    <div class="avatar">م</div>
+    <div class="side-name">پنل مدیریت</div>
+    <div class="side-mobile">${esc(CONTENT.storeName)}</div>
+    <nav class="side-menu">
+      ${ADMIN_SECTIONS.map(x=>`<a href="#/admin/${x.id}" class="side-item ${x.id===section?'active':''}"><svg viewBox="0 0 24 24">${x.icon}</svg>${x.label}</a>`).join('')}
+      <a href="#/" class="side-item"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>مشاهده‌ی سایت</a>
+      <button type="button" class="side-item logout" id="adminSideLogout"><svg viewBox="0 0 24 24"><path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>خروج از پنل</button>
+    </nav>`;
+  document.getElementById('adminSideLogout').onclick = ()=>{ setAdmin(false); location.hash = '#/'; };
+  ADMIN_SECTIONS.forEach(x=>document.getElementById('apane-'+x.id).classList.toggle('active', x.id===section));
+  if (section === 'orders') loadOrders();
+  if (section === 'products') renderAdminProducts();
+  if (section === 'categories') renderAdminCategories();
+  if (section === 'content') renderAdminContent();
+}
+
+/* ---------- مدیریت محصولات ---------- */
+let apFilter = { q:'', cat:'all' };
+function productStatus(p){
+  if (p.hidden) return ['hiddenp','پنهان از فروشگاه'];
+  if (!inStock(p)) return ['outp','ناموجود'];
+  return ['okp','فعال'];
+}
+function apRows(){
+  const q = apFilter.q.trim();
+  const list = PRODUCTS.filter(p=>(apFilter.cat==='all' || p.category===apFilter.cat) && (!q || (p.name + ' ' + (p.sku||'')).includes(q)));
+  if (!PRODUCTS.length) return `<tr><td colspan="7"><div class="empty-state">هنوز محصولی ثبت نشده. با دکمه‌ی «افزودن محصول» شروع کنید.</div></td></tr>`;
+  if (!list.length) return `<tr><td colspan="7"><div class="empty-state">محصولی با این فیلتر پیدا نشد.</div></td></tr>`;
+  return list.map(p=>{
+    const [cls,txt] = productStatus(p);
+    return `<tr>
+      <td><div class="mini-img ${p.image?'has-img':''}">${productThumb(p)}</div></td>
+      <td><b>${esc(p.name)}</b><div class="o-hist">${esc(p.sku||'')}</div></td>
+      <td>${esc(categoryLabel(p.category) || '—')}</td>
+      <td>${fmtPrice(p.price)}</td>
+      <td>${(p.stock===null||p.stock===undefined||p.stock==='') ? 'نامحدود' : fmtPrice(p.stock)}</td>
+      <td><span class="pill ${cls}">${txt}</span></td>
+      <td><div class="p-actions">
+        <button type="button" class="pill-btn" data-act="edit" data-id="${esc(p.id)}">ویرایش</button>
+        <button type="button" class="pill-btn" data-act="toggle" data-id="${esc(p.id)}">${p.hidden?'نمایش':'پنهان'}</button>
+        <button type="button" class="pill-btn danger" data-act="del" data-id="${esc(p.id)}">حذف</button>
+      </div></td></tr>`;
+  }).join('');
+}
+function renderAdminProducts(){
+  const pane = document.getElementById('apane-products');
+  pane.innerHTML = `
+    <div class="admin-toolbar"><h2>مدیریت محصولات <small style="font-size:14px;color:var(--muted);">(${fmtPrice(PRODUCTS.length)})</small></h2>
+      <button class="btn gold" id="apAdd" type="button">+ افزودن محصول</button></div>
+    <div class="admin-filters">
+      <select id="apCat"><option value="all">همه دسته‌ها</option>${CATEGORIES.map(c=>`<option value="${esc(c.id)}" ${apFilter.cat===c.id?'selected':''}>${esc(c.label)}</option>`).join('')}</select>
+      <input type="text" id="apSearch" placeholder="جستجو: نام یا کد کالا" value="${esc(apFilter.q)}">
+    </div>
+    <div class="orders-table-wrap"><table class="ptable">
+      <thead><tr><th></th><th>محصول</th><th>دسته</th><th>قیمت (تومان)</th><th>موجودی</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+      <tbody id="apBody">${apRows()}</tbody></table></div>
+    <div class="status" id="apStatus"></div>`;
+  document.getElementById('apAdd').onclick = ()=>openProductModal(null);
+  document.getElementById('apCat').onchange = e=>{ apFilter.cat = e.target.value; document.getElementById('apBody').innerHTML = apRows(); };
+  document.getElementById('apSearch').oninput = e=>{ apFilter.q = e.target.value; document.getElementById('apBody').innerHTML = apRows(); };
+  document.getElementById('apBody').onclick = async (e)=>{
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const id = b.dataset.id, act = b.dataset.act;
+    if (act === 'edit') return openProductModal(id);
+    try{
+      if (act === 'toggle'){
+        b.disabled = true;
+        await saveProducts(arr=>{ const p = arr.find(x=>x.id===id); if (p) p.hidden = !p.hidden; });
+      }
+      if (act === 'del'){
+        const p = PRODUCTS.find(x=>x.id===id);
+        if (!confirm(`محصول «${p ? p.name : ''}» حذف شود؟ این کار قابل بازگشت نیست.`)) return;
+        b.disabled = true;
+        await saveProducts(arr=>arr.filter(x=>x.id!==id));
+      }
+      renderAdminProducts();
+      setPaneStatus('apStatus', true, 'تغییرات ذخیره شد.');
+    } catch(err){ b.disabled = false; setPaneStatus('apStatus', false, err.message); }
+  };
+}
+async function saveProducts(mutate){
+  if (!CONFIG) CONFIG = await loadConfig();
+  const { data, sha } = await ghGetFile(PRODUCTS_FILE);
+  const out = mutate(data) || data;
+  await ghPutFile(PRODUCTS_FILE, out, sha, 'بروزرسانی محصولات فروشگاه');
+  PRODUCTS = out;
+  return out;
+}
+function compressImage(file, maxW = 560, quality = 0.72){
+  return new Promise((resolve, reject)=>{
+    const fr = new FileReader();
+    fr.onerror = reject;
+    fr.onload = ()=>{
+      const img = new Image();
+      img.onerror = ()=>reject(new Error('فایل تصویر معتبر نیست'));
+      img.onload = ()=>{
+        const sc = Math.min(1, maxW / img.width);
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        let out = c.toDataURL('image/jpeg', quality);
+        if (out.length > 120000) out = c.toDataURL('image/jpeg', 0.5);
+        resolve(out);
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function openProductModal(id){
+  const isNew = !id;
+  const p = isNew ? { name:'', category:(CATEGORIES[0]||{}).id||'', price:'', unit:'', stock:null, sku:'', image:'', description:'', hidden:false } : PRODUCTS.find(x=>x.id===id);
+  if (!p) return;
+  let curImage = p.image || '';
+  const box = document.getElementById('editModalBox');
+  box.innerHTML = `
+    <h2>${isNew ? 'افزودن محصول' : 'ویرایش محصول'}</h2>
+    <form id="apForm" novalidate>
+      <div class="f-field"><label>نام محصول<span class="req">*</span></label><input type="text" id="apfName" value="${esc(p.name)}"><div class="f-err"></div></div>
+      <div class="f-row2">
+        <div class="f-field"><label>دسته‌بندی<span class="req">*</span></label>
+          <select id="apfCat">${CATEGORIES.map(c=>`<option value="${esc(c.id)}" ${c.id===p.category?'selected':''}>${esc(c.label)}</option>`).join('')}</select><div class="f-err"></div></div>
+        <div class="f-field"><label>کد کالا</label><input type="text" id="apfSku" value="${esc(p.sku||'')}"></div>
+      </div>
+      <div class="f-grid3">
+        <div class="f-field"><label>قیمت (تومان)<span class="req">*</span></label><input type="number" min="0" id="apfPrice" value="${esc(p.price)}"><div class="f-err"></div></div>
+        <div class="f-field"><label>واحد فروش</label><input type="text" id="apfUnit" placeholder="مثلاً: کیسه ۲۵ کیلویی" value="${esc(p.unit||'')}"></div>
+        <div class="f-field"><label>موجودی (خالی = نامحدود)</label><input type="number" min="0" id="apfStock" value="${(p.stock===null||p.stock===undefined)?'':esc(p.stock)}"><div class="f-err"></div></div>
+      </div>
+      <div class="f-field"><label>توضیحات محصول</label><textarea id="apfDesc" style="min-height:90px;">${esc(p.description||'')}</textarea></div>
+      <div class="f-field"><label>تصویر محصول</label>
+        <div class="img-box">
+          <div class="img-prev" id="apfPrev"></div>
+          <div class="img-ctrl">
+            <input type="file" id="apfFile" accept="image/*">
+            <input type="text" id="apfImgUrl" placeholder="یا آدرس تصویر (URL)" value="${(p.image && !p.image.startsWith('data:')) ? esc(p.image) : ''}">
+            <button type="button" class="pill-btn" id="apfImgClear">حذف تصویر (نمایش آیکون دسته)</button>
+          </div>
+        </div>
+        <div class="o-hist" id="apfImgInfo">تصویر آپلودشده خودکار کوچک و فشرده می‌شود.</div>
+      </div>
+      <label class="chk"><input type="checkbox" id="apfVisible" ${p.hidden?'':'checked'}> نمایش در فروشگاه</label>
+      <div class="modal-actions">
+        <button type="submit" class="btn gold" id="apfSave">ذخیره</button>
+        <button type="button" class="btn outline" id="apfCancel">انصراف</button>
+      </div>
+      <div class="status" id="apfStatus"></div>
+    </form>`;
+  document.getElementById('editModal').style.display = 'flex';
+  const drawPrev = ()=>{
+    const pv = document.getElementById('apfPrev');
+    if (curImage){ pv.className = 'img-prev has-img'; pv.innerHTML = `<img src="${esc(curImage)}" alt="">`; }
+    else { pv.className = 'img-prev'; pv.innerHTML = categoryIconSvg(document.getElementById('apfCat').value); }
+  };
+  drawPrev();
+  document.getElementById('apfCat').onchange = drawPrev;
+  document.getElementById('apfCancel').onclick = closeEditModal;
+  document.getElementById('apfImgClear').onclick = ()=>{ curImage = ''; document.getElementById('apfImgUrl').value = ''; document.getElementById('apfFile').value = ''; drawPrev(); };
+  document.getElementById('apfImgUrl').oninput = e=>{ curImage = e.target.value.trim(); drawPrev(); };
+  document.getElementById('apfFile').onchange = async (e)=>{
+    const f = e.target.files[0]; if (!f) return;
+    const info = document.getElementById('apfImgInfo');
+    try{
+      curImage = await compressImage(f);
+      document.getElementById('apfImgUrl').value = '';
+      info.textContent = `تصویر آماده شد (حدود ${Math.round(curImage.length/1024)} کیلوبایت).`;
+      drawPrev();
+    } catch(err){ info.textContent = err.message; }
+  };
+  document.getElementById('apForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('apfName'), cat = document.getElementById('apfCat');
+    const price = document.getElementById('apfPrice'), stock = document.getElementById('apfStock');
+    let ok = true;
+    if (!name.value.trim()){ setFErr(name,'نام محصول را وارد کنید'); ok = false; } else setFErr(name,'');
+    if (!cat.value){ setFErr(cat,'ابتدا در بخش دسته‌بندی‌ها یک دسته بسازید'); ok = false; } else setFErr(cat,'');
+    if (price.value === '' || Number(price.value) < 0 || !isFinite(Number(price.value))){ setFErr(price,'قیمت معتبر وارد کنید'); ok = false; } else setFErr(price,'');
+    if (stock.value !== '' && (Number(stock.value) < 0 || !isFinite(Number(stock.value)))){ setFErr(stock,'موجودی معتبر نیست'); ok = false; } else setFErr(stock,'');
+    if (!ok) return;
+    const rec = {
+      id: isNew ? 'p' + Date.now().toString(36) : p.id,
+      name: name.value.trim(), category: cat.value,
+      price: Math.round(Number(price.value)),
+      unit: document.getElementById('apfUnit').value.trim(),
+      stock: stock.value === '' ? null : Math.floor(Number(stock.value)),
+      sku: document.getElementById('apfSku').value.trim(),
+      image: curImage,
+      description: document.getElementById('apfDesc').value.trim(),
+      hidden: !document.getElementById('apfVisible').checked
+    };
+    const btn = document.getElementById('apfSave'); btn.disabled = true; btn.textContent = 'در حال ذخیره...';
+    try{
+      await saveProducts(arr=>{
+        const i = arr.findIndex(x=>x.id===rec.id);
+        if (i >= 0) arr[i] = { ...arr[i], ...rec }; else arr.push(rec);
+      });
+      closeEditModal();
+      renderAdminProducts();
+      setPaneStatus('apStatus', true, isNew ? 'محصول اضافه شد.' : 'تغییرات محصول ذخیره شد.');
+    } catch(err){
+      setPaneStatus('apfStatus', false, err.message);
+      btn.disabled = false; btn.textContent = 'ذخیره';
+    }
+  });
+}
+
+/* ---------- مدیریت دسته‌بندی‌ها ---------- */
+let catDraft = [];
+function renderAdminCategories(){ catDraft = CATEGORIES.map(c=>({...c})); drawCats(); }
+function drawCats(statusMsg){
+  const pane = document.getElementById('apane-categories');
+  pane.innerHTML = `
+    <div class="admin-toolbar"><h2>دسته‌بندی‌ها</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn outline" id="catAdd" type="button">+ دسته‌ی جدید</button><button class="btn gold" id="catSave" type="button">ذخیره تغییرات</button></div></div>
+    <p class="info-note">ترتیب این فهرست، ترتیب دکمه‌های فیلتر در فروشگاه است. دسته‌ای که محصول دارد قابل حذف نیست؛ ابتدا محصولات را به دسته‌ی دیگری ببرید.</p>
+    <div id="catList">${catDraft.map((c,i)=>{
+      const n = PRODUCTS.filter(p=>p.category===c.id).length;
+      return `<div class="cat-row" data-i="${i}">
+        <div class="cat-ic">${iconSvg(c.icon)}</div>
+        <input type="text" class="cat-label" value="${esc(c.label)}" placeholder="نام دسته">
+        <select class="cat-icon">${Object.entries(ICON_LABELS).map(([k,v])=>`<option value="${k}" ${k===c.icon?'selected':''}>${v}</option>`).join('')}</select>
+        <span class="cat-count">${fmtPrice(n)} محصول</span>
+        <span class="cat-btns"><button type="button" class="pill-btn cat-up" ${i===0?'disabled':''}>↑</button><button type="button" class="pill-btn cat-down" ${i===catDraft.length-1?'disabled':''}>↓</button><button type="button" class="pill-btn danger cat-del">حذف</button></span>
+      </div>`; }).join('') || '<div class="empty-state">هنوز دسته‌ای نیست.</div>'}</div>
+    <div class="status" id="catStatus"></div>`;
+  if (statusMsg) setPaneStatus('catStatus', statusMsg[0], statusMsg[1]);
+  document.getElementById('catAdd').onclick = ()=>{ catDraft.push({ id:'c' + Date.now().toString(36), label:'', icon:'leaf' }); drawCats(); };
+  document.getElementById('catSave').onclick = saveCategories;
+  document.querySelectorAll('#catList .cat-row').forEach(row=>{
+    const i = +row.dataset.i;
+    row.querySelector('.cat-label').oninput = e=>{ catDraft[i].label = e.target.value; };
+    row.querySelector('.cat-icon').onchange = e=>{ catDraft[i].icon = e.target.value; drawCats(); };
+    row.querySelector('.cat-up').onclick = ()=>{ [catDraft[i-1], catDraft[i]] = [catDraft[i], catDraft[i-1]]; drawCats(); };
+    row.querySelector('.cat-down').onclick = ()=>{ [catDraft[i+1], catDraft[i]] = [catDraft[i], catDraft[i+1]]; drawCats(); };
+    row.querySelector('.cat-del').onclick = ()=>{
+      const n = PRODUCTS.filter(p=>p.category===catDraft[i].id).length;
+      if (n > 0){ alert(`این دسته ${fmtPrice(n)} محصول دارد. ابتدا محصولات را به دسته‌ی دیگری منتقل کنید.`); return; }
+      catDraft.splice(i,1); drawCats();
+    };
+  });
+}
+async function saveCategories(){
+  const labels = catDraft.map(c=>c.label.trim());
+  if (!catDraft.length){ setPaneStatus('catStatus', false, 'حداقل یک دسته لازم است.'); return; }
+  if (labels.some(l=>!l)){ setPaneStatus('catStatus', false, 'نام همه‌ی دسته‌ها را وارد کنید.'); return; }
+  if (new Set(labels).size !== labels.length){ setPaneStatus('catStatus', false, 'نام دسته‌ها نباید تکراری باشد.'); return; }
+  const btn = document.getElementById('catSave'); btn.disabled = true; btn.textContent = 'در حال ذخیره...';
+  try{
+    if (!CONFIG) CONFIG = await loadConfig();
+    const { sha } = await ghGetFile(CATEGORIES_FILE);
+    const out = catDraft.map(c=>({ id:c.id, label:c.label.trim(), icon:c.icon }));
+    await ghPutFile(CATEGORIES_FILE, out, sha, 'بروزرسانی دسته‌بندی‌ها');
+    CATEGORIES = out; catDraft = out.map(c=>({...c}));
+    drawCats([true, 'دسته‌بندی‌ها ذخیره شد.']);
+  } catch(err){ btn.disabled = false; btn.textContent = 'ذخیره تغییرات'; setPaneStatus('catStatus', false, err.message); }
+}
+
+/* ---------- مدیریت متن‌ها و محتوا ---------- */
+const CONTENT_SCHEMA = [
+  { title:'برند و عمومی', items:[
+    ['f','logo','نشان لوگو (یک ایموجی)'],['f','storeName','نام فروشگاه'],['f','tagline','شعار زیر نام'],['f','footerText','متن پایین صفحه (فوتر)','area'] ]},
+  { title:'صفحه‌ی اصلی', items:[
+    ['f','heroTitle','تیتر اصلی'],['f','heroText','متن زیر تیتر','area'],
+    ['f','whyTitle','عنوان بخش مزایا'],['f','whySub','توضیح بخش مزایا','area'],
+    ['l','features','کارت‌های مزایا',[['title','عنوان'],['text','متن','area']]],
+    ['f','stepsTitle','عنوان بخش مراحل خرید'],['f','stepsSub','توضیح بخش مراحل خرید','area'],
+    ['l','steps','مراحل خرید',[['title','عنوان'],['text','متن','area']]] ]},
+  { title:'صفحه‌ی درباره ما', items:[
+    ['f','aboutHeroTitle','تیتر صفحه'],['f','aboutHeroText','زیرتیتر'],
+    ['f','aboutWhoTitle','عنوان بخش اول'],['f','aboutWhoText','متن بخش اول','area'],
+    ['f','aboutApproachTitle','عنوان بخش دوم'],['f','aboutApproachText','متن بخش دوم','area'],
+    ['f','shippingTitle','عنوان ارسال و تحویل'],['f','shippingText','متن ارسال و تحویل','area'],
+    ['f','faqTitle','عنوان سوالات متداول'],
+    ['l','faq','سوالات متداول',[['q','سوال'],['a','پاسخ','area']]],
+    ['f','contactTitle','عنوان بخش تماس'] ]},
+  { title:'اطلاعات تماس', items:[
+    ['f','contact.phone','تلفن'],['f','contact.telegram','تلگرام / پیام‌رسان'],['f','contact.address','آدرس فروشگاه'],['f','contact.hours','ساعت پاسخ‌گویی'] ]},
+  { title:'پیام‌های سفارش، فاکتور و پروفایل', items:[
+    ['f','shipNoteShip','پیام هنگام انتخاب پست/تیپاکس','area'],
+    ['f','shipNotePickup','پیام هنگام انتخاب تحویل حضوری','area'],
+    ['f','successShip','پیام موفقیت سفارش (ارسالی)','area'],
+    ['f','successPickup','پیام موفقیت سفارش (حضوری)','area'],
+    ['f','invoiceNote','یادداشت پایین فاکتور','area'],
+    ['l','supportCards','کارت‌های صفحه‌ی پشتیبانی در پروفایل مشتری',[['title','عنوان'],['text','متن','area']]] ]}
+];
+function getPath(o, path){ return path.split('.').reduce((a,k)=>(a==null?'':a[k]), o); }
+function setPath(o, path, v){ const ks = path.split('.'); let t = o; ks.slice(0,-1).forEach(k=>{ if (typeof t[k] !== 'object' || t[k] === null) t[k] = {}; t = t[k]; }); t[ks[ks.length-1]] = v; }
+function ctInput(attr, val, area){
+  return area ? `<textarea ${attr}>${esc(val)}</textarea>` : `<input type="text" ${attr} value="${esc(val)}">`;
+}
+function renderAdminContent(draft){
+  const D = draft || CONTENT;
+  const pane = document.getElementById('apane-content');
+  const openArr = draft && draft.__open ? draft.__open : null;
+  pane.innerHTML = `
+    <div class="admin-toolbar"><h2>متن‌ها و محتوای سایت</h2></div>
+    <p class="info-note">هر متنی که اینجا تغییر دهید بعد از «ذخیره» روی کل سایت اعمال می‌شود. برای رفتن به خط بعد در متن‌های بلند، Enter بزنید.</p>
+    ${CONTENT_SCHEMA.map((g,gi)=>`<details class="ct-group" ${(openArr ? openArr[gi] : gi===0) ? 'open' : ''}><summary>${g.title}</summary><div class="ct-body">
+      ${g.items.map(it=>{
+        if (it[0] === 'f') return `<div class="f-field"><label>${it[2]}</label>${ctInput(`data-key="${it[1]}"`, getPath(D, it[1]), it[3]==='area')}</div>`;
+        const arr = D[it[1]] || [];
+        return `<div class="ct-list-title">${it[2]}</div><div class="ct-list" data-list="${it[1]}">
+          ${arr.map(row=>`<div class="ct-item">${it[3].map(f=>`<div class="f-field"><label>${f[1]}</label>${ctInput(`data-ikey="${f[0]}"`, row[f[0]]||'', f[2]==='area')}</div>`).join('')}
+            <button type="button" class="pill-btn danger ct-del">حذف این مورد</button></div>`).join('')}
+          </div><button type="button" class="pill-btn ct-add" data-list="${it[1]}">+ افزودن مورد</button>`;
+      }).join('')}
+    </div></details>`).join('')}
+    <div class="ct-bar">
+      <button type="button" class="btn gold" id="ctSave">ذخیره و اعمال روی سایت</button>
+      <button type="button" class="btn outline" id="ctReset">بازگشت به متن‌های پیش‌فرض</button>
+    </div>
+    <div class="status" id="ctStatus"></div>`;
+  pane.querySelectorAll('.ct-add').forEach(b=>b.onclick = ()=>{
+    const d = collectContent(); const key = b.dataset.list;
+    const fields = CONTENT_SCHEMA.flatMap(g=>g.items).find(it=>it[1]===key)[3];
+    const blank = {}; fields.forEach(f=>blank[f[0]] = '');
+    d[key] = [...(d[key]||[]), blank];
+    d.__open = openStates(); renderAdminContent(d);
+  });
+  pane.querySelectorAll('.ct-del').forEach(b=>b.onclick = ()=>{
+    const item = b.closest('.ct-item'); const list = b.closest('.ct-list');
+    const idx = [...list.children].indexOf(item);
+    const d = collectContent(); d[list.dataset.list].splice(idx,1);
+    d.__open = openStates(); renderAdminContent(d);
+  });
+  document.getElementById('ctSave').onclick = saveContent;
+  document.getElementById('ctReset').onclick = resetContent;
+}
+function openStates(){ return [...document.querySelectorAll('#apane-content .ct-group')].map(g=>g.open); }
+function collectContent(){
+  const pane = document.getElementById('apane-content');
+  const out = clone(CONTENT);
+  pane.querySelectorAll('[data-key]').forEach(el=>setPath(out, el.dataset.key, el.value.trim()));
+  pane.querySelectorAll('.ct-list').forEach(l=>{
+    out[l.dataset.list] = [...l.querySelectorAll('.ct-item')].map(it=>{
+      const o = {}; it.querySelectorAll('[data-ikey]').forEach(e=>o[e.dataset.ikey] = e.value.trim()); return o;
+    });
+  });
+  return out;
+}
+async function saveContent(){
+  const out = collectContent();
+  if (!out.storeName){ setPaneStatus('ctStatus', false, 'نام فروشگاه نمی‌تواند خالی باشد.'); return; }
+  Object.keys(out).forEach(k=>{ if (Array.isArray(out[k])) out[k] = out[k].filter(o=>Object.values(o).some(v=>v)); });
+  const btn = document.getElementById('ctSave'); btn.disabled = true; btn.textContent = 'در حال ذخیره...';
+  try{
+    if (!CONFIG) CONFIG = await loadConfig();
+    const { sha } = await ghGetFile(CONTENT_FILE, true);
+    await ghPutFile(CONTENT_FILE, out, sha, 'بروزرسانی متن‌های سایت');
+    CONTENT = mergeContent(out); applyContent();
+    setPaneStatus('ctStatus', true, 'ذخیره شد و روی سایت اعمال شد.');
+  } catch(err){ setPaneStatus('ctStatus', false, err.message); }
+  finally { btn.disabled = false; btn.textContent = 'ذخیره و اعمال روی سایت'; }
+}
+async function resetContent(){
+  if (!confirm('همه‌ی متن‌ها به حالت پیش‌فرض برگردند؟')) return;
+  try{
+    if (!CONFIG) CONFIG = await loadConfig();
+    const { sha } = await ghGetFile(CONTENT_FILE, true);
+    await ghPutFile(CONTENT_FILE, {}, sha, 'بازگشت متن‌های سایت به پیش‌فرض');
+    CONTENT = clone(DEFAULT_CONTENT); applyContent(); renderAdminContent();
+    setPaneStatus('ctStatus', true, 'متن‌ها به حالت پیش‌فرض برگشت.');
+  } catch(err){ setPaneStatus('ctStatus', false, err.message); }
 }
 
 /* ---------- راه‌اندازی ---------- */
@@ -1893,13 +2419,19 @@ async function init(){
   setAdmin(isAdmin());
   updateAccountLink();
   updateCartBadge();
+  applyContent();
   try{
     CONFIG = await loadConfig();
-    const { data } = await ghGetFile('products.json');
-    if (!data.length) throw new Error('فایل products.json در ریشه‌ی مخزن خالی یا یافت نشد — آن را در ریشه‌ی ریپو آپلود کن');
-    PRODUCTS = data;
+    const prP = ghGetFile(PRODUCTS_FILE);
+    const ctP = ghGetFile(CATEGORIES_FILE).catch(()=>null);
+    const cnP = ghGetFile(CONTENT_FILE, true).catch(()=>null);
+    const pr = await prP;
+    PRODUCTS = pr.data;
+    const ct = await ctP; if (ct && ct.data.length) CATEGORIES = ct.data;
+    const cn = await cnP; if (cn && Object.keys(cn.data).length){ CONTENT = mergeContent(cn.data); }
+    applyContent();
   } catch(err){
-    document.getElementById('productGrid').innerHTML = `<div class="status bad" style="display:block;">${err.message}</div>`;
+    document.getElementById('productGrid').innerHTML = `<div class="status bad" style="display:block;">${esc(err.message)}</div>`;
   }
   route();
 }
