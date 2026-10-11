@@ -1264,11 +1264,407 @@ const FS_ART_RULES = [
 ];
 const FS_ART_CAT = { seed:'packet', fertilizer:'urea', tool:'trowel', irrigation:'can', machinery:'tractor', protection:'sprayer', leaf:'crate', box:'crate' };
 
+/* ===== کتابخانه‌ی وکتورهای عمومی (همه‌ی حوزه‌ها) — جایگزین تصویر محصول ===== */
+(function(){
+  const C = { G:'#3f6b35', GL:'#8fbf6e', GD:'#2b4a24', W:'#d9a441', WD:'#a97b1f', SOIL:'#6b4a2b', SOILD:'#4a321c',
+    CREAM:'#fdf8ea', RED:'#c8553d', REDD:'#9c3b28', STEEL:'#aeb8bf', STEELD:'#7d8991', INK:'#2a2318',
+    BLUE:'#3b82a8', BLUEL:'#bfe0ee', BLUED:'#2c6585', PINK:'#e58aa5', PURPLE:'#7a5aa6', ORANGE:'#e8863a', YELLOW:'#f2c94c' };
+  const {G,GL,GD,W,WD,SOIL,SOILD,CREAM,RED,REDD,STEEL,STEELD,INK,BLUE,BLUEL,BLUED,PINK,PURPLE,ORANGE,YELLOW} = C;
+  const sh = (cx=100, cy=184, rx=56) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="7" fill="${INK}" opacity=".13"/>`;
+  const hl = (d, w=3) => `<path d="${d}" stroke="#fff" stroke-width="${w}" opacity=".45" fill="none" stroke-linecap="round"/>`;
+  const leaf = (x,y,r=0,s=1,c=G) => `<path transform="translate(${x} ${y}) rotate(${r}) scale(${s})" d="M0 0c-14-2-22-10-22-22 14 0 22 8 22 22z" fill="${c}"/>`;
+  const A = {};
+  const T = (x,y,t,sz=14,fill='#fff') => `<text x="${x}" y="${y}" text-anchor="middle" font-family="Vazirmatn,sans-serif" font-weight="800" font-size="${sz}" fill="${fill}">${t}</text>`;
+
+  /* ---------- غذا و خوراکی ---------- */
+  A.apple = () => `${sh()}<path d="M100 66c-22-14-52-4-52 36 0 36 22 66 40 66 6 0 8-3 12-3s6 3 12 3c18 0 40-30 40-66 0-40-30-50-52-36z" fill="${RED}"/>
+    <path d="M70 80c-8 10-10 28-4 46" stroke="#fff" stroke-width="5" opacity=".35" fill="none" stroke-linecap="round"/>
+    <path d="M100 66c0-12 2-24 10-34" stroke="${SOILD}" stroke-width="5" fill="none" stroke-linecap="round"/>${leaf(106,48,-30,1.3)}`;
+  A.citrus = () => `${sh()}<circle cx="100" cy="104" r="62" fill="${ORANGE}"/><circle cx="100" cy="104" r="62" fill="none" stroke="#c9691f" stroke-width="3"/>
+    ${hl('M62 82c6-14 18-24 32-28',5)}<circle cx="100" cy="104" r="46" fill="#fbd18b" opacity=".0"/>
+    <path d="M100 42l-3 8" stroke="${GD}" stroke-width="4" stroke-linecap="round"/>${leaf(100,46,-20,1.2)}${leaf(102,46,70,.9,GL)}`;
+  A.grapes = () => `${sh()}<path d="M100 54c0-10 6-16 14-18" stroke="${SOILD}" stroke-width="5" fill="none" stroke-linecap="round"/>${leaf(112,40,60,1.5,G)}
+    <g fill="${PURPLE}">${[[70,70],[100,70],[130,70],[82,96],[112,96],[142,96],[94,122],[124,122],[108,148]].map(([x,y])=>`<circle cx="${x-10}" cy="${y+12}" r="17"/>`).join('')}</g>
+    <g fill="#fff" opacity=".4">${[[60,82],[90,82],[120,82],[72,108],[102,108],[132,108],[84,134],[114,134],[98,160]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.5"/>`).join('')}</g>`;
+  A.watermelon = () => `${sh()}<path d="M24 92a76 76 0 0 0 152 0z" fill="${G}"/><path d="M32 92a68 68 0 0 0 136 0z" fill="#e8f2d4"/><path d="M40 92a60 60 0 0 0 120 0z" fill="${RED}"/>
+    <g fill="${INK}">${[[70,110],[100,124],[130,110],[85,138],[115,138]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="3.2" ry="5.5"/>`).join('')}</g>`;
+  A.banana = () => `${sh()}<path d="M44 58c4 56 40 100 112 94 6-1 8-8 2-10-44-6-76-36-84-84-1-6-12-6-30 0z" fill="${YELLOW}"/>
+    <path d="M44 58c-2-8 2-14 12-16l8 6z" fill="${SOILD}"/><path d="M60 62c10 40 40 70 90 82" stroke="#d6a82a" stroke-width="3" fill="none"/>${hl('M52 70c6 30 24 54 50 70',3)}`;
+  A.strawberry = () => `${sh()}<path d="M40 70c0-10 16-14 60-14s60 4 60 14c0 40-24 98-60 98S40 110 40 70z" fill="${RED}"/>
+    <g fill="${YELLOW}">${[[68,84],[100,92],[132,84],[80,114],[116,114],[100,140],[70,140],[130,140]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="2.6" ry="4"/>`).join('')}</g>
+    ${leaf(100,58,-60,1.4)}${leaf(100,58,60,1.4)}${leaf(100,58,180,1.2,GD)}${leaf(100,58,-10,1.2,GL)}`;
+  A.vegetable = () => `${sh()}<path d="M62 56h76c4 0 6 3 4 7l-30 100c-2 6-6 8-10 8s-8-2-10-8L58 63c-2-4 0-7 4-7z" fill="${ORANGE}" transform="rotate(-18 100 110)"/>
+    <g transform="rotate(-18 100 110)" stroke="#c9691f" stroke-width="2.4" stroke-linecap="round" opacity=".6"><path d="M78 80h16M104 100h16M84 118h14M100 140h10"/></g>
+    <g transform="translate(70 52)">${leaf(0,6,-50,2,G)}${leaf(8,2,0,2.2,GL)}${leaf(14,6,50,2,G)}</g>`;
+  A.tomato = () => `${sh()}<path d="M100 56c-44 0-64 30-64 62 0 30 26 50 64 50s64-20 64-50c0-32-20-62-64-62z" fill="${RED}"/>${hl('M58 100c4-14 14-24 28-28',5)}
+    <g fill="${G}"><path d="M100 60l-24-6 12 14-16 10 22-2 6 14 6-14 22 2-16-10 12-14z"/></g><path d="M100 60v-14" stroke="${GD}" stroke-width="4" stroke-linecap="round"/>`;
+  A.bread = () => `${sh()}<path d="M36 112c-8-34 20-60 64-60s72 26 64 60c-2 8-8 10-12 12v36c0 8-4 12-10 12H58c-6 0-10-4-10-12v-36c-4-2-10-4-12-12z" fill="#d99a52"/>
+    <path d="M48 124h104v36c0 8-4 12-10 12H58c-6 0-10-4-10-12z" fill="#e8b36e"/>
+    <g stroke="#b9772c" stroke-width="4" stroke-linecap="round" fill="none"><path d="M70 82c2 8 0 14-4 20M100 74c2 8 0 16-4 24M130 82c2 8 0 14-4 20"/></g>${hl('M54 100c4-14 12-22 24-26',4)}`;
+  A.cheese = () => `${sh()}<path d="M24 118L120 54l56 20v52c0 6-4 10-10 10H34c-6 0-10-4-10-10z" fill="${YELLOW}"/><path d="M24 118L120 54l56 20-96 62z" fill="#f8de7e"/>
+    <path d="M24 118l56 18 96-62" fill="none" stroke="#d6a82a" stroke-width="2"/>
+    <g fill="#d6a82a">${[[56,140,7],[104,148,9],[142,128,6],[160,100,5]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}"/>`).join('')}</g><circle cx="108" cy="78" r="6" fill="#d6a82a"/>`;
+  A.milk = () => `${sh()}<path d="M64 70l22-26h28l22 26v96c0 6-4 10-10 10H74c-6 0-10-4-10-10z" fill="#fff" stroke="${STEEL}" stroke-width="3"/>
+    <path d="M64 70h72v16H64z" fill="${BLUE}"/><rect x="76" y="100" width="48" height="46" rx="8" fill="${BLUEL}"/>
+    <path d="M100 108c-8 10-12 16-12 22a12 12 0 0 0 24 0c0-6-4-12-12-22z" fill="#fff"/><path d="M86 44h28v-8H86z" fill="${BLUED}"/>${hl('M72 94v62',3)}`;
+  A.egg = () => `${sh()}<path d="M100 40c-28 0-46 44-46 76 0 28 20 50 46 50s46-22 46-50c0-32-18-76-46-76z" fill="#f6ead4"/>${hl('M72 96c4-16 12-30 24-38',5)}
+    <path d="M154 130c0-24 14-30 26-30 8 0 14 6 14 14 0 20-16 36-40 36z" fill="#e8c58c" opacity=".0"/>`;
+  A.meat = () => `${sh()}<path d="M40 100c0-34 30-50 62-50 40 0 66 20 66 48 0 34-30 58-70 58-34 0-58-22-58-56z" fill="${RED}"/>
+    <path d="M52 100c0-24 22-36 50-36 30 0 54 14 54 36" fill="none" stroke="#f3b6a5" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+    <path d="M60 128c20 16 60 16 84 0" stroke="${REDD}" stroke-width="4" fill="none" opacity=".6" stroke-linecap="round"/>
+    <circle cx="118" cy="104" r="16" fill="#f4e4d0"/><circle cx="118" cy="104" r="9" fill="#d9b88f"/>`;
+  A.fish = () => `${sh()}<path d="M26 100c22-34 62-44 94-30 18 8 30 18 36 30-6 12-18 22-36 30-32 14-72 4-94-30z" fill="${BLUE}"/>
+    <path d="M156 100l30-28v56z" fill="${BLUED}"/><path d="M26 100c22 30 62 40 94 30" fill="none" stroke="${BLUEL}" stroke-width="12" opacity=".35"/>
+    <circle cx="56" cy="92" r="6" fill="#fff"/><circle cx="55" cy="92" r="3" fill="${INK}"/><path d="M84 76c6 14 6 34 0 48" stroke="${BLUED}" stroke-width="3" fill="none"/>
+    <path d="M96 64c10-14 24-18 34-14-4 10-16 16-34 14z" fill="${BLUED}"/>`;
+  A.honey = () => `${sh()}<rect x="52" y="48" width="96" height="14" rx="6" fill="${SOIL}"/><path d="M58 62h84v16c8 8 12 20 12 36v38c0 10-6 16-16 16H62c-10 0-16-6-16-16v-38c0-16 4-28 12-36z" fill="#f2b440"/>
+    <path d="M58 62h84v16H58z" fill="#e39a1f"/><rect x="64" y="104" width="72" height="44" rx="8" fill="${CREAM}"/>
+    <path d="M100 112l10 6v12l-10 6-10-6v-12z" fill="${W}"/><path d="M92 136h16" stroke="${WD}" stroke-width="3"/>${hl('M58 90v70',4)}
+    <path d="M70 62c-2 14 0 22 4 22s6-8 4-22" fill="#f2b440"/>`;
+  A.tea = () => `${sh()}<path d="M44 90h96v34c0 26-20 46-48 46s-48-20-48-46z" fill="${CREAM}" stroke="${STEEL}" stroke-width="3"/><path d="M44 90h96v12H44z" fill="${RED}"/>
+    <path d="M140 100h10c14 0 18 12 12 22s-20 14-34 14" fill="none" stroke="${CREAM}" stroke-width="8" stroke-linecap="round"/><path d="M26 176h132" stroke="${STEEL}" stroke-width="8" stroke-linecap="round"/>
+    <g stroke="${STEELD}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".6"><path d="M80 70c-6-8 6-14 0-24M104 72c-6-8 6-14 0-24"/></g><path d="M62 124c10 12 40 12 50 0" stroke="${RED}" stroke-width="3" fill="none" opacity=".5"/>`;
+  A.coffee = () => `${sh()}<path d="M50 80h88l-8 82c-1 8-6 12-14 12H72c-8 0-13-4-14-12z" fill="${SOIL}"/><path d="M46 70h96c4 0 6 2 6 6s-2 6-6 6H46c-4 0-6-2-6-6s2-6 6-6z" fill="${SOILD}"/>
+    <path d="M62 100h64l-4 40H66z" fill="${CREAM}"/><path d="M94 108c-12 6-14 18-6 26 10-4 14-18 6-26z" fill="${SOIL}"/>
+    <path d="M138 96h8c12 0 16 12 10 22s-16 12-24 12" fill="none" stroke="${SOIL}" stroke-width="7" stroke-linecap="round"/>
+    <g stroke="${STEELD}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"><path d="M80 58c-6-8 6-12 0-22M104 58c-6-8 6-12 0-22"/></g>`;
+  A.nuts = () => `${sh()}<path d="M40 112c0-20 14-30 34-30h52c20 0 34 10 34 30 0 36-26 58-60 58s-60-22-60-58z" fill="${SOIL}"/>
+    <g>${[[76,100,'#8bb86a'],[104,92,'#a7cd84'],[130,106,'#8bb86a'],[92,124,'#a7cd84'],[118,128,'#8bb86a']].map(([x,y,c])=>`<ellipse cx="${x}" cy="${y}" rx="14" ry="10" fill="${c}"/><path d="M${x-8} ${y}c6-4 10-4 16 0" stroke="#fff" opacity=".5" stroke-width="2" fill="none"/>`).join('')}</g>
+    <path d="M40 112c0-10 6-18 16-22" stroke="#fff" stroke-width="3" opacity=".25" fill="none" stroke-linecap="round"/>`;
+  A.spice = () => `${sh()}<rect x="62" y="40" width="76" height="20" rx="6" fill="${INK}"/><g fill="${STEELD}"><circle cx="82" cy="50" r="2.4"/><circle cx="100" cy="50" r="2.4"/><circle cx="118" cy="50" r="2.4"/></g>
+    <path d="M66 60h68l4 100c0 8-4 12-10 12H72c-6 0-10-4-10-12z" fill="#e8f2f4" stroke="${STEEL}" stroke-width="3"/><path d="M70 100h60l2 60c0 6-3 8-8 8H76c-5 0-8-2-8-8z" fill="${RED}"/>
+    <rect x="72" y="118" width="56" height="30" rx="5" fill="${CREAM}"/>${T(100,139,'ادویه',15,REDD)}${hl('M72 70v28',3)}`;
+  A.oil = () => `${sh()}<path d="M88 30h24v22c14 6 24 16 24 30v82c0 6-4 10-10 10H74c-6 0-10-4-10-10V82c0-14 10-24 24-30z" fill="#e9c24a"/>
+    <rect x="86" y="24" width="28" height="14" rx="4" fill="${GD}"/><rect x="72" y="100" width="56" height="46" rx="8" fill="${CREAM}"/>
+    <path d="M100 108c-12 12-14 20-14 26a14 14 0 0 0 28 0c0-6-2-14-14-26z" fill="${G}"/>${hl('M72 84v70',4)}`;
+  A.cake = () => `${sh()}<path d="M40 112h120v50c0 6-4 10-10 10H50c-6 0-10-4-10-10z" fill="#e8b36e"/><path d="M40 112h120v-14c0-8-6-12-12-12H52c-6 0-12 4-12 12z" fill="${PINK}"/>
+    <path d="M40 102c8 0 8 12 16 12s8-12 16 12 8-12 16-12 8 12 16 12 8-12 16-12 8 12 16 12 8-12 16-12v-6H40z" fill="#fff"/>
+    <rect x="94" y="56" width="12" height="32" rx="3" fill="${BLUE}"/><path d="M100 36c-8 8-8 14-6 17a6 6 0 0 0 12 0c2-3 2-9-6-17z" fill="${YELLOW}"/><path d="M40 140h120" stroke="${PINK}" stroke-width="5" opacity=".8"/>`;
+  A.candy = () => `${sh()}<circle cx="100" cy="100" r="40" fill="${PINK}"/><path d="M100 100m-34 0a34 34 0 1 1 68 0" fill="none" stroke="#fff" stroke-width="7" opacity=".7"/>
+    <circle cx="100" cy="100" r="22" fill="none" stroke="#fff" stroke-width="7" opacity=".7"/><path d="M60 80L28 66l10 22zM140 120l32 14-10-22z" fill="${RED}"/><path d="M60 120L28 134l10-22zM140 80l32-14-10 22z" fill="${RED}"/>`;
+  A.drink = () => `${sh()}<rect x="86" y="28" width="28" height="16" rx="4" fill="${RED}"/><path d="M88 44h24v26c14 8 22 20 22 36v62c0 6-4 10-10 10H76c-6 0-10-4-10-10v-62c0-16 8-28 22-36z" fill="${BLUEL}" stroke="${BLUE}" stroke-width="3"/>
+    <path d="M66 112h68v50c0 6-4 10-10 10H76c-6 0-10-4-10-10z" fill="${BLUE}" opacity=".55"/><rect x="72" y="104" width="56" height="34" rx="6" fill="#fff" opacity=".9"/><path d="M82 122h36" stroke="${BLUE}" stroke-width="4" stroke-linecap="round"/>${hl('M74 90v60',4)}`;
+  A.pot = () => `${sh()}<path d="M40 86h120l-8 62c-1 12-8 20-20 20H68c-12 0-19-8-20-20z" fill="${STEELD}"/><rect x="34" y="76" width="132" height="14" rx="7" fill="${STEEL}"/>
+    <path d="M40 86L24 92M160 86l16 6" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><path d="M64 64h72" stroke="${STEEL}" stroke-width="10" stroke-linecap="round"/>
+    ${hl('M52 100l4 44',5)}<g stroke="${STEELD}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".5"><path d="M80 48c-6-8 6-12 0-22M108 48c-6-8 6-12 0-22"/></g>`;
+
+  /* ---------- لوازم دیجیتال و الکترونیک ---------- */
+  A.phone = () => `${sh()}<rect x="64" y="22" width="72" height="156" rx="14" fill="${INK}"/><rect x="70" y="34" width="60" height="132" rx="6" fill="${BLUE}"/>
+    <path d="M70 120l30-34 30 28v52H70z" fill="${GL}" opacity=".8"/><circle cx="112" cy="58" r="10" fill="${YELLOW}"/><rect x="88" y="26" width="24" height="4" rx="2" fill="#555"/><circle cx="100" cy="172" r="3" fill="#666"/>${hl('M76 44h20',3)}`;
+  A.laptop = () => `${sh(100,184,74)}<rect x="40" y="52" width="120" height="84" rx="8" fill="${INK}"/><rect x="46" y="58" width="108" height="72" rx="3" fill="${BLUE}"/>
+    <path d="M46 114l32-34 28 24 22-14 26 22v18H46z" fill="${GL}" opacity=".75"/><circle cx="128" cy="78" r="7" fill="${YELLOW}"/>
+    <path d="M24 142h152l-10 18c-2 4-4 6-8 6H42c-4 0-6-2-8-6z" fill="${STEEL}"/><rect x="82" y="142" width="36" height="6" rx="3" fill="${STEELD}"/>`;
+  A.headphones = () => `${sh()}<path d="M44 118V98c0-34 24-56 56-56s56 22 56 56v20" fill="none" stroke="${INK}" stroke-width="12" stroke-linecap="round"/>
+    <rect x="30" y="102" width="32" height="58" rx="14" fill="${RED}"/><rect x="138" y="102" width="32" height="58" rx="14" fill="${RED}"/>
+    <rect x="38" y="112" width="12" height="38" rx="6" fill="${REDD}"/><rect x="150" y="112" width="12" height="38" rx="6" fill="${REDD}"/>${hl('M66 62c10-8 22-12 34-12',4)}`;
+  A.camera = () => `${sh(100,184,70)}<path d="M34 76h30l8-16h56l8 16h30c6 0 10 4 10 10v68c0 6-4 10-10 10H34c-6 0-10-4-10-10V86c0-6 4-10 10-10z" fill="${INK}"/>
+    <path d="M24 100h152v16H24z" fill="#3b3b3b"/><circle cx="100" cy="116" r="38" fill="${STEELD}"/><circle cx="100" cy="116" r="30" fill="${INK}"/><circle cx="100" cy="116" r="20" fill="${BLUED}"/><circle cx="92" cy="108" r="6" fill="#fff" opacity=".6"/>
+    <rect x="144" y="62" width="20" height="10" rx="3" fill="${RED}"/><circle cx="42" cy="90" r="5" fill="${YELLOW}"/>`;
+  A.tv = () => `${sh(100,184,70)}<rect x="22" y="44" width="156" height="102" rx="10" fill="${INK}"/><rect x="30" y="52" width="140" height="86" rx="4" fill="${BLUE}"/>
+    <path d="M30 118l38-42 34 30 26-18 42 38v12H30z" fill="${GL}" opacity=".8"/><circle cx="140" cy="74" r="9" fill="${YELLOW}"/>
+    <path d="M70 168h60M100 146v22" stroke="${STEELD}" stroke-width="8" stroke-linecap="round"/>${hl('M36 60h40',4)}`;
+  A.watch = () => `${sh()}<rect x="76" y="14" width="48" height="40" rx="8" fill="${INK}"/><rect x="76" y="146" width="48" height="40" rx="8" fill="${INK}"/>
+    <rect x="52" y="48" width="96" height="104" rx="26" fill="${STEEL}"/><rect x="60" y="56" width="80" height="88" rx="20" fill="${INK}"/>
+    <circle cx="100" cy="100" r="30" fill="#1b3a4b"/><path d="M100 100V80M100 100l14 8" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="100" r="3" fill="${RED}"/><rect x="148" y="86" width="8" height="18" rx="3" fill="${STEELD}"/>`;
+  A.speaker = () => `${sh()}<rect x="52" y="20" width="96" height="156" rx="16" fill="${INK}"/><circle cx="100" cy="56" r="14" fill="#444"/><circle cx="100" cy="56" r="7" fill="${STEELD}"/>
+    <circle cx="100" cy="122" r="36" fill="#333"/><circle cx="100" cy="122" r="28" fill="${STEELD}"/><circle cx="100" cy="122" r="16" fill="#222"/><circle cx="100" cy="122" r="6" fill="${STEEL}"/><circle cx="130" cy="32" r="3.2" fill="${RED}"/>`;
+  A.keyboard = () => `${sh(100,180,76)}<rect x="18" y="64" width="164" height="82" rx="10" fill="${STEELD}"/><rect x="22" y="68" width="156" height="74" rx="8" fill="${STEEL}"/>
+    <g fill="#fff">${[0,1,2].map(r=>Array.from({length:r==2?7:9}).map((_,i)=>`<rect x="${(r==2?44:28)+i*(r==2?16:15.5)}" y="${74+r*20}" width="${r==2?14:12.5}" height="15" rx="3"/>`).join('')).join('')}</g>
+    <rect x="62" y="116" width="76" height="14" rx="4" fill="#fff" opacity="0"/>`;
+  A.bulb = () => `${sh()}<path d="M100 22c-30 0-50 20-50 46 0 18 10 30 20 40 6 6 8 12 8 20h44c0-8 2-14 8-20 10-10 20-22 20-40 0-26-20-46-50-46z" fill="${YELLOW}"/>
+    <rect x="76" y="128" width="48" height="14" rx="4" fill="${STEELD}"/><rect x="80" y="142" width="40" height="12" rx="4" fill="${STEEL}"/><path d="M88 154h24l-4 12H92z" fill="${INK}"/>
+    <path d="M86 128V96l14 12 14-12v32" fill="none" stroke="${WD}" stroke-width="3.4" stroke-linejoin="round"/>${hl('M68 54c4-12 14-20 26-22',5)}
+    <g stroke="${YELLOW}" stroke-width="5" stroke-linecap="round"><path d="M30 60l12 6M170 60l-12 6M100 8v-0M24 100h12M164 100h12"/></g>`;
+  A.battery = () => `${sh()}<rect x="40" y="62" width="112" height="76" rx="12" fill="${INK}"/><rect x="152" y="86" width="14" height="28" rx="4" fill="${STEELD}"/>
+    <rect x="48" y="70" width="96" height="60" rx="7" fill="#1d2a1d"/><rect x="52" y="74" width="30" height="52" rx="4" fill="${GL}"/><rect x="86" y="74" width="30" height="52" rx="4" fill="${GL}"/><rect x="120" y="74" width="20" height="52" rx="4" fill="${G}"/>
+    <path d="M104 82l-12 20h10l-6 18 18-26h-11z" fill="#fff" opacity=".0"/>`;
+  A.gamepad = () => `${sh(100,180,70)}<path d="M54 60h92c24 0 36 28 40 64 2 18-10 28-24 22-12-4-20-18-30-18H68c-10 0-18 14-30 18-14 6-26-4-24-22 4-36 16-64 40-64z" fill="${INK}"/>
+    <path d="M56 84v28M42 98h28" stroke="${STEEL}" stroke-width="9" stroke-linecap="round"/><circle cx="142" cy="86" r="7" fill="${RED}"/><circle cx="158" cy="100" r="7" fill="${YELLOW}"/><circle cx="126" cy="100" r="7" fill="${BLUE}"/><circle cx="142" cy="114" r="7" fill="${GL}"/>
+    <circle cx="86" cy="118" r="8" fill="#444"/><circle cx="114" cy="118" r="8" fill="#444"/>`;
+
+  /* ---------- پوشاک و مد ---------- */
+  A.shirt = () => `${sh()}<path d="M70 34l-48 26 18 36 22-10v88h76V86l22 10 18-36-48-26c-4 12-14 18-30 18S74 46 70 34z" fill="${BLUE}"/>
+    <path d="M70 34c4 12 14 18 30 18s26-6 30-18" fill="none" stroke="${BLUED}" stroke-width="5" stroke-linecap="round"/><path d="M62 86v88M138 86v88" stroke="${BLUED}" stroke-width="2" opacity=".35"/>${hl('M60 100v60',4)}`;
+  A.shoe = () => `${sh(100,182,72)}<path d="M20 120c0-16 6-24 18-26l30-6c8 14 22 22 46 24 22 2 46 8 56 20 6 8 4 18-6 18H30c-8 0-10-8-10-16z" fill="${RED}"/>
+    <path d="M20 148h160v14c0 6-4 8-8 8H28c-6 0-8-4-8-8z" fill="#fff"/><path d="M20 148h160" stroke="${REDD}" stroke-width="3"/>
+    <path d="M70 90l18 12M82 84l18 12M94 80l18 12" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M36 100c30 4 56 14 76 30" stroke="#fff" stroke-width="3" opacity=".4" fill="none" stroke-linecap="round"/>`;
+  A.handbag = () => `${sh()}<path d="M70 82V66c0-20 12-32 30-32s30 12 30 32v16" fill="none" stroke="${SOILD}" stroke-width="9" stroke-linecap="round"/>
+    <path d="M38 82h124l10 82c1 8-4 12-12 12H40c-8 0-13-4-12-12z" fill="${PINK}"/><path d="M38 82h124l2 18H36z" fill="#c9667f" opacity=".55"/><rect x="88" y="100" width="24" height="18" rx="5" fill="${W}"/><circle cx="100" cy="109" r="3" fill="${WD}"/>${hl('M46 118v44',4)}`;
+  A.backpack = () => `${sh()}<path d="M78 40c0-12 10-18 22-18s22 6 22 18" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>
+    <path d="M52 76c0-22 20-34 48-34s48 12 48 34v90c0 6-4 10-10 10H62c-6 0-10-4-10-10z" fill="${G}"/><rect x="68" y="112" width="64" height="44" rx="10" fill="${GD}"/><path d="M68 128h64" stroke="${GL}" stroke-width="3"/>
+    <rect x="94" y="132" width="12" height="10" rx="3" fill="${W}"/><path d="M52 90c-12 0-16 10-16 24v20c0 6 6 8 12 6M148 90c12 0 16 10 16 24v20c0 6-6 8-12 6" fill="${GD}"/>${hl('M62 70v28',4)}`;
+  A.hat = () => `${sh(100,176,70)}<path d="M54 118c0-36 18-64 46-64s46 28 46 64z" fill="${SOIL}"/><ellipse cx="100" cy="120" rx="82" ry="22" fill="#c9a56a"/><path d="M54 116c20 8 72 8 92 0v-12c-20 8-72 8-92 0z" fill="${RED}"/>${hl('M66 92c4-16 12-26 24-30',4)}`;
+  A.dress = () => `${sh()}<path d="M78 24h10l12 20 12-20h10l8 34-10 22 36 90c2 6-2 10-8 10H52c-6 0-10-4-8-10l36-90-10-22z" fill="${PURPLE}"/>
+    <path d="M70 84h60v10H70z" fill="#5d4388"/><path d="M52 176l24-70M148 176l-24-70M100 100v76" stroke="#fff" stroke-width="2" opacity=".25"/>${hl('M62 160l18-50',4)}`;
+  A.glasses = () => `${sh()}<circle cx="58" cy="106" r="32" fill="${BLUEL}" opacity=".7" stroke="${INK}" stroke-width="7"/><circle cx="142" cy="106" r="32" fill="${BLUEL}" opacity=".7" stroke="${INK}" stroke-width="7"/>
+    <path d="M90 100c6-6 14-6 20 0M26 100L10 86M174 100l16-14" stroke="${INK}" stroke-width="7" stroke-linecap="round" fill="none"/>${hl('M42 92c4-8 10-12 18-14',4)}${hl('M126 92c4-8 10-12 18-14',4)}`;
+  A.ring = () => `${sh()}<circle cx="100" cy="124" r="42" fill="none" stroke="${W}" stroke-width="12"/><circle cx="100" cy="124" r="42" fill="none" stroke="${WD}" stroke-width="3" opacity=".5"/>
+    <path d="M78 66l-14 -16h72l-14 16" fill="none"/><path d="M80 80L66 58l18-14h32l18 14-14 22z" fill="${BLUEL}" stroke="${BLUE}" stroke-width="3" stroke-linejoin="round"/><path d="M66 58h68M84 44l16 36 16-36" stroke="${BLUE}" stroke-width="2.4" fill="none" opacity=".7"/>${hl('M62 120c2 12 8 22 18 28',4)}`;
+
+  /* ---------- خانه و دکور ---------- */
+  A.sofa = () => `${sh(100,180,76)}<rect x="30" y="68" width="140" height="62" rx="18" fill="${BLUED}"/><rect x="14" y="94" width="34" height="56" rx="14" fill="${BLUE}"/><rect x="152" y="94" width="34" height="56" rx="14" fill="${BLUE}"/>
+    <rect x="44" y="100" width="112" height="40" rx="10" fill="#4f9bc3"/><path d="M100 102v38" stroke="${BLUED}" stroke-width="2.4"/><rect x="38" y="150" width="124" height="14" rx="6" fill="${BLUED}"/><path d="M44 164v12M156 164v12" stroke="${SOILD}" stroke-width="6" stroke-linecap="round"/>`;
+  A.lamp = () => `${sh()}<path d="M62 30h76l24 66H38z" fill="${YELLOW}"/><path d="M62 30h76l24 66H38z" fill="none" stroke="${WD}" stroke-width="3"/><path d="M100 96v72" stroke="${STEELD}" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="100" cy="172" rx="34" ry="8" fill="${STEELD}"/>${hl('M66 44l-16 40',5)}<path d="M80 96h40" stroke="#fff" stroke-width="10" opacity=".35" stroke-linecap="round"/>`;
+  A.bed = () => `${sh(100,182,80)}<rect x="22" y="56" width="12" height="118" rx="5" fill="${SOIL}"/><rect x="166" y="90" width="12" height="84" rx="5" fill="${SOIL}"/>
+    <rect x="34" y="112" width="132" height="36" rx="8" fill="${BLUE}"/><rect x="34" y="104" width="132" height="14" rx="6" fill="${BLUEL}"/><rect x="40" y="82" width="46" height="26" rx="12" fill="#fff" stroke="${STEEL}" stroke-width="2"/>
+    <rect x="22" y="148" width="156" height="12" rx="4" fill="${SOILD}"/><path d="M110 118v28M130 118v28M150 118v28" stroke="${BLUED}" stroke-width="2" opacity=".5"/>`;
+  A.chair = () => `${sh()}<path d="M62 24h76c6 0 10 4 10 10v62H52V34c0-6 4-10 10-10z" fill="${SOIL}"/><path d="M62 36h76M62 54h76M62 72h76" stroke="${SOILD}" stroke-width="3" opacity=".5"/>
+    <rect x="44" y="96" width="112" height="16" rx="6" fill="#c9a56a"/><path d="M54 112l-6 66M146 112l6 66M80 112v62M120 112v62" stroke="${SOIL}" stroke-width="8" stroke-linecap="round"/>`;
+  A.table = () => `${sh(100,182,76)}<rect x="20" y="70" width="160" height="16" rx="6" fill="#c9a56a"/><rect x="20" y="82" width="160" height="8" rx="3" fill="${SOIL}"/>
+    <path d="M38 90l-6 88M162 90l6 88M60 90v70M140 90v70" stroke="${SOIL}" stroke-width="9" stroke-linecap="round"/><ellipse cx="100" cy="66" rx="20" ry="5" fill="none"/>
+    <path d="M86 70c0-14 6-22 14-22s14 8 14 22z" fill="${BLUE}"/>${hl('M30 76h60',3)}`;
+  A.vase = () => `${sh()}<path d="M84 60h32c0 14-2 22-8 30 22 12 34 32 34 56 0 18-10 30-42 30s-42-12-42-30c0-24 12-44 34-56-6-8-8-16-8-30z" fill="${BLUE}"/>
+    <path d="M60 128h80" stroke="#fff" stroke-width="5" opacity=".4"/><path d="M62 148h76" stroke="#fff" stroke-width="3" opacity=".3"/>${hl('M66 140c2 14 8 22 18 26',4)}
+    <path d="M100 60c-6-20-16-30-24-34M100 60c0-22 6-32 12-40M100 60c8-14 20-20 30-20" stroke="${G}" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="76" cy="26" r="9" fill="${PINK}"/><circle cx="112" cy="20" r="9" fill="${YELLOW}"/><circle cx="130" cy="40" r="9" fill="${RED}"/>`;
+  A.carpet = () => `${sh(100,180,80)}<path d="M40 56h132l-18 108H22z" fill="${RED}"/><path d="M52 68h108l-14 84H34z" fill="${CREAM}"/><path d="M60 78h92l-11 64H42z" fill="${REDD}"/>
+    <path d="M106 86l22 24-22 24-22-24z" fill="${W}"/><path d="M106 96l12 14-12 14-12-14z" fill="${RED}"/>
+    <path d="M22 164h132M26 170v8M42 170v8M58 170v8M74 170v8M90 170v8M106 170v8M122 170v8M138 170v8" stroke="${CREAM}" stroke-width="3" stroke-linecap="round"/>`;
+  A.clock = () => `${sh()}<circle cx="100" cy="100" r="68" fill="${SOIL}"/><circle cx="100" cy="100" r="58" fill="${CREAM}"/>
+    <g stroke="${INK}" stroke-width="4" stroke-linecap="round">${Array.from({length:12}).map((_,i)=>{const a=i*Math.PI/6;return `<path d="M${100+Math.sin(a)*48} ${100-Math.cos(a)*48}L${100+Math.sin(a)*53} ${100-Math.cos(a)*53}"/>`}).join('')}</g>
+    <path d="M100 100V62M100 100l24 14" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><path d="M100 100l-30-12" stroke="${RED}" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="100" r="5" fill="${INK}"/>`;
+  A.appliance = () => `${sh()}<rect x="46" y="18" width="108" height="160" rx="12" fill="#eef2f4" stroke="${STEEL}" stroke-width="3"/><path d="M46 74h108" stroke="${STEEL}" stroke-width="3"/>
+    <rect x="132" y="34" width="8" height="28" rx="4" fill="${STEELD}"/><rect x="132" y="92" width="8" height="40" rx="4" fill="${STEELD}"/>${hl('M56 30v36',4)}${hl('M56 88v80',4)}
+    <rect x="60" y="150" width="44" height="6" rx="3" fill="${BLUEL}"/><path d="M52 178v8M148 178v8" stroke="${STEELD}" stroke-width="6" stroke-linecap="round"/>`;
+  A.washer = () => `${sh()}<rect x="34" y="20" width="132" height="160" rx="14" fill="#eef2f4" stroke="${STEEL}" stroke-width="3"/><path d="M34 52h132" stroke="${STEEL}" stroke-width="3"/>
+    <circle cx="60" cy="36" r="7" fill="${BLUE}"/><circle cx="84" cy="36" r="5" fill="${STEEL}"/><rect x="118" y="30" width="34" height="12" rx="4" fill="${INK}"/><circle cx="100" cy="118" r="42" fill="${STEEL}"/><circle cx="100" cy="118" r="34" fill="${BLUE}"/>
+    <path d="M70 118c10-8 20 8 30 0s20 8 30 0" stroke="#fff" stroke-width="4" fill="none" opacity=".6" stroke-linecap="round"/>${hl('M78 96c6-8 14-12 22-12',4)}`;
+  A.candle = () => `${sh()}<path d="M100 30c-12 14-12 24-6 30a8 8 0 0 0 12 0c6-6 6-16-6-30z" fill="${ORANGE}"/><path d="M100 42c-5 6-5 10-2 13a3.4 3.4 0 0 0 4 0c3-3 3-7-2-13z" fill="${YELLOW}"/>
+    <path d="M100 64v8" stroke="${INK}" stroke-width="3"/><path d="M68 76h64v84c0 8-6 14-14 14H82c-8 0-14-6-14-14z" fill="${CREAM}" stroke="${W}" stroke-width="3"/><path d="M68 96c8 0 8 12 16 12s8-12 16-12" stroke="${W}" stroke-width="3" fill="none"/>${hl('M76 90v70',4)}`;
+
+  /* ---------- زیبایی، بهداشت و سلامت ---------- */
+  A.perfume = () => `${sh()}<rect x="82" y="22" width="36" height="22" rx="5" fill="${W}"/><rect x="92" y="44" width="16" height="12" fill="${STEELD}"/>
+    <rect x="52" y="56" width="96" height="116" rx="18" fill="${PINK}" opacity=".85" stroke="#c9667f" stroke-width="3"/><rect x="62" y="96" width="76" height="46" rx="8" fill="#fff" opacity=".9"/><path d="M100 104l5 11h12l-10 8 4 12-11-8-11 8 4-12-10-8h12z" fill="${W}"/>${hl('M62 70v22',4)}`;
+  A.lipstick = () => `${sh()}<path d="M80 100V60c0-14 8-24 20-30 12 6 20 16 20 30v40z" fill="${RED}"/><path d="M80 60c8-4 24-4 40 0" stroke="#fff" stroke-width="3" opacity=".35" fill="none"/>
+    <rect x="72" y="100" width="56" height="16" fill="${W}"/><rect x="68" y="116" width="64" height="60" rx="8" fill="${INK}"/><path d="M76 124v44" stroke="#fff" stroke-width="3" opacity=".3" stroke-linecap="round"/><rect x="68" y="140" width="64" height="6" fill="${W}"/>`;
+  A.cream = () => `${sh()}<rect x="44" y="64" width="112" height="22" rx="8" fill="${INK}"/><path d="M48 86h104l-6 74c-1 8-6 12-14 12H68c-8 0-13-4-14-12z" fill="${CREAM}" stroke="${PINK}" stroke-width="3"/>
+    <path d="M100 100c-12 14-16 22-16 30a16 16 0 0 0 32 0c0-8-4-16-16-30z" fill="${PINK}"/>${hl('M56 96l4 60',4)}`;
+  A.medicine = () => `${sh()}<rect x="62" y="30" width="76" height="28" rx="8" fill="${BLUED}"/><path d="M66 58h68l-4 100c0 8-4 12-10 12H80c-6 0-10-4-10-12z" fill="#f0a14a" opacity=".9"/>
+    <rect x="72" y="90" width="56" height="52" rx="8" fill="#fff"/><path d="M100 98v36M82 116h36" stroke="${GD}" stroke-width="10" stroke-linecap="round"/>${hl('M74 70v22',4)}`;
+  A.pill = () => `${sh()}<g transform="rotate(-35 80 90)"><rect x="34" y="68" width="92" height="44" rx="22" fill="${RED}"/><path d="M80 68h46a22 22 0 0 1 0 44H80z" fill="#fff"/>${hl('M46 80h26',4)}</g>
+    <circle cx="140" cy="140" r="26" fill="${BLUEL}" stroke="${BLUE}" stroke-width="3"/><path d="M118 140h44" stroke="${BLUE}" stroke-width="3"/><circle cx="60" cy="152" r="16" fill="${YELLOW}"/><path d="M52 152h16" stroke="${WD}" stroke-width="3"/>`;
+  A.firstaid = () => `${sh()}<path d="M78 56V44c0-6 4-10 10-10h24c6 0 10 4 10 10v12" fill="none" stroke="${INK}" stroke-width="8"/><rect x="28" y="56" width="144" height="110" rx="16" fill="${RED}"/>
+    <rect x="28" y="56" width="144" height="26" rx="14" fill="${REDD}" opacity=".5"/><circle cx="100" cy="116" r="32" fill="#fff"/><path d="M100 96v40M80 116h40" stroke="${RED}" stroke-width="12" stroke-linecap="round"/>`;
+  A.toothbrush = () => `${sh()}<g transform="rotate(-38 100 100)"><rect x="24" y="90" width="120" height="20" rx="10" fill="${BLUE}"/><rect x="140" y="82" width="38" height="36" rx="8" fill="${BLUEL}"/>
+    <g stroke="${BLUED}" stroke-width="4" stroke-linecap="round">${[0,1,2,3,4].map(i=>`<path d="M${148+i*6} 82v-16"/>`).join('')}</g><rect x="40" y="96" width="60" height="8" rx="4" fill="#fff" opacity=".4"/></g>`;
+  A.stethoscope = () => `${sh()}<path d="M60 30v50c0 22 14 34 34 34s34-12 34-34V30" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><path d="M94 114v22c0 20 14 30 30 30s30-10 30-30v-8" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="154" cy="116" r="16" fill="${STEEL}" stroke="${STEELD}" stroke-width="4"/><circle cx="154" cy="116" r="6" fill="${STEELD}"/><circle cx="60" cy="26" r="8" fill="${STEEL}"/><circle cx="128" cy="26" r="8" fill="${STEEL}"/>`;
+  A.soap = () => `${sh()}<rect x="40" y="96" width="120" height="66" rx="22" fill="${GL}"/><rect x="48" y="104" width="104" height="50" rx="16" fill="#b8dc9c"/>${hl('M56 118c4-8 10-12 20-12',4)}
+    <circle cx="150" cy="62" r="20" fill="${BLUEL}" stroke="${BLUE}" stroke-width="2.4" opacity=".9"/><circle cx="116" cy="46" r="13" fill="${BLUEL}" stroke="${BLUE}" stroke-width="2.4" opacity=".9"/><circle cx="78" cy="66" r="9" fill="${BLUEL}" stroke="${BLUE}" stroke-width="2.4" opacity=".9"/><circle cx="144" cy="56" r="4" fill="#fff"/>`;
+
+  /* ---------- لوازم تحریر، کتاب و هنر ---------- */
+  A.book = () => `${sh(100,182,64)}<path d="M40 30h98c8 0 14 6 14 14v118c0 4-3 8-8 8H50c-8 0-14-6-14-14V34c0-2 2-4 4-4z" fill="${BLUED}"/><path d="M40 30h98c8 0 14 6 14 14v118H58c-10 0-18-8-18-18z" fill="${BLUE}"/>
+    <rect x="64" y="154" width="86" height="12" rx="3" fill="${CREAM}"/><path d="M40 148c0-8 8-14 18-14h94" fill="none" stroke="${BLUED}" stroke-width="3"/><rect x="62" y="52" width="70" height="40" rx="6" fill="${CREAM}" opacity=".9"/>${T(97,78,'کتاب',20,BLUED)}`;
+  A.pencil = () => `${sh()}<g transform="rotate(40 100 100)"><rect x="82" y="16" width="36" height="112" fill="${YELLOW}"/><path d="M82 16h12v112H82z" fill="#d6a82a"/><rect x="82" y="16" width="36" height="16" fill="${PINK}"/><rect x="82" y="30" width="36" height="8" fill="${STEEL}"/>
+    <path d="M82 128h36l-18 40z" fill="#f0d9b5"/><path d="M92 150h16l-8 18z" fill="${INK}"/></g>`;
+  A.notebook = () => `${sh()}<rect x="46" y="22" width="108" height="150" rx="10" fill="${G}"/><rect x="58" y="22" width="96" height="150" rx="8" fill="${GL}"/><g fill="${INK}">${Array.from({length:7}).map((_,i)=>`<circle cx="56" cy="${42+i*20}" r="4.5"/>`).join('')}</g>
+    <rect x="76" y="44" width="62" height="44" rx="5" fill="${CREAM}"/><path d="M84 58h46M84 70h34" stroke="${G}" stroke-width="4" stroke-linecap="round"/>`;
+  A.palette = () => `${sh()}<path d="M100 28c-46 0-76 30-76 66 0 34 26 56 52 56 14 0 16-8 12-16-4-10 2-18 14-18h28c20 0 34-12 34-30 0-34-26-58-64-58z" fill="#e8c58c"/>
+    <circle cx="62" cy="86" r="11" fill="${RED}"/><circle cx="92" cy="62" r="11" fill="${YELLOW}"/><circle cx="130" cy="68" r="11" fill="${BLUE}"/><circle cx="150" cy="98" r="11" fill="${G}"/><circle cx="74" cy="120" r="11" fill="${PURPLE}"/><circle cx="108" cy="112" r="9" fill="#fff" stroke="#c9a56a" stroke-width="2"/>`;
+
+  /* ---------- ورزش و سفر ---------- */
+  A.ball = () => `${sh()}<circle cx="100" cy="100" r="66" fill="#fff" stroke="${INK}" stroke-width="4"/><path d="M100 70l26 20-10 30H84L74 90z" fill="${INK}"/>
+    <path d="M100 70V40M126 90l28-10M116 120l16 26M84 120l-16 26M74 90L46 80" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>${hl('M60 70c6-14 16-22 28-26',5)}`;
+  A.dumbbell = () => `${sh(100,170,76)}<rect x="62" y="92" width="76" height="16" rx="6" fill="${STEELD}"/><rect x="40" y="62" width="22" height="76" rx="8" fill="${INK}"/><rect x="24" y="76" width="16" height="48" rx="6" fill="${INK}"/>
+    <rect x="138" y="62" width="22" height="76" rx="8" fill="${INK}"/><rect x="160" y="76" width="16" height="48" rx="6" fill="${INK}"/><path d="M48 70v60M146 70v60" stroke="#fff" stroke-width="3" opacity=".25" stroke-linecap="round"/>`;
+  A.bicycle = () => `${sh(100,184,78)}<g fill="none" stroke="${INK}" stroke-width="7"><circle cx="46" cy="132" r="34"/><circle cx="154" cy="132" r="34"/></g>
+    <path d="M46 132l30-60h52l26 60M76 72l30 60h-60M76 72h-14M128 72l-8-18h18" fill="none" stroke="${RED}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="50" y="62" width="30" height="8" rx="4" fill="${INK}"/><circle cx="106" cy="132" r="6" fill="${STEELD}"/>`;
+  A.tent = () => `${sh(100,180,78)}<path d="M100 30L18 170h164z" fill="${ORANGE}"/><path d="M100 30l82 140h-82z" fill="#c9691f"/><path d="M100 90l-30 80h60z" fill="${INK}"/><path d="M100 90v80" stroke="${STEELD}" stroke-width="2"/>
+    <path d="M100 30V16" stroke="${SOILD}" stroke-width="5"/><path d="M18 170L2 180M182 170l16 10" stroke="${SOILD}" stroke-width="4" stroke-linecap="round"/><path d="M100 30L40 134" stroke="#fff" stroke-width="3" opacity=".35"/>`;
+  A.trophy = () => `${sh()}<path d="M64 36h72v38c0 22-16 38-36 38S64 96 64 74z" fill="${W}"/><path d="M64 46H40c0 24 10 40 28 44M136 46h24c0 24-10 40-28 44" fill="none" stroke="${WD}" stroke-width="7" stroke-linecap="round"/>
+    <rect x="92" y="110" width="16" height="30" fill="${WD}"/><rect x="68" y="140" width="64" height="14" rx="4" fill="${SOIL}"/><rect x="58" y="154" width="84" height="16" rx="5" fill="${SOILD}"/>${hl('M72 48v28',5)}<path d="M100 56l6 12 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2z" fill="#fff" opacity=".7"/>`;
+  A.suitcase = () => `${sh()}<path d="M78 56V40c0-6 4-10 10-10h24c6 0 10 4 10 10v16" fill="none" stroke="${INK}" stroke-width="8"/><rect x="30" y="56" width="140" height="106" rx="16" fill="${ORANGE}"/>
+    <path d="M70 56v106M130 56v106" stroke="#c9691f" stroke-width="6"/><rect x="88" y="100" width="24" height="16" rx="4" fill="${W}"/><path d="M52 162v10M148 162v10" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>${hl('M40 70v78',4)}`;
+  A.umbrella = () => `${sh()}<path d="M24 100C24 56 58 28 100 28s76 28 76 72c-10-10-20-10-30 0-10-10-20-10-30 0-10-10-20-10-30 0-10-10-20-10-30 0-10-10-20-10-30 0z" fill="${RED}"/>
+    <path d="M100 28c-14 14-20 40-20 72M100 28c14 14 20 40 20 72" stroke="${REDD}" stroke-width="3" fill="none" opacity=".5"/><path d="M100 100v64c0 12-8 16-16 12" stroke="${INK}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M100 28V16" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`;
+
+  /* ---------- اسباب‌بازی و کودک ---------- */
+  A.teddy = () => `${sh()}<circle cx="60" cy="44" r="18" fill="#a9794a"/><circle cx="140" cy="44" r="18" fill="#a9794a"/><circle cx="60" cy="44" r="9" fill="#e6c9a3"/><circle cx="140" cy="44" r="9" fill="#e6c9a3"/>
+    <circle cx="100" cy="76" r="42" fill="#a9794a"/><ellipse cx="100" cy="132" rx="42" ry="46" fill="#a9794a"/><ellipse cx="100" cy="86" rx="18" ry="14" fill="#e6c9a3"/><ellipse cx="100" cy="80" rx="6" ry="4.5" fill="${INK}"/>
+    <circle cx="84" cy="66" r="4.5" fill="${INK}"/><circle cx="116" cy="66" r="4.5" fill="${INK}"/><ellipse cx="100" cy="138" rx="24" ry="28" fill="#e6c9a3"/><circle cx="50" cy="116" r="14" fill="#a9794a"/><circle cx="150" cy="116" r="14" fill="#a9794a"/><circle cx="68" cy="172" r="14" fill="#8c6238"/><circle cx="132" cy="172" r="14" fill="#8c6238"/><path d="M82 100l18 10 18-10-8 18h-20z" fill="${RED}" opacity="0"/>`;
+  A.puzzle = () => `${sh()}<path d="M40 40h40c-8-18 20-18 12 0h40v40c18-8 18 20 0 12v48h-40c8 18-20 18-12 0H40V92c-18 8-18-20 0-12z" fill="${BLUE}"/>
+    <path d="M100 40v52M40 92h52M92 92v48" stroke="${BLUED}" stroke-width="2.4" opacity=".5"/><path d="M100 100h40c-8-18 20-18 12 0h20v40c18-8 18 20 0 12v20h-72z" fill="${RED}"/>${hl('M50 52h24',4)}`;
+  A.rocket = () => `${sh()}<path d="M100 20c28 20 40 52 38 88H62c-2-36 10-68 38-88z" fill="#f2f4f5" stroke="${STEEL}" stroke-width="3"/><circle cx="100" cy="78" r="16" fill="${BLUE}" stroke="${STEELD}" stroke-width="4"/><circle cx="95" cy="73" r="4" fill="#fff" opacity=".6"/>
+    <path d="M62 108l-26 30 30-4zM138 108l26 30-30-4z" fill="${RED}"/><path d="M100 20c-10 8-18 18-24 30h48c-6-12-14-22-24-30z" fill="${RED}"/><path d="M82 108h36l-8 22H90z" fill="${STEELD}"/>
+    <path d="M100 132c-12 14-12 30 0 44 12-14 12-30 0-44z" fill="${ORANGE}"/><path d="M100 140c-6 8-6 18 0 26 6-8 6-18 0-26z" fill="${YELLOW}"/>`;
+  A.babybottle = () => `${sh()}<path d="M88 22c0-8 24-8 24 0v22H88z" fill="${PINK}"/><rect x="74" y="44" width="52" height="16" rx="6" fill="${BLUEL}"/><path d="M76 60h48v100c0 8-6 14-14 14H90c-8 0-14-6-14-14z" fill="#f0f7fb" stroke="${BLUE}" stroke-width="3"/>
+    <path d="M76 96h48v64c0 8-6 14-14 14H90c-8 0-14-6-14-14z" fill="${BLUEL}" opacity=".7"/><path d="M76 84h14M76 108h14M76 132h14" stroke="${BLUE}" stroke-width="3" stroke-linecap="round"/>${hl('M118 70v46',4)}`;
+
+  /* ---------- خودرو، تعمیرات و ابزار صنعتی ---------- */
+  A.car = () => `${sh(100,184,80)}<path d="M20 124c0-14 6-22 16-24l22-36c4-6 8-8 14-8h60c8 0 12 2 16 8l20 36c10 2 16 10 16 24v18H20z" fill="${RED}"/>
+    <path d="M62 68h76l16 32H46z" fill="${BLUEL}"/><path d="M100 68v32" stroke="${RED}" stroke-width="5"/><rect x="20" y="122" width="160" height="10" fill="${REDD}" opacity=".5"/>
+    <circle cx="56" cy="144" r="20" fill="${INK}"/><circle cx="56" cy="144" r="9" fill="${STEEL}"/><circle cx="148" cy="144" r="20" fill="${INK}"/><circle cx="148" cy="144" r="9" fill="${STEEL}"/><rect x="164" y="112" width="14" height="10" rx="4" fill="${YELLOW}"/>`;
+  A.tire = () => `${sh()}<circle cx="100" cy="100" r="72" fill="${INK}"/><circle cx="100" cy="100" r="60" fill="none" stroke="#3a3a3a" stroke-width="6" stroke-dasharray="10 6"/><circle cx="100" cy="100" r="44" fill="${STEEL}"/><circle cx="100" cy="100" r="36" fill="#c9d2d7"/>
+    <g stroke="${STEELD}" stroke-width="7" stroke-linecap="round">${Array.from({length:5}).map((_,i)=>{const a=i*2*Math.PI/5;return `<path d="M${100+Math.sin(a)*8} ${100-Math.cos(a)*8}L${100+Math.sin(a)*32} ${100-Math.cos(a)*32}"/>`}).join('')}</g><circle cx="100" cy="100" r="8" fill="${INK}"/>`;
+  A.motorbike = () => `${sh(100,184,80)}<g fill="none" stroke="${INK}" stroke-width="9"><circle cx="42" cy="136" r="28"/><circle cx="160" cy="136" r="28"/></g>
+    <path d="M42 136l36-40h38l44 40M116 96l-12-30h28M104 66H82" fill="none" stroke="${INK}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 96c0-14 12-22 26-22h20l-6 30H78z" fill="${RED}"/>
+    <rect x="86" y="104" width="38" height="28" rx="8" fill="${STEELD}"/><path d="M62 90h28" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><circle cx="168" cy="82" r="8" fill="${YELLOW}"/><path d="M132 66l28 16" stroke="${INK}" stroke-width="6" stroke-linecap="round"/>`;
+  A.hammer = () => `${sh()}<g transform="rotate(-38 100 100)"><rect x="92" y="60" width="16" height="116" rx="6" fill="#c99a62"/><rect x="60" y="30" width="80" height="34" rx="6" fill="${STEELD}"/>
+    <path d="M140 36l32 -8v44l-32 -8z" fill="${STEEL}"/><rect x="60" y="30" width="80" height="10" rx="5" fill="#fff" opacity=".3"/><rect x="92" y="150" width="16" height="26" rx="6" fill="${RED}"/></g>`;
+  A.wrench = () => `${sh()}<g transform="rotate(-40 100 100)"><rect x="90" y="56" width="20" height="116" rx="8" fill="${STEEL}"/><path d="M76 20c0-6 6-8 10-4l8 10h12l8-10c4-4 10-2 10 4v34c0 12-10 22-24 22S76 66 76 54z" fill="${STEELD}"/>
+    <circle cx="100" cy="164" r="12" fill="${STEEL}"/><circle cx="100" cy="164" r="5" fill="${INK}"/><path d="M96 72v78" stroke="#fff" stroke-width="3" opacity=".5" stroke-linecap="round"/></g>`;
+  A.drill = () => `${sh(100,182,72)}<path d="M20 74h88c10 0 16 6 16 14v22H20z" fill="${ORANGE}"/><rect x="20" y="62" width="104" height="18" rx="6" fill="#c9691f"/><path d="M62 110h44l-8 56c-1 6-5 10-10 10H76c-5 0-8-4-8-10z" fill="${INK}"/>
+    <path d="M124 80h22v26h-22z" fill="${STEELD}"/><path d="M146 86h40" stroke="${STEEL}" stroke-width="6" stroke-linecap="round"/><path d="M158 82l6 10M170 82l6 10" stroke="${STEELD}" stroke-width="3"/><rect x="36" y="86" width="22" height="10" rx="4" fill="${INK}"/><rect x="70" y="170" width="30" height="8" rx="3" fill="${INK}"/>`;
+  A.paint = () => `${sh()}<path d="M40 70h120l-10 90c-1 10-8 16-18 16H68c-10 0-17-6-18-16z" fill="${STEEL}"/><ellipse cx="100" cy="70" rx="60" ry="14" fill="${STEELD}"/><ellipse cx="100" cy="70" rx="52" ry="10" fill="${BLUE}"/>
+    <path d="M44 100h112" stroke="${STEELD}" stroke-width="3" opacity=".6"/><path d="M60 64c-6 14 2 30 12 30 8 0 8-10 4-22z" fill="${BLUE}"/><path d="M52 112v56" stroke="#fff" stroke-width="4" opacity=".4" stroke-linecap="round"/><rect x="74" y="116" width="52" height="34" rx="6" fill="${CREAM}"/><circle cx="100" cy="133" r="10" fill="${BLUE}"/>
+    <path d="M100 40V20h-14" stroke="${INK}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+  A.brick = () => `${sh()}<g fill="${RED}"><rect x="30" y="52" width="68" height="30" rx="3"/><rect x="104" y="52" width="68" height="30" rx="3"/><rect x="14" y="88" width="68" height="30" rx="3"/><rect x="88" y="88" width="68" height="30" rx="3"/><rect x="162" y="88" width="30" height="30" rx="3"/><rect x="30" y="124" width="68" height="30" rx="3"/><rect x="104" y="124" width="68" height="30" rx="3"/></g>
+    <g fill="${REDD}" opacity=".45"><rect x="30" y="74" width="68" height="8"/><rect x="104" y="74" width="68" height="8"/><rect x="14" y="110" width="68" height="8"/><rect x="88" y="110" width="68" height="8"/><rect x="30" y="146" width="68" height="8"/><rect x="104" y="146" width="68" height="8"/></g>`;
+  A.plug = () => `${sh()}<path d="M70 30v36M130 30v36" stroke="${STEEL}" stroke-width="12" stroke-linecap="round"/><path d="M52 62h96v32c0 24-20 40-48 40S52 118 52 94z" fill="${INK}"/><path d="M100 134v26c0 12 10 16 24 16h26" stroke="${INK}" stroke-width="12" fill="none" stroke-linecap="round"/>
+    ${hl('M62 76v18',4)}<rect x="76" y="76" width="48" height="10" rx="5" fill="${YELLOW}"/>`;
+  A.solar = () => `${sh()}<path d="M30 70h140l14 82H16z" fill="${BLUED}"/><path d="M30 70h140l14 82H16z" fill="none" stroke="${STEEL}" stroke-width="5"/><path d="M63 70l-8 82M100 70v82M137 70l8 82M23 111h154" stroke="${STEEL}" stroke-width="3" opacity=".9"/>
+    <path d="M40 80l30-10M116 80l28 10" stroke="#fff" stroke-width="3" opacity=".3"/><path d="M100 152v20M70 176h60" stroke="${STEELD}" stroke-width="8" stroke-linecap="round"/><circle cx="160" cy="36" r="16" fill="${YELLOW}"/><g stroke="${YELLOW}" stroke-width="4" stroke-linecap="round"><path d="M160 10v6M184 36h-6M136 36h6M178 18l-4 4M142 18l4 4"/></g>`;
+
+  /* ---------- حیوانات و دامپروری ---------- */
+  A.cow = () => `${sh(100,184,72)}<path d="M30 74l-14-18M170 74l14-18" stroke="${INK}" stroke-width="6" stroke-linecap="round"/><ellipse cx="100" cy="84" rx="56" ry="48" fill="#fff" stroke="${INK}" stroke-width="3"/>
+    <ellipse cx="38" cy="78" rx="16" ry="10" fill="#fff" stroke="${INK}" stroke-width="3" transform="rotate(-25 38 78)"/><ellipse cx="162" cy="78" rx="16" ry="10" fill="#fff" stroke="${INK}" stroke-width="3" transform="rotate(25 162 78)"/>
+    <path d="M62 52c14-6 24 2 22 16-4 8-18 10-26 2z" fill="${INK}"/><path d="M142 60c8 4 8 14 0 18-8 2-14-6-12-14z" fill="${INK}"/><ellipse cx="100" cy="116" rx="34" ry="26" fill="#f1b6b6"/><ellipse cx="86" cy="116" rx="5" ry="7" fill="${REDD}"/><ellipse cx="114" cy="116" rx="5" ry="7" fill="${REDD}"/>
+    <circle cx="78" cy="78" r="6" fill="${INK}"/><circle cx="122" cy="78" r="6" fill="${INK}"/><path d="M80 164h40" stroke="${INK}" stroke-width="2" opacity="0"/>`;
+  A.sheep = () => `${sh(100,184,66)}<g fill="#f2f2ee" stroke="${STEEL}" stroke-width="2">${[[60,92,28],[90,72,30],[124,76,30],[148,100,26],[70,124,28],[104,128,30],[134,126,26]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}"/>`).join('')}</g>
+    <path d="M10 108c0-22 12-34 28-34 14 0 22 10 22 24 0 18-10 30-26 30S10 124 10 108z" fill="${INK}" transform="translate(0 -4)"/><circle cx="26" cy="100" r="3" fill="#fff"/><path d="M58 150v28M82 154v26M122 154v26M146 150v28" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>`;
+  A.chicken = () => `${sh()}<path d="M44 122c0-40 28-62 62-62s54 22 54 52c0 34-26 56-60 56s-56-18-56-46z" fill="#fff" stroke="${STEEL}" stroke-width="3"/><path d="M130 118c20-4 32 6 34 18-18 14-34 8-40-4z" fill="#e8e8e0"/>
+    <circle cx="58" cy="76" r="26" fill="#fff" stroke="${STEEL}" stroke-width="3"/><path d="M46 56c0-12 8-16 12-8 2-10 12-8 12 2 0 0-2 8-12 10z" fill="${RED}"/><path d="M36 80l-16 6 16 6z" fill="${W}"/><circle cx="54" cy="74" r="3.4" fill="${INK}"/>
+    <path d="M50 96c-4 8 0 14 4 12" fill="${RED}"/><path d="M92 170v14M118 170v14" stroke="${W}" stroke-width="5" stroke-linecap="round"/>`;
+  A.bee = () => `${sh()}<ellipse cx="70" cy="62" rx="26" ry="18" fill="${BLUEL}" opacity=".85" transform="rotate(-30 70 62)"/><ellipse cx="124" cy="52" rx="26" ry="18" fill="${BLUEL}" opacity=".85" transform="rotate(30 124 52)"/>
+    <ellipse cx="100" cy="106" rx="42" ry="50" fill="${YELLOW}"/><path d="M60 94h80M58 114h84M64 136h72" stroke="${INK}" stroke-width="12" stroke-linecap="round"/><circle cx="100" cy="64" r="22" fill="${INK}"/>
+    <circle cx="92" cy="62" r="4" fill="#fff"/><circle cx="108" cy="62" r="4" fill="#fff"/><path d="M92 46c-6-10-12-12-16-10M108 46c6-10 12-12 16-10" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M100 156v14" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`;
+  A.dog = () => `${sh()}<path d="M44 72c-14 4-22 20-18 40 4 12 18 10 20-4z" fill="${SOIL}"/><path d="M156 72c14 4 22 20 18 40-4 12-18 10-20-4z" fill="${SOIL}"/><ellipse cx="100" cy="100" rx="50" ry="56" fill="#d9a064"/>
+    <ellipse cx="100" cy="124" rx="28" ry="22" fill="#f4e4d0"/><ellipse cx="100" cy="112" rx="10" ry="7" fill="${INK}"/><circle cx="78" cy="88" r="6" fill="${INK}"/><circle cx="122" cy="88" r="6" fill="${INK}"/><path d="M100 119v8M90 132c6 6 14 6 20 0" stroke="${INK}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M92 136c2 12 14 12 16 0z" fill="${PINK}"/>`;
+  A.cat = () => `${sh()}<path d="M48 78L44 36l34 22zM152 78l4-42-34 22z" fill="#8f8f95"/><path d="M52 66l-2-18 14 10zM148 66l2-18-14 10z" fill="${PINK}"/><ellipse cx="100" cy="104" rx="56" ry="52" fill="#a0a0a8"/>
+    <ellipse cx="78" cy="94" rx="9" ry="12" fill="#c8e08a"/><ellipse cx="122" cy="94" rx="9" ry="12" fill="#c8e08a"/><ellipse cx="78" cy="94" rx="3.4" ry="9" fill="${INK}"/><ellipse cx="122" cy="94" rx="3.4" ry="9" fill="${INK}"/>
+    <path d="M94 114h12l-6 7z" fill="${PINK}"/><path d="M100 121v6M88 132c6 4 10 2 12-5 2 7 6 9 12 5" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/><g stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M56 112l-26-4M56 120l-24 8M144 112l26-4M144 120l24 8"/></g><path d="M74 54h8M100 50h0M118 54h8" stroke="#7d7d84" stroke-width="5" stroke-linecap="round"/>`;
+  A.petfood = () => `${sh()}<path d="M52 62c0-8 6-12 14-12h68c8 0 14 4 14 12l4 100c0 9-6 14-14 14H62c-8 0-14-5-14-14z" fill="${SOIL}"/><path d="M52 62c0-8 6-12 14-12h68c8 0 14 4 14 12l.6 14H51.4z" fill="${SOILD}"/>
+    <rect x="66" y="94" width="68" height="58" rx="9" fill="${CREAM}"/><path d="M80 118h40M92 108a8 8 0 1 0-12 10M108 108a8 8 0 1 1 12 10M80 128a8 8 0 1 0 12 10M120 128a8 8 0 1 1-12 10" stroke="${SOIL}" stroke-width="6" stroke-linecap="round" fill="none"/>`;
+
+  /* ---------- گیاه و گل ---------- */
+  A.flower = () => `${sh()}<path d="M100 100v76" stroke="${G}" stroke-width="7" stroke-linecap="round"/>${leaf(100,150,-30,1.6,GL)}${leaf(100,140,150,1.6,G)}
+    <g fill="${PINK}">${Array.from({length:6}).map((_,i)=>`<ellipse cx="100" cy="52" rx="15" ry="26" transform="rotate(${i*60} 100 80)"/>`).join('')}</g><circle cx="100" cy="80" r="15" fill="${YELLOW}"/><circle cx="96" cy="76" r="4" fill="#fff" opacity=".5"/>`;
+  A.houseplant = () => `${sh()}<path d="M100 112c-4-30-30-44-52-48 0 30 22 48 52 48z" fill="${G}"/><path d="M100 112c4-40 30-62 56-64 0 38-24 62-56 64z" fill="${GL}"/><path d="M100 112c-2-20 4-44 12-58-16 8-24 32-12 58z" fill="${GD}"/>
+    <path d="M100 112V80" stroke="${GD}" stroke-width="3"/><path d="M58 112h84l-10 56c-1 8-6 10-12 10H80c-6 0-11-2-12-10z" fill="#c9691f"/><rect x="54" y="106" width="92" height="14" rx="6" fill="#e8863a"/>${hl('M66 128l6 36',4)}`;
+  A.cactus = () => `${sh()}<path d="M84 150V70c0-14 32-14 32 0v80z" fill="${G}"/><path d="M84 112H66c-10 0-12-8-12-16V84c0-8 14-8 14 0v10h16zM116 100h18c6 0 10-4 10-10V74c0-8-14-8-14 0v10h-14z" fill="${GL}"/>
+    <path d="M100 66v80M92 70v76M108 70v76" stroke="${GD}" stroke-width="2" opacity=".4"/><g stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M96 82l-5-3M104 100l5-3M96 120l-5-3"/></g><circle cx="100" cy="62" r="7" fill="${PINK}"/>
+    <path d="M62 150h76l-8 28H70z" fill="#c9691f"/><rect x="58" y="144" width="84" height="12" rx="5" fill="#e8863a"/>`;
+  A.tree = () => `${sh()}<path d="M92 176l4-60h8l4 60z" fill="${SOIL}"/><g fill="${G}"><circle cx="100" cy="56" r="34"/><circle cx="64" cy="86" r="30"/><circle cx="136" cy="86" r="30"/><circle cx="100" cy="100" r="34"/></g>
+    <g fill="${GL}" opacity=".6"><circle cx="90" cy="44" r="14"/><circle cx="56" cy="78" r="12"/><circle cx="124" cy="92" r="12"/></g>`;
+  A.sun = () => `<circle cx="100" cy="100" r="40" fill="${YELLOW}"/><g stroke="${W}" stroke-width="8" stroke-linecap="round">${Array.from({length:12}).map((_,i)=>{const a=i*Math.PI/6;return `<path d="M${100+Math.sin(a)*54} ${100-Math.cos(a)*54}L${100+Math.sin(a)*72} ${100-Math.cos(a)*72}"/>`}).join('')}</g>${hl('M76 84c4-8 10-12 18-14',5)}`;
+
+  /* ---------- موسیقی، هدیه، خرید و عمومی ---------- */
+  A.guitar = () => `${sh()}<g transform="rotate(-38 100 100)"><rect x="92" y="6" width="16" height="84" rx="4" fill="${SOILD}"/><rect x="88" y="0" width="24" height="22" rx="5" fill="${INK}"/>
+    <path d="M100 82c-22 0-30 14-26 28-14 6-14 36 4 48 12 8 36 8 44 0 16-12 16-42 2-48 4-14-4-28-24-28z" fill="#c9691f"/><circle cx="100" cy="124" r="14" fill="${INK}"/><circle cx="100" cy="124" r="14" fill="none" stroke="${W}" stroke-width="3"/>
+    <rect x="86" y="152" width="28" height="6" rx="3" fill="${SOILD}"/><path d="M96 20v132M104 20v132" stroke="${STEEL}" stroke-width="1.6"/></g>`;
+  A.gift = () => `${sh()}<rect x="34" y="80" width="132" height="92" rx="8" fill="${RED}"/><rect x="26" y="62" width="148" height="28" rx="8" fill="${REDD}"/><rect x="88" y="62" width="24" height="110" fill="${W}"/>
+    <path d="M100 62c-10-26-40-30-44-14s28 14 44 14zM100 62c10-26 40-30 44-14s-28 14-44 14z" fill="${W}" stroke="${WD}" stroke-width="3"/>${hl('M40 98v62',4)}`;
+  A.shoppingbag = () => `${sh()}<path d="M72 74V58c0-16 12-26 28-26s28 10 28 26v16" fill="none" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M42 74h116l8 94c1 6-3 10-9 10H43c-6 0-10-4-9-10z" fill="${G}"/>
+    <path d="M42 74h116l1 14H41z" fill="${GD}" opacity=".5"/><circle cx="76" cy="74" r="5" fill="${INK}"/><circle cx="124" cy="74" r="5" fill="${INK}"/><path d="M100 110c-16-12-30 4-12 20l12 10 12-10c18-16 4-32-12-20z" fill="#fff" opacity=".9"/>`;
+  A.tag = () => `${sh()}<path d="M24 100l72-72h66c6 0 10 4 10 10v66l-72 72c-4 4-10 4-14 0l-58-58c-4-4-4-10 0-14z" fill="${W}"/><circle cx="136" cy="64" r="12" fill="${CREAM}"/><path d="M148 52c14-14 26-16 32-18" stroke="${INK}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M70 102l30 30M84 88l30 30" stroke="${WD}" stroke-width="5" opacity=".4" stroke-linecap="round"/>${hl('M40 100l54-54',5)}`;
+  A.key = () => `${sh()}<circle cx="60" cy="72" r="34" fill="${W}"/><circle cx="60" cy="72" r="14" fill="${CREAM}"/><path d="M84 96l76 76" stroke="${W}" stroke-width="16" stroke-linecap="round"/><path d="M130 142l14-14M148 160l14-14" stroke="${WD}" stroke-width="12" stroke-linecap="round"/>${hl('M42 56c6-10 14-14 24-14',5)}`;
+  A.lock = () => `${sh()}<path d="M64 88V64c0-22 16-36 36-36s36 14 36 36v24" fill="none" stroke="${STEEL}" stroke-width="14" stroke-linecap="round"/><rect x="42" y="84" width="116" height="90" rx="16" fill="${W}"/>
+    <rect x="42" y="84" width="116" height="20" rx="12" fill="${WD}" opacity=".4"/><circle cx="100" cy="124" r="12" fill="${INK}"/><path d="M100 128v18" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>${hl('M52 112v50',4)}`;
+  A.star = () => `${sh()}<path d="M100 22l24 52 56 6-42 38 12 56-50-28-50 28 12-56-42-38 56-6z" fill="${YELLOW}" stroke="${W}" stroke-width="4" stroke-linejoin="round"/>${hl('M78 62l14-22',5)}`;
+  A.heart = () => `${sh()}<path d="M100 172C40 130 24 96 24 70c0-22 16-38 38-38 16 0 30 8 38 22 8-14 22-22 38-22 22 0 38 16 38 38 0 26-16 60-76 102z" fill="${RED}"/>${hl('M44 70c0-12 8-20 18-22',6)}`;
+  A.bag = () => A.shoppingbag();
+  A.document = () => `${sh(100,184,60)}<path d="M54 22h64l30 30v118c0 6-4 10-10 10H54c-6 0-10-4-10-10V32c0-6 4-10 10-10z" fill="#fff" stroke="${STEEL}" stroke-width="3"/><path d="M118 22v30h30z" fill="${BLUEL}"/>
+    <path d="M62 78h72M62 98h72M62 118h72M62 138h46" stroke="${BLUE}" stroke-width="5" stroke-linecap="round" opacity=".7"/>`;
+  A.globe = () => `${sh()}<circle cx="100" cy="100" r="70" fill="${BLUE}"/><path d="M60 58c14-6 26 0 24 14s-18 12-14 28-22 10-30-6c-4-14 6-30 20-36zM116 108c14-4 30 6 28 22-6 16-24 22-32 8-6-12-6-26 4-30zM118 44c10-6 22 0 24 10-8 4-18 4-24-10z" fill="${GL}"/>
+    <ellipse cx="100" cy="100" rx="70" ry="70" fill="none" stroke="${BLUED}" stroke-width="3"/>${hl('M54 70c8-20 22-30 40-34',6)}`;
+  A.coins = () => `${sh()}<ellipse cx="100" cy="150" rx="56" ry="18" fill="${WD}"/><path d="M44 134v16c0 10 24 18 56 18s56-8 56-18v-16z" fill="${W}"/><ellipse cx="100" cy="134" rx="56" ry="18" fill="#f0c460"/>
+    <ellipse cx="100" cy="104" rx="56" ry="18" fill="${WD}"/><path d="M44 88v16c0 10 24 18 56 18s56-8 56-18V88z" fill="${W}"/><ellipse cx="100" cy="88" rx="56" ry="18" fill="#f0c460"/><ellipse cx="100" cy="88" rx="38" ry="11" fill="none" stroke="${WD}" stroke-width="3"/>${T(100,95,'$',15,WD)}`;
+  A.generic = () => A.box();
+  A.box = () => `${sh()}<path d="M36 70l64-28 64 28v68l-64 30-64-30z" fill="#c9a56a"/><path d="M100 98v70l64-30V70z" fill="${SOIL}" opacity=".35"/><path d="M36 70l64 28 64-28" fill="none" stroke="${SOIL}" stroke-width="3"/><path d="M68 56l64 28v26l-14-6V90L54 62z" fill="#e8d3a8" opacity=".9"/>${hl('M44 82v50',4)}`;
+
+  /* ثبت در کتابخانه‌ی اصلی */
+  Object.keys(A).forEach(k => { if (!window.FS_ART_EXTRA) window.FS_ART_EXTRA = {}; window.FS_ART_EXTRA[k] = A[k]; });
+})();
+
+/* ---------- قوانین تشخیص وکتور عمومی بر اساس نام محصول ---------- */
+Object.assign(FS_ART, window.FS_ART_EXTRA || {});
+const FS_ART_RULES_EXTRA = [
+  [/ماشین\s*آلات|ماشین‌آلات/, 'tiller'],
+  /* خوراکی */
+  [/سیب(?!\s*زمینی)|apple/i, 'apple'], [/پرتقال|نارنگی|لیمو|گریپ|نارنج|مرکبات|orange|lemon/i, 'citrus'], [/انگور|کشمش|توت\s*فرنگی\s*سیاه|grape/i, 'grapes'],
+  [/هندوانه|خربزه|طالبی|watermelon/i, 'watermelon'], [/موز|banana/i, 'banana'], [/توت\s*فرنگی|توت|strawberry|berry/i, 'strawberry'],
+  [/گوجه|tomato/i, 'tomato'], [/هویج|خیار|کدو|سبزی|تره|سیب\s*زمینی|پیاز|سیر|بادمجان|فلفل|کلم|carrot|vegetable/i, 'vegetable'],
+  [/نان|کیک\s*نان|بربری|سنگک|لواش|بیسکویت|کلوچه|bread|bakery/i, 'bread'], [/پنیر|کره|کشک|cheese|butter/i, 'cheese'], [/شیر(?!ین)|ماست|دوغ|خامه|لبنیات|milk|yogurt|dairy/i, 'milk'],
+  [/تخم\s*مرغ|تخم\s*شترمرغ|egg/i, 'egg'], [/گوشت|کباب|سوسیس|کالباس|همبرگر|فیله|meat|steak/i, 'meat'], [/ماهی|میگو|سالمون|fish|shrimp/i, 'fish'],
+  [/عسل|شهد|موم|رب\s*انار|شیره|مربا|honey|jam/i, 'honey'], [/چای|دمنوش|گیاه\s*دارویی|عرق|tea/i, 'tea'], [/قهوه|نسکافه|کاکائو|coffee|cocoa/i, 'coffee'],
+  [/پسته|بادام|گردو|فندق|خشکبار|مغز|تخمه|آجیل|نخود\s*چی|nut|pistachio|almond/i, 'nuts'], [/زعفران|ادویه|زردچوبه|فلفل\s*سیاه|دارچین|نمک|سماق|spice|saffron/i, 'spice'],
+  [/روغن|زیتون|کنجد\s*روغن|oil/i, 'oil'], [/کیک|شیرینی|دسر|گز|سوهان|باقلوا|قطاب|نان\s*برنجی|cake|dessert|sweet/i, 'cake'], [/شکلات|آب\s*نبات|آدامس|پاستیل|نبات|candy|chocolate/i, 'candy'],
+  [/نوشابه|آبمیوه|آب\s*میوه|آب\s*معدنی|شربت|نوشیدنی|juice|drink|water/i, 'drink'], [/قابلمه|تابه|دیگ|ظروف\s*آشپزخانه|زودپز|پلوپز|cookware|pot|pan/i, 'pot'],
+  /* دیجیتال */
+  [/گوشی|موبایل|تلفن\s*همراه|تبلت|آیفون|phone|mobile|tablet/i, 'phone'], [/لپ\s*تاپ|لپتاپ|کامپیوتر|نوت\s*بوک|رایانه|laptop|computer|pc\b/i, 'laptop'],
+  [/هدفون|هدست|هندزفری|ایرپاد|headphone|earphone|headset/i, 'headphones'], [/دوربین|عکاسی|لنز|camera/i, 'camera'], [/تلویزیون|تی\s*وی|مانیتور|پروژکتور|\btv\b|monitor/i, 'tv'],
+  [/ساعت\s*هوشمند|ساعت\s*مچی|ساعت\s*دیجیتال|smart\s*watch|wristwatch/i, 'watch'], [/اسپیکر|بلندگو|بلوتوث|speaker/i, 'speaker'], [/کیبورد|کیبرد|ماوس|موس|keyboard|mouse/i, 'keyboard'],
+  [/لامپ|روشنایی|چراغ\s*(?:led|ال\s*ای\s*دی)|lamp\s*led|bulb/i, 'bulb'], [/باتری|شارژر|پاوربانک|پاور\s*بانک|اینورتر|battery|charger/i, 'battery'], [/کنسول|بازی\s*ویدیویی|دسته\s*بازی|گیم|game|console/i, 'gamepad'],
+  [/پریز|کابل|سیم|دوشاخه|فیش|مولتی\s*پلاگ|برق|plug|cable/i, 'plug'], [/پنل\s*خورشیدی|خورشیدی|solar/i, 'solar'],
+  /* پوشاک */
+  [/پیراهن|تی\s*شرت|تیشرت|بلوز|لباس|ژاکت|سویشرت|هودی|مانتو|شلوار|shirt|cloth|jacket/i, 'shirt'], [/کفش|کتونی|صندل|دمپایی|پوتین|چکمه|بوت|shoe|sneaker|boot/i, 'shoe'],
+  [/کیف\s*دستی|کیف\s*زنانه|کیف\s*پول|کیف\s*رو\s*دوشی|handbag|purse/i, 'handbag'], [/کوله|کیف\s*مدرسه|کیف\s*پشتی|backpack/i, 'backpack'], [/کلاه|شال|روسری|کلاه\s*گیس|hat|cap\b/i, 'hat'],
+  [/پاپیون|لباس\s*مجلسی|پیراهن\s*زنانه|سارافون|دامن|dress|gown/i, 'dress'], [/عینک|glasses|sunglass/i, 'glasses'], [/انگشتر|گردنبند|دستبند|گوشواره|جواهر|طلا|نقره|زیور|ring|jewel|gold/i, 'ring'],
+  [/چمدان|ساک|کیف\s*مسافرتی|suitcase|luggage/i, 'suitcase'], [/چتر|بارانی|umbrella/i, 'umbrella'],
+  /* خانه */
+  [/مبل|کاناپه|راحتی|sofa|couch/i, 'sofa'], [/آباژور|چراغ\s*مطالعه|چراغ\s*خواب|لوستر|چراغ|lamp/i, 'lamp'], [/تخت|تشک|رختخواب|بالش|پتو|ملحفه|bed|mattress/i, 'bed'], [/صندلی|چهارپایه|نیمکت|chair|stool/i, 'chair'],
+  [/میز|دراور|کمد|قفسه|کابینت|بوفه|table|desk|shelf/i, 'table'], [/گلدان\s*(?:تزئینی|سرامیک)|vase|گلدان/i, 'vase'], [/فرش|قالی|گلیم|موکت|کلیم|carpet|rug/i, 'carpet'],
+  [/ساعت\s*دیواری|ساعت|clock/i, 'clock'], [/یخچال|فریزر|اجاق|ماکروویو|ماشین\s*ظرفشویی|جارو|مایکروفر|fridge|oven|microwave/i, 'appliance'], [/لباسشویی|خشک\s*کن|washer|washing/i, 'washer'],
+  [/شمع|عود|خوشبو\s*کننده|candle|incense/i, 'candle'],
+  /* زیبایی و سلامت */
+  [/عطر|ادکلن|اسپری\s*بدن|perfume|cologne/i, 'perfume'], [/رژ|لوازم\s*آرایش|آرایشی|ریمل|rouge|lipstick|makeup/i, 'lipstick'], [/کرم|لوسیون|ضدآفتاب|ضد\s*آفتاب|مرطوب|شامپو|ژل|cream|lotion|shampoo/i, 'cream'],
+  [/دارو|مکمل|ویتامین|قرص|کپسول|شربت\s*دارویی|medicine|vitamin/i, 'medicine'], [/قرص|pill|capsule/i, 'pill'], [/کمک\s*های\s*اولیه|جعبه\s*کمک|پانسمان|بتادین|first\s*aid/i, 'firstaid'],
+  [/مسواک|خمیر\s*دندان|نخ\s*دندان|بهداشت\s*دهان|toothbrush/i, 'toothbrush'], [/فشارسنج|گوشی\s*پزشکی|تجهیزات\s*پزشکی|پزشکی|stethoscope|medical/i, 'stethoscope'], [/صابون|مایع\s*دستشویی|شوینده|پاک\s*کننده|سفید\s*کننده|soap|detergent/i, 'soap'],
+  /* کتاب و هنر */
+  [/کتاب|رمان|مجله|جزوه|دیکشنری|book|novel/i, 'book'], [/مداد|خودکار|خودنویس|ماژیک|لوازم\s*تحریر|pen\b|pencil|stationery/i, 'pencil'], [/دفتر|دفترچه|یادداشت|notebook/i, 'notebook'],
+  [/رنگ\s*آمیزی|نقاشی|قلم\s*مو|آبرنگ|بوم|هنری|palette|paint\s*art/i, 'palette'], [/گیتار|ویولن|سنتور|سه\s*تار|پیانو|ارگ|موسیقی|guitar|violin|piano/i, 'guitar'],
+  /* ورزش و سفر */
+  [/توپ|فوتبال|والیبال|بسکتبال|ball|soccer/i, 'ball'], [/دمبل|هالتر|وزنه|بدنسازی|dumbbell|gym/i, 'dumbbell'], [/دوچرخه|bike|bicycle/i, 'bicycle'], [/چادر\s*مسافرتی|چادر|کمپینگ|کوهنوردی|کیسه\s*خواب|tent|camp/i, 'tent'],
+  [/جام|مدال|تندیس|لوح|trophy|medal/i, 'trophy'],
+  /* اسباب‌بازی و کودک */
+  [/عروسک|خرس|اسباب\s*بازی|بازی\s*کودک|teddy|toy/i, 'teddy'], [/پازل|لگو|بلوک|بازی\s*فکری|puzzle|lego/i, 'puzzle'], [/موشک|فضا|هواپیما|راکت|rocket/i, 'rocket'], [/شیشه\s*شیر|پستانک|نوزاد|کودک|بچه|baby/i, 'babybottle'],
+  /* خودرو و صنعتی */
+  [/ماشین|خودرو|اتومبیل|سواری|car\b|auto/i, 'car'], [/لاستیک|تایر|رینگ|tire|tyre|wheel/i, 'tire'], [/موتور\s*سیکلت|موتورسیکلت|موتور\s*برقی|اسکوتر|motorcycle|scooter/i, 'motorbike'],
+  [/چکش|میخ|پیچ|مهره|ابزار\s*آلات|hammer|nail/i, 'hammer'], [/آچار|انبردست|دم\s*باریک|پیچ\s*گوشتی|wrench|plier|screwdriver/i, 'wrench'], [/دریل|پیچ\s*گوشتی\s*برقی|اره\s*برقی|فرز|drill|saw\s*electric/i, 'drill'],
+  [/رنگ\s*ساختمان|رنگ\s*روغنی|رنگ\s*پلاستیک|سیلر|نقاشی\s*ساختمان|paint/i, 'paint'], [/آجر|سیمان|گچ|بلوک|کاشی|سرامیک|مصالح|brick|cement|tile/i, 'brick'],
+  /* حیوانات */
+  [/گاو|گوساله|شیردوشی|دام\s*سنگین|cow|cattle/i, 'cow'], [/گوسفند|بز(?![آ-ی])|میش|بره|دام\s*سبک|sheep|goat/i, 'sheep'], [/مرغ|خروس|جوجه|ماکیان|بوقلمون|اردک|طیور|chicken|poultry/i, 'chicken'], [/زنبور|کندو|زنبورداری|bee/i, 'bee'],
+  [/سگ|توله|dog/i, 'dog'], [/گربه|cat/i, 'cat'], [/غذای\s*(?:سگ|گربه|حیوان|پرنده|ماهی)|خوراک\s*دام|خوراک\s*طیور|(?:^|\s)دان(?:\s|$)|علوفه|یونجه|کنسانتره|petfood/i, 'petfood'],
+  /* گیاه */
+  [/گل|شاخه\s*گل|رز|لاله|گل\s*رز|بوکه|گل(?![آ-ی])|flower|rose/i, 'flower'], [/گل\s*آپارتمانی|گیاه\s*آپارتمانی|پتوس|فیکوس|گیاه\s*زینتی|سرخس|houseplant/i, 'houseplant'], [/کاکتوس|ساکولنت|گیاه\s*خارجی|cactus|succulent/i, 'cactus'],
+  /* عمومی */
+  [/هدیه|کادو|بسته\s*هدیه|gift|present/i, 'gift'], [/سبد|بسته|خرید|shop|bag\b/i, 'shoppingbag'], [/تخفیف|حراج|کوپن|کد\s*تخفیف|sale|discount/i, 'tag'], [/کلید|قفل\s*کلید|key\b/i, 'key'], [/قفل|امنیت|دزدگیر|lock|security/i, 'lock'],
+  [/جلد|پوشه|فایل|مدارک|اوراق|سند|document|file/i, 'document'], [/سفر|جهانی|بین\s*المللی|گردشگری|tour|globe|travel/i, 'globe'], [/خدمات|کارمزد|اشتراک|قیمت|پول|سکه|ارز|coin|money/i, 'coins'],
+  [/ویژه|پیشنهاد|محبوب|برتر|special|top|best/i, 'star'], [/علاقه|دوست|love/i, 'heart'], [/خورشید|آفتاب|sun/i, 'sun'], [/درخت|جنگل|چوب|هیزم|tree|wood/i, 'tree']
+];
+/* دسته‌بندی‌های رایج (انگلیسی/فارسی) برای وقتی نام محصول سرنخی ندارد */
+const FS_ART_CAT_EXTRA = {
+  food:'bread', grocery:'bread', fruit:'apple', vegetable:'vegetable', dairy:'milk', meat:'meat', electronics:'phone', digital:'phone', mobile:'phone', computer:'laptop',
+  fashion:'shirt', clothing:'shirt', shoes:'shoe', bag:'handbag', home:'sofa', furniture:'sofa', kitchen:'pot', appliance:'appliance', beauty:'perfume', health:'medicine',
+  book:'book', stationery:'pencil', sport:'ball', sports:'ball', travel:'suitcase', toy:'teddy', kids:'babybottle', baby:'babybottle', car:'car', auto:'car', tools:'wrench',
+  building:'brick', pet:'dog', animal:'cow', plant:'houseplant', flower:'flower', gift:'gift', music:'guitar', art:'palette', office:'document', service:'coins', other:'box', general:'box'
+};
+function fsHashKey(s){
+  const pool = ['box','gift','shoppingbag','tag','star','globe','document','coins'];
+  let h = 0; s = String(s||''); for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
+  return pool[h % pool.length];
+}
+function fsNorm(s){ return String(s||'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/ۀ/g,'ه').replace(/[‌‏]/g,' ').replace(/\s+/g,' ').trim(); }
+
+const FS_ART_RULES_X = FS_ART_RULES_EXTRA.map(([re,k]) => [new RegExp('(?:^|[^\\u0600-\\u06FFa-zA-Z])(?:' + re.source + ')', re.flags), k]);
+
+
 function productArtKey(p){
   const name = String((p && p.name) || '');
   for (const [re, key] of FS_ART_RULES){ if (re.test(name)) return key; }
+  const nn = fsNorm(name);
+  for (const [re, key] of FS_ART_RULES_X){ if (re.test(nn)) return key; }
   const cat = CATEGORIES.find(c=>c.id === (p && p.category));
-  return FS_ART_CAT[(cat && cat.icon) || (p && p.category)] || 'crate';
+  const ck = (cat && cat.icon) || (p && p.category);
+  if (FS_ART_CAT[ck]) return FS_ART_CAT[ck];
+  const cid = String(ck||'').toLowerCase();
+  if (FS_ART_CAT_EXTRA[cid]) return FS_ART_CAT_EXTRA[cid];
+  const cn = fsNorm((cat && cat.name) || '');
+  for (const [re, key] of FS_ART_RULES_X){ if (cn && re.test(cn)) return key; }
+  return fsHashKey(name || cid);
 }
 function productArt(p){
   const key = productArtKey(p);
