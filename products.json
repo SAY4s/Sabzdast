@@ -113,13 +113,14 @@
   {
     "id": "p11",
     "name": "هویج",
-    "category": "vegetables",
+    "category": "seed",
     "price": 150000,
     "unit": "کیسه ۱۰ کیلویی",
     "stock": 45,
     "sku": "VG-303",
-    "image": "",
-    "description": "هویج تازه و شیرین، شسته‌شده و آماده‌ی مصرف. مناسب پلو، آش و آب‌میوه."
+    "image": "vector:crate",
+    "description": "هویج تازه و شیرین، شسته‌شده و آماده‌ی مصرف. مناسب پلو، آش و آب‌میوه.",
+    "hidden": false
   },
   {
     "id": "p12",
