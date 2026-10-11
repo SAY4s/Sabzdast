@@ -1343,10 +1343,9 @@ function productArtKey(p){
   return FS_ART_CAT[(cat && cat.icon) || (p && p.category)] || 'crate';
 }
 function productArt(p){
-  const key = productArtKey(p);
-  const body = (FS_ART[key] || FS_ART.crate)();
+  /* نسخه ساده: به‌جای تصویر وکتور سفارشی، فقط یک کادر خاکستری ساده نمایش داده می‌شود */
   const title = esc((p && p.name) || '');
-  return `<svg class="fs-art" viewBox="0 0 200 200" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+  return `<svg class="fs-art" viewBox="0 0 200 200" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="#e4e4e4"/><circle cx="68" cy="76" r="14" fill="#c4c4c4"/><path d="M30 156l46-52 32 36 22-24 40 40z" fill="#c4c4c4"/></svg>`;
 }
 window.fsProductArt = function(el){
   const d = document.createElement('div');
