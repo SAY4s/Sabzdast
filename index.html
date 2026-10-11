@@ -486,6 +486,19 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 .mini-img .fs-art{width:100%;height:100%;}
 .img-prev:has(.fs-art){padding:3px;}
 .img-prev .fs-art{width:100%;height:100%;}
+
+#vecPicker{position:fixed;inset:0;z-index:300;background:#fdf8ea;display:flex;flex-direction:column;}
+#vecPicker .vp-head{display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #e3d9bd;background:#fff;flex-wrap:wrap;}
+#vecPicker .vp-head h2{margin:0;font-size:19px;color:var(--leaf-dark);flex:none;}
+#vecPicker .vp-head input{flex:1;min-width:180px;padding:10px 12px;border:1px solid #d9cfae;border-radius:10px;font:inherit;}
+#vecPicker .vp-body{flex:1;overflow:auto;padding:8px 18px 40px;}
+#vecPicker h3{margin:22px 0 10px;font-size:15px;color:var(--leaf-dark);}
+#vecPicker .vp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;}
+#vecPicker .vp-item{background:#fff;border:2px solid #e3d9bd;border-radius:12px;padding:8px 6px 10px;cursor:pointer;font:inherit;font-size:12.5px;color:#2a2318;display:flex;flex-direction:column;align-items:center;gap:4px;}
+#vecPicker .vp-item:hover{border-color:#8fbf6e;transform:translateY(-2px);}
+#vecPicker .vp-item.sel{border-color:#3f6b35;box-shadow:0 0 0 3px #8fbf6e55;}
+#vecPicker .vp-item svg{width:100%;height:auto;max-width:110px;}
+#vecPicker .vp-empty{text-align:center;color:#7d6f4f;padding:40px 0;}
 </style>
 </head>
 <body>
@@ -1011,7 +1024,7 @@ function iconSvg(key){
 }
 window.fsIcon = function(catId){ const d = document.createElement('div'); d.innerHTML = categoryIconSvg(catId); return d.firstChild; };
 function productThumb(p){
-  if (p.image){
+  if (p.image && String(p.image).indexOf('vector:') !== 0){
     return `<img src="${esc(p.image)}" alt="${esc(p.name)}" data-name="${esc(p.name)}" data-cat="${esc(p.category)}" onerror="this.replaceWith(fsProductArt(this))">`;
   }
   return productArt(p);
@@ -1582,7 +1595,7 @@ const FS_ART_CAT = { seed:'packet', fertilizer:'urea', tool:'trowel', irrigation
 /* ---------- قوانین تشخیص وکتور عمومی بر اساس نام محصول ---------- */
 Object.assign(FS_ART, window.FS_ART_EXTRA || {});
 const FS_ART_RULES_EXTRA = [
-  [/ماشین\s*آلات|ماشین‌آلات/, 'tiller'],
+  [/ماشین\s*آلات|ماشین‌آلات/, 'tiller'], [/بذر|تخمه\s*کاری|seed/i, 'packet'], [/کود|ریزمغذی|هیومیک|fertili[sz]er/i, 'urea'], [/گلخانه|پلاستیک\s*گلخانه|سایبان/, 'crate'], [/ساعت\s*دیواری|ساعت\s*رومیزی|clock/i, 'clock'],
   /* خوراکی */
   [/سیب(?!\s*زمینی)|apple/i, 'apple'], [/پرتقال|نارنگی|لیمو|گریپ|نارنج|مرکبات|orange|lemon/i, 'citrus'], [/انگور|کشمش|توت\s*فرنگی\s*سیاه|grape/i, 'grapes'],
   [/هندوانه|خربزه|طالبی|watermelon/i, 'watermelon'], [/موز|banana/i, 'banana'], [/توت\s*فرنگی|توت|strawberry|berry/i, 'strawberry'],
@@ -1607,7 +1620,7 @@ const FS_ART_RULES_EXTRA = [
   /* خانه */
   [/مبل|کاناپه|راحتی|sofa|couch/i, 'sofa'], [/آباژور|چراغ\s*مطالعه|چراغ\s*خواب|لوستر|چراغ|lamp/i, 'lamp'], [/تخت|تشک|رختخواب|بالش|پتو|ملحفه|bed|mattress/i, 'bed'], [/صندلی|چهارپایه|نیمکت|chair|stool/i, 'chair'],
   [/میز|دراور|کمد|قفسه|کابینت|بوفه|table|desk|shelf/i, 'table'], [/گلدان\s*(?:تزئینی|سرامیک)|vase|گلدان/i, 'vase'], [/فرش|قالی|گلیم|موکت|کلیم|carpet|rug/i, 'carpet'],
-  [/ساعت\s*دیواری|ساعت|clock/i, 'clock'], [/یخچال|فریزر|اجاق|ماکروویو|ماشین\s*ظرفشویی|جارو|مایکروفر|fridge|oven|microwave/i, 'appliance'], [/لباسشویی|خشک\s*کن|washer|washing/i, 'washer'],
+  [/یخچال|فریزر|اجاق|ماکروویو|ماشین\s*ظرفشویی|جارو|مایکروفر|fridge|oven|microwave/i, 'appliance'], [/لباسشویی|خشک\s*کن|washer|washing/i, 'washer'],
   [/شمع|عود|خوشبو\s*کننده|candle|incense/i, 'candle'],
   /* زیبایی و سلامت */
   [/عطر|ادکلن|اسپری\s*بدن|perfume|cologne/i, 'perfume'], [/رژ|لوازم\s*آرایش|آرایشی|ریمل|rouge|lipstick|makeup/i, 'lipstick'], [/کرم|لوسیون|ضدآفتاب|ضد\s*آفتاب|مرطوب|شامپو|ژل|cream|lotion|shampoo/i, 'cream'],
@@ -1631,9 +1644,7 @@ const FS_ART_RULES_EXTRA = [
   /* گیاه */
   [/گل|شاخه\s*گل|رز|لاله|گل\s*رز|بوکه|گل(?![آ-ی])|flower|rose/i, 'flower'], [/گل\s*آپارتمانی|گیاه\s*آپارتمانی|پتوس|فیکوس|گیاه\s*زینتی|سرخس|houseplant/i, 'houseplant'], [/کاکتوس|ساکولنت|گیاه\s*خارجی|cactus|succulent/i, 'cactus'],
   /* عمومی */
-  [/هدیه|کادو|بسته\s*هدیه|gift|present/i, 'gift'], [/سبد|بسته|خرید|shop|bag\b/i, 'shoppingbag'], [/تخفیف|حراج|کوپن|کد\s*تخفیف|sale|discount/i, 'tag'], [/کلید|قفل\s*کلید|key\b/i, 'key'], [/قفل|امنیت|دزدگیر|lock|security/i, 'lock'],
-  [/جلد|پوشه|فایل|مدارک|اوراق|سند|document|file/i, 'document'], [/سفر|جهانی|بین\s*المللی|گردشگری|tour|globe|travel/i, 'globe'], [/خدمات|کارمزد|اشتراک|قیمت|پول|سکه|ارز|coin|money/i, 'coins'],
-  [/ویژه|پیشنهاد|محبوب|برتر|special|top|best/i, 'star'], [/علاقه|دوست|love/i, 'heart'], [/خورشید|آفتاب|sun/i, 'sun'], [/درخت|جنگل|چوب|هیزم|tree|wood/i, 'tree']
+  [/هدیه|کادو|بسته\s*هدیه|gift|present/i, 'gift'],     [/درخت|جنگل|چوب|هیزم|tree|wood/i, 'tree']
 ];
 /* دسته‌بندی‌های رایج (انگلیسی/فارسی) برای وقتی نام محصول سرنخی ندارد */
 const FS_ART_CAT_EXTRA = {
@@ -1664,10 +1675,65 @@ function productArtKey(p){
   if (FS_ART_CAT_EXTRA[cid]) return FS_ART_CAT_EXTRA[cid];
   const cn = fsNorm((cat && cat.name) || '');
   for (const [re, key] of FS_ART_RULES_X){ if (cn && re.test(cn)) return key; }
-  return fsHashKey(name || cid);
+  return 'crate';
 }
+
+/* ---------- صفحه‌ی انتخاب وکتور ---------- */
+const FS_ART_LABELS = {
+  wheat:'گندم و غلات', sapling:'نهال', urea:'کود شیمیایی', compost:'کود آلی', shovel:'بیل', shears:'قیچی باغبانی', drip:'لوله قطره‌ای', pump:'پمپ آب', tiller:'تیلر / ماشین‌آلات', sprayer:'سم و سمپاش',
+  packet:'بسته بذر', trowel:'بیلچه', can:'آبپاش', tractor:'تراکتور', crate:'جعبه',
+  apple:'سیب', citrus:'مرکبات', grapes:'انگور', watermelon:'هندوانه', banana:'موز', strawberry:'توت‌فرنگی', vegetable:'سبزیجات', tomato:'گوجه', bread:'نان', cheese:'پنیر', milk:'شیر و لبنیات', egg:'تخم‌مرغ', meat:'گوشت', fish:'ماهی',
+  honey:'عسل', tea:'چای', coffee:'قهوه', nuts:'آجیل و خشکبار', spice:'ادویه', oil:'روغن', cake:'کیک و شیرینی', candy:'شکلات و آب‌نبات', drink:'نوشیدنی', pot:'قابلمه و ظروف',
+  phone:'موبایل', laptop:'لپ‌تاپ', headphones:'هدفون', camera:'دوربین', tv:'تلویزیون', watch:'ساعت هوشمند', speaker:'اسپیکر', keyboard:'کیبورد', bulb:'لامپ', battery:'باتری', gamepad:'کنسول بازی', plug:'کابل و برق', solar:'پنل خورشیدی',
+  shirt:'لباس', shoe:'کفش', handbag:'کیف دستی', backpack:'کوله‌پشتی', hat:'کلاه', dress:'لباس زنانه', glasses:'عینک', ring:'جواهر', suitcase:'چمدان', umbrella:'چتر',
+  sofa:'مبل', lamp:'آباژور', bed:'تخت', chair:'صندلی', table:'میز', vase:'گلدان تزئینی', carpet:'فرش', clock:'ساعت دیواری', appliance:'یخچال / لوازم خانگی', washer:'لباسشویی', candle:'شمع',
+  perfume:'عطر', lipstick:'لوازم آرایش', cream:'کرم و شامپو', medicine:'دارو و مکمل', pill:'قرص', firstaid:'کمک‌های اولیه', toothbrush:'مسواک', stethoscope:'تجهیزات پزشکی', soap:'صابون و شوینده',
+  book:'کتاب', pencil:'لوازم تحریر', notebook:'دفتر', palette:'هنر و نقاشی', guitar:'ساز و موسیقی', ball:'توپ', dumbbell:'بدنسازی', bicycle:'دوچرخه', tent:'چادر و کمپینگ', trophy:'جام و مدال',
+  teddy:'عروسک', puzzle:'پازل', rocket:'اسباب‌بازی', babybottle:'نوزاد و کودک', car:'خودرو', tire:'لاستیک', motorbike:'موتورسیکلت', hammer:'چکش', wrench:'آچار', drill:'دریل', paint:'رنگ ساختمان', brick:'مصالح ساختمانی',
+  cow:'گاو', sheep:'گوسفند', chicken:'مرغ و طیور', bee:'زنبورداری', dog:'سگ', cat:'گربه', petfood:'خوراک دام و حیوان', flower:'گل', houseplant:'گیاه آپارتمانی', cactus:'کاکتوس', tree:'درخت', sun:'خورشید',
+  gift:'هدیه', shoppingbag:'کیسه خرید', tag:'برچسب قیمت', key:'کلید', lock:'قفل', star:'ستاره', heart:'قلب', document:'سند و مدارک', globe:'کره‌ی زمین', coins:'سکه و پول', box:'جعبه'
+};
+const FS_ART_GROUPS = [
+  ['کشاورزی و باغبانی', ['wheat','packet','sapling','urea','compost','shovel','trowel','shears','drip','can','pump','tiller','tractor','sprayer','crate','houseplant','flower','cactus','tree']],
+  ['دام، طیور و حیوانات', ['cow','sheep','chicken','bee','dog','cat','petfood','egg','milk','cheese']],
+  ['خوراکی و نوشیدنی', ['apple','citrus','grapes','watermelon','banana','strawberry','tomato','vegetable','bread','meat','fish','honey','tea','coffee','nuts','spice','oil','cake','candy','drink','pot']],
+  ['دیجیتال و برق', ['phone','laptop','headphones','camera','tv','watch','speaker','keyboard','bulb','battery','gamepad','plug','solar']],
+  ['پوشاک و مد', ['shirt','dress','shoe','handbag','backpack','hat','glasses','ring','suitcase','umbrella']],
+  ['خانه و دکور', ['sofa','lamp','bed','chair','table','vase','carpet','clock','appliance','washer','candle']],
+  ['زیبایی و سلامت', ['perfume','lipstick','cream','soap','toothbrush','medicine','pill','firstaid','stethoscope']],
+  ['کتاب، هنر و سرگرمی', ['book','pencil','notebook','palette','guitar','teddy','puzzle','rocket','babybottle']],
+  ['ورزش و سفر', ['ball','dumbbell','bicycle','tent','trophy']],
+  ['خودرو، ابزار و ساختمان', ['car','tire','motorbike','hammer','wrench','drill','paint','brick']],
+  ['عمومی', ['gift','shoppingbag','tag','key','lock','star','heart','document','globe','coins','sun','box']]
+];
+window.openVectorPicker = function(current, onPick){
+  let ov = document.getElementById('vecPicker'); if (ov) ov.remove();
+  ov = document.createElement('div'); ov.id = 'vecPicker';
+  const used = new Set(); FS_ART_GROUPS.forEach(g=>g[1].forEach(k=>used.add(k)));
+  const rest = Object.keys(FS_ART).filter(k=>!used.has(k));
+  const groups = rest.length ? FS_ART_GROUPS.concat([['سایر', rest]]) : FS_ART_GROUPS;
+  ov.innerHTML = `<div class="vp-head"><h2>انتخاب تصویر وکتور</h2><input type="search" id="vpSearch" placeholder="جستجو… (مثلاً: کفش، گاو، عسل)"><button type="button" class="btn outline" id="vpClose">بستن</button></div><div class="vp-body" id="vpBody"></div>`;
+  document.body.appendChild(ov);
+  const body = ov.querySelector('#vpBody');
+  const render = q=>{
+    q = fsNorm(q||'');
+    body.innerHTML = groups.map(([title, keys])=>{
+      const ks = keys.filter(k=>FS_ART[k] && (!q || fsNorm(FS_ART_LABELS[k]||k).includes(q) || k.includes(q.toLowerCase())));
+      if (!ks.length) return '';
+      return `<h3>${title}</h3><div class="vp-grid">${ks.map(k=>`<button type="button" class="vp-item ${current==='vector:'+k?'sel':''}" data-k="${k}"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">${FS_ART[k]()}</svg><span>${FS_ART_LABELS[k]||k}</span></button>`).join('')}</div>`;
+    }).join('') || '<p class="vp-empty">وکتوری با این نام پیدا نشد.</p>';
+  };
+  render('');
+  const close = ()=>ov.remove();
+  ov.querySelector('#vpClose').onclick = close;
+  ov.querySelector('#vpSearch').oninput = e=>render(e.target.value);
+  body.onclick = e=>{ const b = e.target.closest('.vp-item'); if (!b) return; onPick('vector:' + b.dataset.k); close(); };
+  document.addEventListener('keydown', function esc1(e){ if (e.key==='Escape'){ close(); document.removeEventListener('keydown', esc1); } });
+};
+
 function productArt(p){
-  const key = productArtKey(p);
+  const mv = (p && typeof p.image === 'string' && p.image.indexOf('vector:') === 0) ? p.image.slice(7) : '';
+  const key = (mv && FS_ART[mv]) ? mv : productArtKey(p);
   const body = (FS_ART[key] || FS_ART.crate)();
   const title = esc((p && p.name) || '');
   return `<svg class="fs-art" viewBox="0 0 200 200" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
@@ -2898,8 +2964,9 @@ function openProductModal(id){
           <div class="img-prev" id="apfPrev"></div>
           <div class="img-ctrl">
             <input type="file" id="apfFile" accept="image/*">
-            <input type="text" id="apfImgUrl" placeholder="یا آدرس تصویر (URL)" value="${(p.image && !p.image.startsWith('data:')) ? esc(p.image) : ''}">
-            <button type="button" class="pill-btn" id="apfImgClear">حذف تصویر (نمایش تصویر وکتور پیش‌فرض)</button>
+            <input type="text" id="apfImgUrl" placeholder="یا آدرس تصویر (URL)" value="${(p.image && !p.image.startsWith('data:') && !p.image.startsWith('vector:')) ? esc(p.image) : ''}">
+            <button type="button" class="pill-btn" id="apfVecPick">🎨 انتخاب از کتابخانه‌ی وکتور</button>
+            <button type="button" class="pill-btn" id="apfImgClear">حذف تصویر (وکتور خودکار بر اساس نام)</button>
           </div>
         </div>
         <div class="o-hist" id="apfImgInfo">تصویر آپلودشده خودکار کوچک و فشرده می‌شود.</div>
@@ -2914,13 +2981,15 @@ function openProductModal(id){
   document.getElementById('editModal').style.display = 'flex';
   const drawPrev = ()=>{
     const pv = document.getElementById('apfPrev');
-    if (curImage){ pv.className = 'img-prev has-img'; pv.innerHTML = `<img src="${esc(curImage)}" alt="">`; }
+    if (curImage && curImage.indexOf('vector:') === 0){ pv.className = 'img-prev'; pv.innerHTML = productArt({ name: document.getElementById('apfName').value, category: document.getElementById('apfCat').value, image: curImage }); }
+    else if (curImage){ pv.className = 'img-prev has-img'; pv.innerHTML = `<img src="${esc(curImage)}" alt="">`; }
     else { pv.className = 'img-prev'; pv.innerHTML = productArt({ name: document.getElementById('apfName').value, category: document.getElementById('apfCat').value }); }
   };
   drawPrev();
   document.getElementById('apfCat').onchange = drawPrev;
   document.getElementById('apfName').addEventListener('input', ()=>{ if (!curImage) drawPrev(); });
   document.getElementById('apfCancel').onclick = closeEditModal;
+  document.getElementById('apfVecPick').onclick = ()=>openVectorPicker(curImage, v=>{ curImage = v; document.getElementById('apfImgUrl').value = ''; document.getElementById('apfFile').value = ''; document.getElementById('apfImgInfo').textContent = 'وکتور انتخاب شد: ' + (FS_ART_LABELS[v.slice(7)]||v.slice(7)); drawPrev(); });
   document.getElementById('apfImgClear').onclick = ()=>{ curImage = ''; document.getElementById('apfImgUrl').value = ''; document.getElementById('apfFile').value = ''; drawPrev(); };
   document.getElementById('apfImgUrl').oninput = e=>{ curImage = e.target.value.trim(); drawPrev(); };
   document.getElementById('apfFile').onchange = async (e)=>{
