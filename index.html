@@ -1829,7 +1829,8 @@ function renderOrdersTable(){
       const trackEl = card.querySelector('.os-track');
       b.disabled = true; b.textContent = 'در حال ذخیره...';
       try{
-        await updateOrder(oid, { status: st, trackingCode: trackEl ? trackEl.value.trim() : '' });
+        const r = await updateOrder(oid, { status: st, trackingCode: trackEl ? trackEl.value.trim() : '' });
+        if (r && r.shortages && r.shortages.length) alert('موجودی این کالاها کمتر از تعداد سفارش بود و صفر شد:\n' + r.shortages.join('\n'));
         b.textContent = 'ذخیره شد ✓';
         setTimeout(renderOrdersTable, 700);
       } catch(err){
@@ -1838,17 +1839,55 @@ function renderOrdersTable(){
     };
   });
 }
+/* وضعیت‌هایی که موجودی کالا برایشان کم شده است (از «در حال آماده‌سازی» به بعد) */
+const STOCK_RESERVED = ['preparing','shipped','done'];
 async function updateOrder(oid, patch){
   if (!CONFIG) CONFIG = await loadConfig();
   const { data, sha } = await ghGetFile(CONFIG.fileName);
   const o = data.find(x=>String(x.id)===String(oid));
   if (!o) throw new Error('سفارش پیدا نشد');
   const changed = (o.status || 'pending') !== patch.status;
+
+  /* ---- موجودی: کسر در آماده‌سازی، برگشت در لغو / بازگشت به انتظار ---- */
+  let stockUndo = null, shortages = [];
+  const wantReserved = STOCK_RESERVED.includes(patch.status);
+  if (wantReserved && !o.stockMoves){
+    let moves = [];
+    await saveProducts(arr=>{
+      moves = []; shortages = [];
+      (o.items||[]).forEach(it=>{
+        const p = arr.find(x=>x.id===it.id);
+        if (!p || p.stock === null || p.stock === undefined || p.stock === '') return; // موجودی نامحدود
+        const cur = Number(p.stock) || 0, want = Number(it.qty) || 0;
+        const take = Math.min(cur, want);
+        if (take < want) shortages.push(`${it.name} (موجودی ${cur}، سفارش ${want})`);
+        p.stock = cur - take;
+        if (take > 0) moves.push({ id: p.id, qty: take });
+      });
+    });
+    o.stockMoves = moves;
+    stockUndo = arr=>{ moves.forEach(m=>{ const p = arr.find(x=>x.id===m.id); if (p) p.stock = (Number(p.stock)||0) + m.qty; }); };
+  } else if (!wantReserved && o.stockMoves){
+    const moves = o.stockMoves;
+    await saveProducts(arr=>{
+      moves.forEach(m=>{ const p = arr.find(x=>x.id===m.id); if (p && p.stock !== null && p.stock !== undefined && p.stock !== '') p.stock = (Number(p.stock)||0) + m.qty; });
+    });
+    delete o.stockMoves;
+    stockUndo = arr=>{ moves.forEach(m=>{ const p = arr.find(x=>x.id===m.id); if (p) p.stock = (Number(p.stock)||0) - m.qty; }); };
+  }
+
   o.status = patch.status;
   o.trackingCode = patch.trackingCode;
   if (changed){ o.history = o.history || []; o.history.push({ status: patch.status, date: nowJalali(), time: nowTime() }); }
-  await ghPutFile(CONFIG.fileName, data, sha, `بروزرسانی سفارش ${oid}`);
+  try{
+    await ghPutFile(CONFIG.fileName, data, sha, `بروزرسانی سفارش ${oid}`);
+  } catch(err){
+    /* ذخیره‌ی سفارش شکست خورد → موجودی را به حالت قبل برگردان */
+    if (stockUndo){ try{ await saveProducts(arr=>{ stockUndo(arr); }); } catch(e){} }
+    throw err;
+  }
   ordersCache = data; ordersSha = null;
+  return { shortages };
 }
 
 
