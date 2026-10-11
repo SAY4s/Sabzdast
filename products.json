@@ -102,13 +102,14 @@
   {
     "id": "p10",
     "name": "پیاز زرد",
-    "category": "vegetables",
+    "category": "seed",
     "price": 190000,
     "unit": "کیسه ۱۰ کیلویی",
     "stock": 80,
     "sku": "VG-302",
-    "image": "",
-    "description": "پیاز زرد خشک و سفت، پوست سالم و مناسب نگهداری طولانی‌مدت."
+    "image": "vector:crate",
+    "description": "پیاز زرد خشک و سفت، پوست سالم و مناسب نگهداری طولانی‌مدت.",
+    "hidden": false
   },
   {
     "id": "p11",
