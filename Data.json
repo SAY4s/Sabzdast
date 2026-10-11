@@ -295,13 +295,24 @@
       }
     ],
     "total": 185000,
-    "status": "pending",
+    "status": "preparing",
     "trackingCode": "",
     "history": [
       {
         "status": "pending",
         "date": "19 مهر 1405",
         "time": "۱۰:۱۴"
+      },
+      {
+        "status": "preparing",
+        "date": "19 مهر 1405",
+        "time": "۱۰:۱۶"
+      }
+    ],
+    "stockMoves": [
+      {
+        "id": "p1",
+        "qty": 1
       }
     ]
   }
