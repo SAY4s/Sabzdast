@@ -165,13 +165,18 @@
       }
     ],
     "total": 328000,
-    "status": "pending",
+    "status": "canceled",
     "trackingCode": "",
     "history": [
       {
         "status": "pending",
         "date": "20 مهر 1405",
         "time": "۱۹:۴۴"
+      },
+      {
+        "status": "canceled",
+        "date": "20 مهر 1405",
+        "time": "۲۰:۰۰"
       }
     ]
   }
