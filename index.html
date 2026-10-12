@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>فروشگاه ابزار و نهاده‌های کشاورزی</title>
+<title>در حال بارگذاری…</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Lalezar&display=swap');
 
@@ -499,15 +499,40 @@ footer{border-top:1px solid rgba(255,255,255,.55);}
 #vecPicker .vp-item.sel{border-color:#3f6b35;box-shadow:0 0 0 3px #8fbf6e55;}
 #vecPicker .vp-item svg{width:100%;height:auto;max-width:110px;}
 #vecPicker .vp-empty{text-align:center;color:#7d6f4f;padding:40px 0;}
+
+/* ===== لودینگ اولیه ===== */
+.boot-loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#ece6d2;transition:opacity .35s;}
+.boot-loader.done{opacity:0;pointer-events:none;}
+.boot-box{width:min(320px,80vw);text-align:center;}
+.boot-spin{width:44px;height:44px;margin:0 auto 20px;border:4px solid rgba(0,0,0,.1);border-top-color:#555;border-radius:50%;animation:bootspin .8s linear infinite;}
+.sk{height:14px;border-radius:7px;margin:10px auto;background:linear-gradient(90deg,rgba(0,0,0,.06) 25%,rgba(0,0,0,.13) 37%,rgba(0,0,0,.06) 63%);background-size:400% 100%;animation:skshimmer 1.3s ease infinite;}
+.sk-w60{width:60%;}.sk-w40{width:40%;}
+.boot-msg{margin-top:14px;font-size:13px;color:#7a7059;}
+@keyframes bootspin{to{transform:rotate(360deg);}}
+@keyframes skshimmer{0%{background-position:100% 50%;}100%{background-position:0 50%;}}
+
+/* ===== حالت سایت خدماتی ===== */
+.mode-service .pd-meta span:nth-child(2){display:none;}
+.mode-service .out-badge{display:none;}
+.svc-switch{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:0 0 14px;border-radius:10px;background:var(--glass-tint);border:1px solid var(--glass-border);font-weight:700;font-size:14px;}
+.svc-switch input{width:20px;height:20px;}
 </style>
 </head>
 <body>
+<div id="bootLoader" class="boot-loader">
+  <div class="boot-box">
+    <div class="boot-spin"></div>
+    <div class="sk sk-w60"></div>
+    <div class="sk sk-w40"></div>
+    <div class="boot-msg" id="bootMsg">در حال بارگذاری…</div>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="header-inner">
     <a href="#/" class="brand">
-      <span style="font-size:24px;" id="brandLogo">🌾</span>
-      <div><span class="brand-mark" id="brandName">سبزدشت</span><small id="brandTag">ابزار و نهاده‌های کشاورزی</small></div>
+      <span style="font-size:24px;" id="brandLogo"></span>
+      <div><span class="brand-mark" id="brandName"></span><small id="brandTag"></small></div>
     </a>
     <nav class="main-nav" id="mainNav">
       <a href="#/" data-route="home">محصولات</a>
@@ -785,9 +810,10 @@ const SHIP_METHODS = {
 };
 const STATUS_LIST = ['pending','preparing','shipped','done','canceled'];
 function statusLabel(st, method){
-  const m = { pending:'در انتظار تأیید', preparing:'در حال آماده‌سازی', shipped: method==='pickup' ? 'آماده‌ی تحویل' : 'ارسال شد', done:'تحویل‌شده', canceled:'لغو شده' };
+  const m = { pending:'در انتظار تأیید', preparing:'در حال آماده‌سازی', shipped: isNoShip(method) ? 'آماده‌ی تحویل' : 'ارسال شد', done:'تحویل‌شده', canceled:'لغو شده' };
   return m[st] || st;
 }
+function isNoShip(m){ return m === 'pickup' || m === 'online'; }
 function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function nowTime(){ return new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'}); }
 
@@ -891,6 +917,7 @@ function applyContent(){
   set('contactTitle', C.contactTitle);
   set('footerText', C.footerText);
   renderContact();
+  applySiteType();
 }
 
 let CONFIG = null;
@@ -2022,7 +2049,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e)=>{
       receiver: { name: name.value.trim(), mobile: mobile.value.trim() },
       shipping: { method, label: SHIP_METHODS[method].label },
       address: needs ? { province: province.value.trim(), city: city.value.trim(), postalCode: postal.value.trim(), full: address.value.trim() } : null,
-      notes: notes.value.trim(),
+      notes: withWhen(notes.value.trim()),
       items: cartLines().map(l=>({ id:l.product.id, name:l.product.name, price:l.product.price, qty:l.qty, lineTotal:l.lineTotal })),
       total: cartTotal(),
       status: 'pending',
@@ -2205,7 +2232,7 @@ function shippingText(o){
     if (loc) lines.push(`استان/شهر: ${loc}`);
     if (o.addr.full) lines.push(`آدرس: ${o.addr.full}`);
     if (o.addr.postalCode) lines.push(`کد پستی: ${o.addr.postalCode}`);
-  } else if (o.shipping.method === 'pickup') lines.push('تحویل حضوری از فروشگاه');
+  } else if (isNoShip(o.shipping.method)) lines.push('تحویل حضوری از فروشگاه');
   return lines.join('\n');
 }
 function renderOrdersTable(){
@@ -2236,7 +2263,7 @@ function renderOrdersTable(){
   if (!list.length){ wrap.innerHTML = '<div class="empty-state">سفارشی با این فیلتر پیدا نشد.</div>'; return; }
 
   wrap.innerHTML = list.map(o=>{
-    const isPickup = o.shipping.method === 'pickup';
+    const isPickup = isNoShip(o.shipping.method);
     const addrHtml = o.addr
       ? `${o.addr.province||o.addr.city ? `<b>${esc([o.addr.province,o.addr.city].filter(Boolean).join('، '))}</b><br>` : ''}${esc(o.addr.full||'')}${o.addr.postalCode ? `<br>کد پستی: ${esc(o.addr.postalCode)}` : ''}`
       : (isPickup ? 'تحویل حضوری از فروشگاه' : '—');
@@ -2365,7 +2392,7 @@ function histText(o){
 
 /* ---------- فاکتور چاپی ---------- */
 function invoiceHtml(o){
-  const isPickup = o.shipping.method === 'pickup';
+  const isPickup = isNoShip(o.shipping.method);
   const sum = o.items.reduce((t,it)=>t + (it.lineTotal ?? it.price*it.qty), 0);
   const total = o.total ?? sum;
   const rows = o.items.map((it,i)=>`<tr><td>${fmtPrice(i+1)}</td><td class="nm">${esc(it.name)}</td><td>${fmtPrice(it.qty)}</td><td>${fmtPrice(it.price)}</td><td>${fmtPrice(it.lineTotal ?? it.price*it.qty)}</td></tr>`).join('');
@@ -2440,7 +2467,7 @@ function renderMyOrders(){
   }
   body.innerHTML = myOrders.map(o=>{
     const pending = o.status === 'pending';
-    const isPickup = o.shipping.method === 'pickup';
+    const isPickup = isNoShip(o.shipping.method);
     const addr = o.addr
       ? `${esc([o.addr.province,o.addr.city].filter(Boolean).join('، '))}${o.addr.full ? '<br>' + esc(o.addr.full) : ''}${o.addr.postalCode ? '<br>کد پستی: ' + esc(o.addr.postalCode) : ''}`
       : (isPickup ? 'تحویل حضوری از فروشگاه' : '—');
@@ -3129,6 +3156,7 @@ function renderAdminContent(draft){
   const openArr = draft && draft.__open ? draft.__open : null;
   pane.innerHTML = `
     <div class="admin-toolbar"><h2>متن‌ها و محتوای سایت</h2></div>
+    <label class="svc-switch"><input type="checkbox" id="ctSvc" ${D.siteType==='service'?'checked':''}> <span>سایت خدماتی (ارائه‌ی خدمات / مشاغل) — عبارت‌ها، نحوه‌ی ارائه و فرم درخواست مناسب خدمات می‌شود</span></label>
     <p class="info-note">هر متنی که اینجا تغییر دهید بعد از «ذخیره» روی کل سایت اعمال می‌شود. برای رفتن به خط بعد در متن‌های بلند، Enter بزنید.</p>
     ${CONTENT_SCHEMA.map((g,gi)=>`<details class="ct-group" ${(openArr ? openArr[gi] : gi===0) ? 'open' : ''}><summary>${g.title}</summary><div class="ct-body">
       ${g.items.map(it=>{
@@ -3158,6 +3186,13 @@ function renderAdminContent(draft){
     const d = collectContent(); d[list.dataset.list].splice(idx,1);
     d.__open = openStates(); renderAdminContent(d);
   });
+  document.getElementById('ctSvc').onchange = (e)=>{
+    const d = collectContent();
+    d.siteType = e.target.checked ? 'service' : 'shop';
+    const src = e.target.checked ? SERVICE_TEXTS : DEFAULT_CONTENT;
+    SERVICE_KEYS.forEach(k=>{ d[k] = clone(src[k]); });
+    d.__open = openStates(); renderAdminContent(d);
+  };
   document.getElementById('ctSave').onclick = saveContent;
   document.getElementById('ctReset').onclick = resetContent;
 }
@@ -3165,6 +3200,7 @@ function openStates(){ return [...document.querySelectorAll('#apane-content .ct-
 function collectContent(){
   const pane = document.getElementById('apane-content');
   const out = clone(CONTENT);
+  const sv = document.getElementById('ctSvc'); if (sv) out.siteType = sv.checked ? 'service' : 'shop';
   pane.querySelectorAll('[data-key]').forEach(el=>setPath(out, el.dataset.key, el.value.trim()));
   pane.querySelectorAll('.ct-list').forEach(l=>{
     out[l.dataset.list] = [...l.querySelectorAll('.ct-item')].map(it=>{
@@ -3182,8 +3218,10 @@ async function saveContent(){
     if (!CONFIG) CONFIG = await loadConfig();
     const { sha } = await ghGetFile(CONTENT_FILE, true);
     await ghPutFile(CONTENT_FILE, out, sha, 'بروزرسانی متن‌های سایت');
+    const prevType = CONTENT.siteType || 'shop';
     CONTENT = mergeContent(out); applyContent();
     setPaneStatus('ctStatus', true, 'ذخیره شد و روی سایت اعمال شد.');
+    if (prevType !== (CONTENT.siteType || 'shop')) setTimeout(()=>location.reload(), 700);
   } catch(err){ setPaneStatus('ctStatus', false, err.message); }
   finally { btn.disabled = false; btn.textContent = 'ذخیره و اعمال روی سایت'; }
 }
@@ -3193,9 +3231,174 @@ async function resetContent(){
     if (!CONFIG) CONFIG = await loadConfig();
     const { sha } = await ghGetFile(CONTENT_FILE, true);
     await ghPutFile(CONTENT_FILE, {}, sha, 'بازگشت متن‌های سایت به پیش‌فرض');
+    const wasSvc = CONTENT.siteType === 'service';
     CONTENT = clone(DEFAULT_CONTENT); applyContent(); renderAdminContent();
+    if (wasSvc) setTimeout(()=>location.reload(), 700);
     setPaneStatus('ctStatus', true, 'متن‌ها به حالت پیش‌فرض برگشت.');
   } catch(err){ setPaneStatus('ctStatus', false, err.message); }
+}
+
+/* =======================================================================
+   حالت «سایت خدماتی» (CONTENT.siteType === 'service')
+   ======================================================================= */
+const isSvc = () => CONTENT && CONTENT.siteType === 'service';
+const SHOP_METHODS = JSON.parse(JSON.stringify(SHIP_METHODS));
+const SERVICE_METHODS = {
+  'onsite': { label:'در محل شما',     desc:'ارائه‌ی خدمت در آدرس شما', needsAddress:true },
+  'pickup': { label:'مراجعه حضوری',   desc:'مراجعه به محل ما',         needsAddress:false },
+  'online': { label:'آنلاین / تلفنی', desc:'بدون نیاز به حضور فیزیکی', needsAddress:false }
+};
+const SERVICE_KEYS = ['shipNoteShip','shipNotePickup','successShip','successPickup','invoiceNote','stepsTitle','stepsSub','steps','features','shippingTitle','shippingText','faq','supportCards'];
+const SERVICE_TEXTS = {
+  shipNoteShip:'زمان و هزینه‌ی نهایی خدمت هنگام هماهنگی توسط همکاران ما اعلام می‌شود.',
+  shipNotePickup:'پس از هماهنگی، در زمان مقرر به محل ما مراجعه می‌کنید.',
+  successShip:'همکاران ما برای تأیید و هماهنگی زمان و هزینه با شما تماس می‌گیرند.',
+  successPickup:'همکاران ما برای هماهنگی زمان مراجعه یا ارائه‌ی خدمت با شما تماس می‌گیرند.',
+  invoiceNote:'هزینه‌ی نهایی پس از هماهنگی اعلام می‌شود. این برگه نشان‌دهنده‌ی درخواست ثبت‌شده است.',
+  stepsTitle:'ثبت درخواست در چهار قدم', stepsSub:'فرایند درخواست ساده و بدون پیچیدگی است.',
+  steps:[
+    { title:'انتخاب خدمت', text:'خدمت مورد نیازتان را پیدا و به درخواست اضافه کنید.' },
+    { title:'تکمیل مشخصات', text:'نام، موبایل و در صورت نیاز آدرس را وارد کنید.' },
+    { title:'ثبت درخواست', text:'درخواست شما بلافاصله برای ما ثبت می‌شود.' },
+    { title:'هماهنگی و انجام', text:'همکاران ما برای هماهنگی زمان و انجام خدمت تماس می‌گیرند.' }
+  ],
+  features:[
+    { title:'کیفیت کار', text:'خدمات توسط افراد متخصص و باتجربه انجام می‌شود.' },
+    { title:'هماهنگی سریع', text:'بعد از ثبت درخواست، در کوتاه‌ترین زمان با شما تماس می‌گیریم.' },
+    { title:'ضمانت و پشتیبانی', text:'در صورت هر مشکل، پیگیری و رفع آن انجام می‌شود.' },
+    { title:'مشاوره‌ی رایگان', text:'برای انتخاب خدمت مناسب با کارشناسان ما مشورت کنید.' }
+  ],
+  shippingTitle:'نحوه‌ی ارائه‌ی خدمت',
+  shippingText:'پس از ثبت درخواست، همکاران ما برای تأیید نهایی، هماهنگی زمان و نحوه‌ی ارائه‌ی خدمت با شماره‌ی موبایل شما تماس می‌گیرند. خدمت می‌تواند در محل شما، به‌صورت حضوری در محل ما یا آنلاین/تلفنی انجام شود. هزینه‌ی نهایی هنگام هماهنگی اعلام می‌شود.',
+  faq:[
+    { q:'چطور درخواست بدهم؟', a:'خدمت مورد نظر را به درخواست اضافه کنید، سپس در مرحله‌ی «ثبت درخواست» نحوه‌ی ارائه و مشخصات خود را وارد کنید. برای ثبت درخواست باید وارد حساب کاربری خود شده باشید.' },
+    { q:'پرداخت چگونه انجام می‌شود؟', a:'پرداخت پس از هماهنگی و تأیید درخواست، با همکاران ما انجام می‌شود.' },
+    { q:'می‌توانم زمان انجام خدمت را انتخاب کنم؟', a:'بله، در فرم ثبت درخواست زمان مورد نظر خود را بنویسید تا هنگام هماهنگی در نظر گرفته شود.' },
+    { q:'درخواستم را می‌توانم لغو یا ویرایش کنم؟', a:'تا زمانی که درخواست در وضعیت «در انتظار تأیید» باشد، از بخش «درخواست‌های من» می‌توانید آن را ویرایش یا لغو کنید.' }
+  ],
+  supportCards:[
+    { title:'ویرایش یا لغو درخواست', text:'تا وقتی درخواست در وضعیت «در انتظار تأیید» باشد، از بخش «درخواست‌های من» می‌توانید آن را ویرایش یا لغو کنید. بعد از تأیید، برای تغییر با ما تماس بگیرید.' },
+    { title:'نحوه‌ی ارائه‌ی خدمت', text:'خدمت در محل شما، به‌صورت حضوری در محل ما یا آنلاین/تلفنی ارائه می‌شود. زمان و هزینه هنگام هماهنگی اعلام می‌شود.' },
+    { title:'برگه‌ی درخواست', text:'برای هر درخواست دکمه‌ی «چاپ فاکتور» وجود دارد؛ می‌توانید آن را چاپ یا به‌صورت PDF ذخیره کنید.' },
+    { title:'سوالات متداول', text:'پاسخ پرسش‌های رایج در صفحه‌ی «درباره ما» آمده است.' }
+  ]
+};
+const SVC_DICT = [
+  ['ورود به حساب و ادامه ثبت سفارش','ورود به حساب و ثبت درخواست'],
+  ['ادامه و ثبت سفارش','ادامه و ثبت درخواست'],
+  ['ثبت نهایی سفارش','ثبت نهایی درخواست'],
+  ['افزودن به سبد خرید','افزودن به درخواست'],
+  ['به سبد خرید اضافه شد','به درخواست شما اضافه شد'],
+  ['سبد خرید شما خالی است','هنوز خدمتی انتخاب نکرده‌اید'],
+  ['سبد خرید','درخواست من'],
+  ['روش دریافت سفارش','نحوه‌ی دریافت خدمت'],
+  ['روش ارسال','نحوه‌ی ارائه'],
+  ['آدرس ارسال','آدرس محل خدمت'],
+  ['اطلاعات ارسال','اطلاعات درخواست'],
+  ['کد رهگیری (در صورت ارسال)','کد پیگیری (اختیاری)'],
+  ['کد رهگیری','کد پیگیری'],
+  ['فاکتور فروش','برگه‌ی درخواست خدمت'],
+  ['بازگشت به فروشگاه','بازگشت به صفحه‌ی اصلی'],
+  ['اقلام سفارش','خدمات درخواستی'],
+  ['سفارشات من','درخواست‌های من'],
+  ['سفارشات','درخواست‌ها'],
+  ['سفارش','درخواست'],
+  ['محصولات','خدمات'], ['محصول','خدمت'],
+  ['کالاها','خدمات'], ['کالا','خدمت'],
+  ['فروشنده','ارائه‌دهنده'], ['خریدار','درخواست‌دهنده'],
+  ['تحویل‌گیرنده','درخواست‌دهنده'],
+  ['تحویل حضوری از فروشگاه','مراجعه حضوری'],
+  ['فروشگاه','مجموعه']
+];
+const SVC_PRICE0 = /(^|[^۰-۹٬])۰ تومان/g;
+function svcTr(s){
+  if (!isSvc() || !s) return s;
+  SVC_DICT.forEach(([a,b])=>{ if (s.includes(a)) s = s.split(a).join(b); });
+  return s.replace(SVC_PRICE0, '$1قیمت توافقی');
+}
+/* محتوای نوشته‌ی مدیر (نام خدمت، توضیحات، درباره ما ...) دست نمی‌خورد */
+const SVC_SKIP = 'script,style,textarea,input,select,option,.p-name,.pd-name,.pd-desc,.cart-item-name,.o-items td,.ptable td,.hero,.prose,.feature,.step,.faq,.contact-item,.ct-group,.svc-switch,.order-summary-mini .row:not(.total) span:first-child,.edit-item span';
+function svcFix(n){
+  const p = n.parentElement; if (!p || p.closest(SVC_SKIP)) return;
+  const v = svcTr(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v;
+}
+function svcFixAttr(e){
+  const o = e.getAttribute('placeholder'), v = svcTr(o);
+  if (v !== o) e.setAttribute('placeholder', v);
+}
+function svcWalk(root){
+  if (!isSvc()) return;
+  if (root.nodeType === 3){ svcFix(root); return; }
+  if (root.nodeType !== 1) return;
+  const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), list = []; let n;
+  while ((n = tw.nextNode())) list.push(n);
+  list.forEach(svcFix);
+  if (root.matches('[placeholder]')) svcFixAttr(root);
+  root.querySelectorAll('[placeholder]').forEach(svcFixAttr);
+}
+new MutationObserver(muts=>{
+  if (!isSvc()) return;
+  for (const m of muts){
+    if (m.type === 'characterData') svcFix(m.target);
+    else m.addedNodes.forEach(svcWalk);
+  }
+}).observe(document.body, { childList:true, subtree:true, characterData:true });
+
+const _svcAlert = window.alert.bind(window), _svcConfirm = window.confirm.bind(window);
+window.alert = m => _svcAlert(svcTr(m));
+window.confirm = m => _svcConfirm(svcTr(m));
+
+const _svcStatusLabel = statusLabel;
+statusLabel = function(st, m){
+  if (isSvc()){
+    const x = { pending:'در انتظار تأیید', preparing:'هماهنگ شد', shipped:'در حال انجام', done:'انجام‌شده', canceled:'لغو شده' }[st];
+    if (x) return x;
+  }
+  return _svcStatusLabel(st, m);
+};
+const _svcInStock = inStock, _svcMaxQty = maxQty;
+inStock = p => isSvc() ? true : _svcInStock(p);
+maxQty  = p => isSvc() ? Infinity : _svcMaxQty(p);
+
+const SVC_ART = '<svg class="fs-art" viewBox="0 0 200 200" role="img" aria-label="{T}" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="184" rx="52" ry="7" fill="#2a2318" opacity=".13"/><rect x="48" y="62" width="104" height="112" rx="14" fill="#fffdf8" stroke="#3f6b35" stroke-width="5"/><rect x="76" y="46" width="48" height="28" rx="10" fill="#3f6b35"/><circle cx="100" cy="56" r="6" fill="#fffdf8"/><path d="M68 108l10 10 18-20" fill="none" stroke="#d9a441" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M108 108h28M108 124h28M68 142h68M68 156h46" stroke="#8fbf6e" stroke-width="6" stroke-linecap="round"/></svg>';
+const _svcProductArt = productArt;
+productArt = function(p){ return isSvc() ? SVC_ART.replace('{T}', esc((p && p.name) || '')) : _svcProductArt(p); };
+
+function withWhen(notes){
+  const w = document.getElementById('coWhen');
+  const v = (isSvc() && w) ? w.value.trim() : '';
+  return v ? ('زمان مورد نظر: ' + v + (notes ? '\n' + notes : '')) : notes;
+}
+function ensureWhenField(){
+  const notes = document.getElementById('coNotes'); if (!notes) return;
+  const ex = document.getElementById('whenField');
+  if (!isSvc()){ if (ex) ex.remove(); return; }
+  if (ex) return;
+  const d = document.createElement('div'); d.className = 'f-field'; d.id = 'whenField';
+  d.innerHTML = '<label>زمان یا تاریخ مورد نظر برای انجام خدمت</label><input type="text" id="coWhen" placeholder="مثلاً پنجشنبه صبح یا ۲۵ آبان">';
+  notes.closest('.f-field').before(d);
+}
+function applySiteType(){
+  const svc = isSvc();
+  document.body.classList.toggle('mode-service', svc);
+  Object.keys(SHIP_METHODS).forEach(k => delete SHIP_METHODS[k]);
+  Object.assign(SHIP_METHODS, svc ? SERVICE_METHODS : SHOP_METHODS);
+  const fs = document.getElementById('fShip');
+  if (fs) fs.innerHTML = `<option value="all">${svc ? 'همه نحوه‌های ارائه' : 'همه روش‌های ارسال'}</option>`
+    + Object.entries(SHIP_METHODS).map(([k,v]) => `<option value="${k}">${esc(v.label)}</option>`).join('');
+  ensureWhenField();
+  if (svc) svcWalk(document.body);
+}
+
+/* ---------- لودینگ اولیه ---------- */
+function bootError(msg){
+  const m = document.getElementById('bootMsg'); if (!m) return;
+  m.innerHTML = esc(msg) + '<br><button class="btn" style="margin-top:12px" onclick="location.reload()">تلاش دوباره</button>';
+  const sp = document.querySelector('.boot-spin'); if (sp) sp.style.display = 'none';
+}
+function hideBootLoader(){
+  const l = document.getElementById('bootLoader'); if (!l) return;
+  l.classList.add('done'); setTimeout(()=>l.remove(), 450);
 }
 
 /* ---------- راه‌اندازی ---------- */
@@ -3203,7 +3406,6 @@ async function init(){
   setAdmin(isAdmin());
   updateAccountLink();
   updateCartBadge();
-  applyContent();
   try{
     CONFIG = await loadConfig();
     const prP = ghGetFile(PRODUCTS_FILE);
@@ -3215,9 +3417,11 @@ async function init(){
     const cn = await cnP; if (cn && Object.keys(cn.data).length){ CONTENT = mergeContent(cn.data); }
     applyContent();
   } catch(err){
-    document.getElementById('productGrid').innerHTML = `<div class="status bad" style="display:block;">${esc(err.message)}</div>`;
+    bootError(err.message);
+    return;
   }
   route();
+  hideBootLoader();
 }
 init();
 </script>
